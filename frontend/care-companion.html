@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Care Companion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Lexend:wght@400;700&family=Noto+Emoji:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fbf7f2;--card:#fff;--ink:#35424a;--soft:#6b7a83;--green:#bfe8cf;--yellow:#fbefb6;--orange:#fbd6b0;--red:#f7b9b9;--blue:#cfe3f7;--lilac:#e0d6f3;--peach:#fde3d6;--line:#eadfd3;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#23282c;--card:#2d3439;--ink:#f1ede8;--soft:#b5c0c6;--line:#434c52}}
+:root{--f:"Lexend","Atkinson Hyperlegible","Noto Emoji",sans-serif}
+:root[data-font="plain"]{--f:"Trebuchet MS","Segoe UI",Verdana,"Noto Emoji",sans-serif}
+:root[data-theme="dark"]{--bg:#23282c;--card:#2d3439;--ink:#f1ede8;--soft:#b5c0c6;--line:#434c52}
+body{letter-spacing:.02em;word-spacing:.1em}
+:root[data-font="plain"] body{letter-spacing:0;word-spacing:0}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:8px;margin-top:12px}
+.seg button{min-height:64px;border-radius:18px;border:3px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:18px;cursor:pointer}
+.seg button.on{background:var(--lilac);color:#35424a;border-color:#35424a;font-weight:bold}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:20px/1.5 var(--f),sans-serif}
+#app{max-width:520px;margin:0 auto;height:100%;display:flex;flex-direction:column}
+main{flex:1;overflow-y:auto;padding:20px 18px 24px}
+h1{font-size:30px;margin:4px 0 4px}
+.sub{color:var(--soft);margin:0 0 18px}
+section{display:none}section.on{display:block}
+.block{border-radius:28px;padding:22px;margin-bottom:16px;color:#35424a}
+.status{background:var(--green);transition:background .5s;text-align:center;padding:28px 20px}
+.status .ico{font-size:84px;line-height:1}
+.status h2{font-size:28px;margin:10px 0 6px}
+.status p{margin:0;font-size:20px}
+.scale{height:14px;border-radius:9px;background:linear-gradient(90deg,var(--green),var(--yellow),var(--orange),var(--red));margin:18px 6px 0;position:relative}
+.scale i{position:absolute;top:-6px;width:26px;height:26px;border-radius:50%;background:#fff;border:4px solid #35424a;left:0;transition:left .5s;margin-left:-13px}
+h3{font-size:22px;margin:22px 0 10px}
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.chip{border:3px solid transparent;background:var(--blue);color:#35424a;border-radius:22px;padding:16px 8px;font:inherit;font-size:19px;min-height:92px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
+.chip span{font-size:34px}
+.chip.sel{border-color:#35424a;background:var(--orange)}
+.chip.sel::after{content:"✔ Yes";font-size:16px;font-weight:bold}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{border-radius:24px;padding:18px;min-height:120px;color:#35424a}
+.tile b{display:block;font-size:19px}
+.tile span{font-size:38px}
+.person{background:var(--card);border:2px solid var(--line);border-radius:28px;padding:18px;margin-bottom:16px}
+.who{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.av{width:68px;height:68px;border-radius:50%;display:grid;place-items:center;font-size:36px;color:#35424a}
+.who b{font-size:23px;display:block}.who small{color:var(--soft);font-size:17px}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:60px;border-radius:20px;text-decoration:none;font:inherit;font-weight:bold;font-size:20px;color:#35424a;border:0}
+.call{background:var(--green)}.msg{background:var(--blue)}
+.chat{display:flex;flex-direction:column;gap:12px;padding-bottom:8px}
+.b{max-width:88%;padding:14px 16px;border-radius:22px}
+.bot{background:var(--lilac);color:#35424a;border-bottom-left-radius:6px;align-self:flex-start}
+.me{background:var(--peach);color:#35424a;border-bottom-right-radius:6px;align-self:flex-end}
+.go{display:inline-block;margin-top:10px;background:#fff;color:#35424a;border:0;border-radius:16px;padding:12px 16px;font:inherit;font-weight:bold;font-size:18px;cursor:pointer}
+.sug{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.sug button{background:var(--card);border:2px solid var(--line);color:var(--ink);border-radius:18px;padding:10px 14px;font:inherit;font-size:17px;cursor:pointer}
+.compose{display:flex;gap:10px;padding:10px 14px;border-top:2px solid var(--line);background:var(--bg)}
+.compose input{flex:1;min-width:0;font:inherit;font-size:19px;padding:14px 16px;border-radius:20px;border:2px solid var(--line);background:var(--card);color:var(--ink)}
+.compose button{border:0;border-radius:20px;background:var(--green);color:#35424a;font:inherit;font-weight:bold;font-size:19px;padding:0 20px;cursor:pointer}
+nav{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));background:var(--card);border-top:2px solid var(--line)}
+nav button{border:0;border-radius:22px;background:transparent;color:var(--ink);font:inherit;font-size:17px;padding:8px 0;min-height:72px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer}
+nav button span{font-size:30px}
+nav button.on{background:var(--lilac);color:#35424a;font-weight:bold}
+.help{width:100%;min-height:68px;border:0;border-radius:24px;background:var(--red);color:#35424a;font:inherit;font-weight:bold;font-size:22px;cursor:pointer}
+.tl{position:relative;padding-left:46px}
+.tl::before{content:"";position:absolute;left:19px;top:10px;bottom:10px;width:6px;border-radius:3px;background:linear-gradient(var(--green),var(--blue),var(--lilac),var(--green))}
+.step{position:relative;margin-bottom:16px}
+.dot{position:absolute;left:-46px;top:12px;width:44px;height:44px;border-radius:50%;background:#fff;border:4px solid var(--line);display:grid;place-items:center;font-size:22px;color:#35424a}
+.step .card{border-radius:24px;padding:16px 18px;color:#35424a;border:3px solid transparent}
+.step .card small{display:block;font-size:16px;margin-bottom:2px}
+.step .card b{display:block;font-size:23px;margin-bottom:2px}
+.step .card.now{border-color:#35424a}
+.step.done{opacity:.65}
+[hidden]{display:none!important}
+.askbtn{all:unset;display:block;width:100%;cursor:pointer;text-align:center}
+.askbtn:focus-visible{outline:4px solid #6a8fd8;outline-offset:6px;border-radius:20px}
+.big{margin-top:16px;width:100%;min-height:64px;border:0;border-radius:22px;background:#fff;color:#35424a;font:inherit;font-weight:bold;font-size:21px;cursor:pointer}
+.status .chip{background:#fff}
+.status .chip.sel{background:var(--yellow)}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:4px solid #6a8fd8;outline-offset:2px}
+</style>
+</head>
+<body>
+<div id="app">
+<main>
+<section id="home" class="on">
+<h1>Hello, Margaret 🌼</h1>
+<p class="sub">Scroll down to see what is next.</p>
+<div class="block status" id="status" style="background:var(--blue)">
+<div id="ask"><button class="askbtn" onclick="openPick()"><div class="ico">🙂</div><h2>How are you doing?</h2><p>Tap here to tell us</p></button></div>
+<div id="pick" hidden><h2>Do you feel any of these?</h2><p>Tap what you feel. Feel fine? Just tap Done.</p><div class="chips" id="chips" style="margin-top:14px"></div><button class="big" onclick="calc()">Done</button></div>
+<div id="res" hidden><div class="ico" id="sIco"></div><h2 id="sTitle"></h2><p id="sMsg"></p><button class="big" id="go" onclick="show('care')"></button><button class="big" onclick="again()">Check again</button></div>
+</div>
+<button class="help" onclick="help()">🆘 I need help now</button>
+<h3>What’s coming up</h3>
+<div class="tl">
+<div class="step done"><div class="dot">✔</div><div class="card" style="background:var(--green)"><small>Done · Mon 9 Nov</small><b>GP visit</b>Your doctor asked for a chest X-ray.</div></div>
+<div class="step"><div class="dot">💊</div><div class="card now" style="background:var(--peach)"><small>Today · Fri 13 Nov</small><b>Morning pills at 9:00</b>Take them with breakfast.</div></div>
+<div class="step"><div class="dot">🩻</div><div class="card" style="background:var(--blue)"><small>In 4 days · Tue 17 Nov, 10:30</small><b>Chest X-ray</b>Riverside Cancer Centre, Room 2. Bring your ID card and medicine list.</div></div>
+<div class="step"><div class="dot">📞</div><div class="card" style="background:var(--lilac)"><small>In 6 days · Thu 19 Nov</small><b>Nurse Emma calls you</b>She calls between 12 and 14. Please pick up.</div></div>
+<div class="step"><div class="dot">🔬</div><div class="card" style="background:var(--yellow)"><small>In 10 days · Mon 23 Nov, 9:15</small><b>CT scan</b>Riverside Cancer Centre. You can bring someone with you.</div></div>
+<div class="step"><div class="dot">🥼</div><div class="card" style="background:var(--blue)"><small>In 12 days · Wed 25 Nov, 14:00</small><b>Results with Dr. Patel</b>Ask any question you have.</div></div>
+<div class="step"><div class="dot">📝</div><div class="card" style="background:var(--peach)"><small>In 14 days · Fri 27 Nov</small><b>Weekly check-in</b>A few quick questions about how you feel.</div></div>
+<div class="step"><div class="dot">🌼</div><div class="card" style="background:var(--green)"><small>In 18 days · Tue 1 Dec</small><b>First treatment planned</b>Your nurse will confirm the time with you.</div></div>
+</div>
+</section>
+
+<section id="care">
+<h1>My care team</h1>
+<p class="sub">Tap to call or message.</p>
+<div class="person"><div class="who"><div class="av" style="background:var(--green)">🩺</div><div><b>Nurse Emma</b><small>Your nurse</small></div></div>
+<div class="btns"><a class="btn call" href="tel:+15550100">📞 Call</a><a class="btn msg" href="sms:+15550100">💬 Message</a></div></div>
+<div class="person"><div class="who"><div class="av" style="background:var(--blue)">🥼</div><div><b>Dr. Patel</b><small>Your doctor</small></div></div>
+<div class="btns"><a class="btn call" href="tel:+15550101">📞 Call</a><a class="btn msg" href="sms:+15550101">💬 Message</a></div></div>
+<div class="person"><div class="who"><div class="av" style="background:var(--peach)">🏥</div><div><b>Riverside Cancer Centre</b><small>Your health care provider</small></div></div>
+<div class="btns"><a class="btn call" href="tel:+15550102">📞 Call</a><a class="btn msg" href="sms:+15550102">💬 Message</a></div></div>
+<div class="person"><div class="who"><div class="av" style="background:var(--lilac)">👩</div><div><b>Anna (daughter)</b><small>My contact person</small></div></div>
+<div class="btns"><a class="btn call" href="tel:+15550103">📞 Call</a><a class="btn msg" href="sms:+15550103">💬 Message</a></div></div>
+</section>
+
+<section id="chatp">
+<h1>Ask me 💜</h1>
+<p class="sub">Type or tap a question.</p>
+<div class="chat" id="log"><div class="b bot">Hi Margaret! Ask me anything, or tell me to change a setting, like “make the text bigger”.</div></div>
+<div class="sug" id="sug"></div>
+</section>
+
+<section id="set">
+<h1>Settings</h1>
+<p class="sub">Make it comfortable to read.</p>
+<div class="person"><b>Text size</b><div class="seg" data-k="size"><button data-v="1">Normal</button><button data-v="1.15">Large</button><button data-v="1.3">Extra large</button></div></div>
+<div class="person"><b>Font</b><div class="seg" data-k="font"><button data-v="dys">Easy to read</button><button data-v="plain">Standard</button></div></div>
+<div class="person"><b>Colors</b><div class="seg" data-k="theme"><button data-v="auto">Auto</button><button data-v="light">Light</button><button data-v="dark">Dark</button></div></div>
+</section>
+</main>
+<form class="compose" id="comp" style="display:none" onsubmit="return false"><input id="in" placeholder="Type here…" aria-label="Your question"><button id="send">Send</button></form>
+<nav>
+<button data-p="home" class="on"><span>🏠</span>Home</button>
+<button data-p="care"><span>🩺</span>My team</button>
+<button data-p="chatp"><span>💬</span>Ask</button>
+<button data-p="set"><span>⚙</span>Settings</button>
+</nav>
+</div>
+<script>
+var S=[["🤒","Fever",3],["💨","Hard to breathe",3],["🩸","Bleeding",3],["🤢","Feel sick",1],["😣","Pain",1],["😴","Very tired",1],["🤕","Dizzy",1],["😶","Sore mouth",1]];
+var L=[
+{c:"--green",i:"😊",t:"You’re doing well",m:"Nothing to check right now. Keep resting."},
+{c:"--yellow",i:"🙂",t:"Keep an eye on it",m:"Rest and drink water. Tell us if it gets worse."},
+{c:"--orange",i:"😟",t:"Check your symptoms",m:"Please message your nurse today."},
+{c:"--red",i:"📞",t:"Call your care team now",m:"Go to the My team page and tap Call."}];
+var sel={},chips=document.getElementById("chips"),$=function(i){return document.getElementById(i)};
+var R3=[{c:"--green",i:"😊",t:"Good! You’re doing well",m:"Nothing to worry about. Keep resting."},{c:"--orange",i:"😟",t:"Not so good",m:"Please message your nurse today.",b:"🩺 Go to My team"},{c:"--red",i:"📞",t:"Bad. Call your care team now",m:"Tap Call on the My team page.",b:"📞 Go to My team"}];
+S.forEach(function(s,i){var b=document.createElement("button");b.className="chip";b.innerHTML="<span>"+s[0]+"</span>"+s[1];
+b.onclick=function(){sel[i]=!sel[i];b.classList.toggle("sel",!!sel[i])};chips.appendChild(b)});
+function view(v){["ask","pick","res"].forEach(function(x){$(x).hidden=x!=v})}
+function openPick(){sel={};document.querySelectorAll("#chips .chip").forEach(function(b){b.classList.remove("sel")});$("status").style.background="var(--blue)";view("pick")}
+function again(){$("status").style.background="var(--blue)";view("ask")}
+function render(lv){var d=R3[lv];$("status").style.background="var("+d.c+")";$("sIco").textContent=d.i;$("sTitle").textContent=d.t;$("sMsg").textContent=d.m;$("go").style.display=lv?"block":"none";$("go").textContent=d.b||"";view("res")}
+function help(){render(2);show("care")}
+var P={size:"1",font:"dys",theme:"auto"};
+try{var sv=JSON.parse(localStorage.getItem("cc")||"{}");for(var q in sv)P[q]=sv[q]}catch(e){}
+function apply(){var r=document.documentElement;$("app").style.zoom=P.size;r.dataset.font=P.font;if(P.theme=="auto")r.removeAttribute("data-theme");else r.dataset.theme=P.theme;
+document.querySelectorAll(".seg").forEach(function(g){g.querySelectorAll("button").forEach(function(b){b.classList.toggle("on",b.dataset.v==P[g.dataset.k])})})}
+document.querySelectorAll(".seg button").forEach(function(b){b.onclick=function(){P[b.parentNode.dataset.k]=b.dataset.v;apply();try{localStorage.setItem("cc",JSON.stringify(P))}catch(e){}}});
+apply();
+function calc(){var red=false,n=0;for(var k in sel){if(sel[k]){if(S[k][2]==3)red=true;else n++}}
+render(red||n>2?2:n>0?1:0)}
+function show(p){document.querySelectorAll("section").forEach(function(s){s.classList.toggle("on",s.id==p)});
+document.querySelectorAll("nav button").forEach(function(b){b.classList.toggle("on",b.dataset.p==p)});
+document.getElementById("comp").style.display=p=="chatp"?"flex":"none";document.querySelector("main").scrollTop=0}
+document.querySelectorAll("nav button").forEach(function(b){b.onclick=function(){show(b.dataset.p)}});
+var R=[
+{k:["sick","symptom","pain","fever","feel","hurt","breath","bleed","tired","dizzy"],a:"I’m sorry you feel unwell. You can check your symptoms on the Home page.",p:"home",l:"🏠 Check symptoms"},
+{k:["call","phone","nurse","doctor","contact","talk","help","message"],a:"You can call or message your nurse, doctor or clinic on the My team page.",p:"care",l:"🩺 Go to My team"},
+{k:["medicine","pill","tablet","drug"],a:"Your medicine times are shown on the Home page.",p:"home",l:"💊 See medicine"},
+{k:["appointment","visit","next","when"],a:"Your next visit is shown on the Home page. To change it, call your clinic.",p:"care",l:"🏥 Call the clinic"}];
+var sug=["Make the text bigger","Dark colors","I feel sick","Call my nurse"],log=document.getElementById("log");
+sug.forEach(function(t){var b=document.createElement("button");b.textContent=t;b.onclick=function(){ask(t)};document.getElementById("sug").appendChild(b)});
+function add(c,h){var d=document.createElement("div");d.className="b "+c;d.innerHTML=h;log.appendChild(d);d.scrollIntoView({block:"end",behavior:"smooth"});return d}
+var hist=[];
+function exec(n,a){a=a||{};
+if(n=="set_text_size"){P.size={normal:"1",large:"1.15",extra_large:"1.3"}[a.size]||P.size}
+else if(n=="set_font"){P.font=a.font=="standard"?"plain":"dys"}
+else if(n=="set_theme"){if(["auto","light","dark"].indexOf(a.theme)>-1)P.theme=a.theme}
+else if(n=="reset_settings"){P.size="1";P.font="dys";P.theme="auto"}
+else if(n=="go_to_page"){var m={home:"home",team:"care",chat:"chatp",settings:"set"};if(m[a.page])show(m[a.page]);return}
+else if(n=="offer_call"){var c={nurse:["Nurse Emma","+15550100"],doctor:["Dr. Patel","+15550101"],clinic:["Riverside Cancer Centre","+15550102"],family:["Anna","+15550103"]}[a.who];if(c){var l=document.createElement("a");l.className="go";l.href="tel:"+c[1];l.style.textDecoration="none";l.textContent="📞 Call "+c[0];log.lastChild.appendChild(l)}return}
+apply();try{localStorage.setItem("cc",JSON.stringify(P))}catch(x){}}
+function ask(q){if(!q.trim())return;var d=document.createElement("div");d.textContent=q;add("me",d.innerHTML);
+hist.push({role:"user",content:q});var ty=add("bot","…"),ac=new AbortController();setTimeout(function(){ac.abort()},20000);
+fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},signal:ac.signal,body:JSON.stringify({messages:hist.slice(-12),settings:P})})
+.then(function(r){if(!r.ok)throw 0;return r.json()})
+.then(function(j){var t=j.reply||"Done.";ty.textContent=t;hist.push({role:"assistant",content:t});(j.actions||[]).forEach(function(a){exec(a.name,a.args)})})
+.catch(function(){ty.remove();localAsk(q)})}
+function localTools(s){var n=[];
+if(/dark|night/.test(s)){exec("set_theme",{theme:"dark"});n.push("dark colors")}else if(/light|bright/.test(s)&&/color|mode|theme|screen/.test(s)){exec("set_theme",{theme:"light"});n.push("light colors")}
+if(/extra|biggest|huge|much bigger/.test(s)){exec("set_text_size",{size:"extra_large"});n.push("extra large text")}else if(/bigger|larger|big|can.t read|too small/.test(s)){exec("set_text_size",{size:"large"});n.push("larger text")}else if(/smaller|normal size|normal text/.test(s)){exec("set_text_size",{size:"normal"});n.push("normal text")}
+if(/dyslex|easy.*font|easy to read/.test(s)){exec("set_font",{font:"easy"});n.push("the easy-to-read font")}else if(/standard font|plain font|normal font/.test(s)){exec("set_font",{font:"standard"});n.push("the standard font")}
+if(/reset/.test(s)){exec("reset_settings");n.push("everything back to normal")}
+if(!n.length&&/settings/.test(s)){exec("go_to_page",{page:"settings"});add("bot","Here are your settings.");return true}
+if(!n.length)return false;add("bot","Done. I changed: "+n.join(", ")+".");return true}
+function localAsk(q){var s=q.toLowerCase();if(localTools(s))return;var r=R.find(function(x){return x.k.some(function(w){return s.indexOf(w)>-1})});
+setTimeout(function(){if(r){var e=add("bot",r.a+"<br>");var b=document.createElement("button");b.className="go";b.textContent=r.l;b.onclick=function(){show(r.p)};e.appendChild(b)}
+else add("bot","I’m not sure. Your care team can help best.<br>")&&0;
+if(!r){var e2=log.lastChild;var b2=document.createElement("button");b2.className="go";b2.textContent="🩺 Go to My team";b2.onclick=function(){show("care")};e2.appendChild(b2)}},400)}
+document.getElementById("send").onclick=function(){var i=document.getElementById("in");ask(i.value);i.value=""};
+document.getElementById("in").addEventListener("keydown",function(e){if(e.key=="Enter"){e.preventDefault();document.getElementById("send").click()}});
+</script>
+</body>
+</html>
