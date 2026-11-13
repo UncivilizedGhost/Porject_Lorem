@@ -4,10 +4,14 @@ This repository is a reproducible template for medical / clinical machine learni
 in Python. The data is synthetic by default; real patient data must stay
 de-identified and out of Git.
 
+The medml implementation lives in `backend/`; run the commands below from that
+directory.
+
 ## Commands
 
 ```bash
 # Local Nix environment (flake is gitignored) or an activated Python venv
+cd backend
 nix develop                 # if flake.nix exists locally
 make data                   # generate the synthetic cohort
 make train                  # train + evaluate; writes runs/<timestamp>/
@@ -17,9 +21,10 @@ make check                  # lint + tests
 make predict                # batch-score data/processed/cohort.csv
 ```
 
-If not using `make`, prefix commands with `PYTHONPATH=src`:
+If not using `make`, prefix commands with `PYTHONPATH=src` (run from `backend/`):
 
 ```bash
+cd backend
 PYTHONPATH=src python -m medml.train --config configs/default.yaml
 ```
 
