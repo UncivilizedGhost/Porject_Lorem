@@ -1,1 +1,54 @@
-opencode.json
+# --- Python -----------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+
+# --- Nix (local-only dev environment; never committed) ---------------------
+flake.nix
+flake.lock
+.direnv/
+.envrc
+result
+result-*
+
+# --- Data & PHI -------------------------------------------------------------
+# Never commit real patient data. Only keep directory placeholders.
+data/raw/*
+data/interim/*
+data/processed/*
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+*.dcm
+*.nii
+*.nii.gz
+*.parquet
+
+# --- Run artifacts ----------------------------------------------------------
+runs/
+models/
+*.joblib
+*.pkl
+*.onnx
+mlruns/
+wandb/
+
+# --- Secrets ----------------------------------------------------------------
+# API keys and tokens live in .secrets/ (never committed).
+.secrets/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.DS_Store
+*.log
