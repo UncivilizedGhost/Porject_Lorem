@@ -7,12 +7,47 @@ de-identified and out of Git.
 The medml implementation lives in `backend/`; run the commands below from that
 directory.
 
-## Commands
+## Setup
+
+### Primary: Pure manual (venv only)
+
+Requires Python and pip only — no nix, no direnv:
 
 ```bash
-# Local Nix environment (flake is gitignored) or an activated Python venv
 cd backend
-nix develop                 # if flake.nix exists locally
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e .
+```
+
+This installs the `medml` package plus all dependencies
+(`numpy`, `pandas`, `scikit-learn`, `pyyaml`, `joblib`, `elevenlabs`,
+`python-dotenv`) and the dev tools (`pytest`, `ruff`, `matplotlib`).
+
+### Alternative: Nix + direnv
+
+Requires [nix](https://nixos.org/) and [direnv](https://direnv.net/):
+
+```bash
+cd backend
+direnv allow .envrc
+```
+
+`direnv` loads `use flake` (Python, git, ruff, pytest from nixpkgs) and adds
+the venv's `site-packages` to `PYTHONPATH` for third-party deps not in nixpkgs
+(elevenlabs, python-dotenv). Create the venv once:
+
+```bash
+python3 -m venv .venv
+```
+
+Then run any `make` target; direnv handles the environment automatically.
+
+## Commands
+
+Run from `backend/`:
+
+```bash
 make data                   # generate the synthetic cohort
 make train                  # train + evaluate; writes runs/<timestamp>/
 make test                   # pytest
@@ -21,10 +56,9 @@ make check                  # lint + tests
 make predict                # batch-score data/processed/cohort.csv
 ```
 
-If not using `make`, prefix commands with `PYTHONPATH=src` (run from `backend/`):
+If not using `make`, prefix commands with `PYTHONPATH=src`:
 
 ```bash
-cd backend
 PYTHONPATH=src python -m medml.train --config configs/default.yaml
 ```
 
@@ -40,8 +74,8 @@ PYTHONPATH=src python -m medml.train --config configs/default.yaml
 4. **No PHI in Git.** `data/**`, `runs/**`, `*.joblib`, DICOM/NIfTI files, and
    prediction CSVs are ignored. Never commit real patient data, notes, or
    identifiable artefacts.
-5. **Nix files are local-only.** `flake.nix`, `flake.lock`, `.direnv/`, and
-   `result*` are gitignored and must not be committed.
+5. **Local-only files are not committed.** Local development files (in
+   `.gitignore`) are ignored and must not be committed.
 6. **Report calibration and subgroup performance**, not AUROC alone. State when
    subgroup sample sizes are too small to be reliable.
 7. **Synthetic metrics are not clinical evidence.** Never present them as a

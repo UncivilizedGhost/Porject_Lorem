@@ -14,11 +14,8 @@ venv/
 htmlcov/
 .mypy_cache/
 
-# --- Nix (local-only dev environment; never committed) ---------------------
-flake.nix
-flake.lock
-.direnv/
-.envrc
+# --- Local dev environment (not committed) ----------------------------------
+backend/.direnv/
 result
 result-*
 
@@ -54,4 +51,5 @@ wandb/
 *.key
 .DS_Store
 *.log
-/.env.example
+
+
