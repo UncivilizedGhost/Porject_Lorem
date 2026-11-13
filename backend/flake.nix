@@ -16,6 +16,8 @@
         matplotlib
         pytest
         ruff
+        python-dotenv
+        elevenlabs
       ]);
     in {
       devShells.${system}.default = pkgs.mkShell {
