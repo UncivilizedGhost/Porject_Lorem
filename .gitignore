@@ -1,5 +1,6 @@
 # --- OpenCode ---------------------------------------------------------------
 opencode.json
+
 # --- Python -----------------------------------------------------------------
 __pycache__/
 *.py[cod]
@@ -40,6 +41,8 @@ models/
 *.onnx
 mlruns/
 wandb/
+# TTS-produced voice audio files
+**/*.mp3
 
 # --- Secrets ----------------------------------------------------------------
 # API keys and tokens live in .secrets/ (never committed).
