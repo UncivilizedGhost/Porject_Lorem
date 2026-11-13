@@ -52,3 +52,4 @@ wandb/
 *.key
 .DS_Store
 *.log
+/.env.example
