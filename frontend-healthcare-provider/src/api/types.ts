@@ -65,6 +65,21 @@ export interface AlertCard {
   reports: AlertCardReport[];
 }
 
+export interface Clinician {
+  id: string;
+  name: string;
+  types: string[];
+  location: string;
+  working_days: number[]; // ISO weekdays, 1 = Monday
+  hours: { start: string; end: string };
+}
+
+export interface Availability {
+  clinician_id: string;
+  working_days: number[];
+  days: { date: string; slots: string[] }[];
+}
+
 export interface CountySummary {
   name: string;
   tile: { col: number; row: number };

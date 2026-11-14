@@ -1,6 +1,6 @@
 // One API client wrapping fetch. Tests mock this module.
 
-import type { AlertCard, WorklistResponse } from "./types";
+import type { AlertCard, Availability, Clinician, WorklistResponse } from "./types";
 
 const BASE = "/api";
 
@@ -34,9 +34,9 @@ export const api = {
     request<unknown>("POST", `/contacts/${contactId}/callback-handled`, { status }),
   stepHandled: (stepId: string, outcome?: string) =>
     request<unknown>("POST", `/escalation-steps/${stepId}/handled`, outcome ? { outcome } : undefined),
-  clinicians: (type: string) => request<unknown>("GET", `/clinicians?type=${type}`),
+  clinicians: (type: string) => request<Clinician[]>("GET", `/clinicians?type=${type}`),
   availability: (id: string, from: string, to: string) =>
-    request<unknown>("GET", `/clinicians/${id}/availability?from=${from}&to=${to}`),
+    request<Availability>("GET", `/clinicians/${id}/availability?from=${from}&to=${to}`),
   book: (body: object) => request<unknown>("POST", "/appointments", body),
 
   // person 1: dashboard
