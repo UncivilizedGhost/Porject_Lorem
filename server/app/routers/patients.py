@@ -7,13 +7,19 @@ person 4 for kanta-medicines (`app/services/messaging.py`).
 
 from fastapi import APIRouter, HTTPException
 
+from app import db
+from app.services import pathway
+
 router = APIRouter(prefix="/patients", tags=["patients"])
 
 
 @router.get("/{patient_id}")
-async def get_patient():
+async def get_patient(patient_id: str):
     """person 2: Patient + derived pathway_steps, status, next_step (with pending_confirmation), medicines."""
-    raise HTTPException(status_code=501, detail="not implemented")
+    patient = await db.get("patients", patient_id)
+    if patient is None:
+        raise HTTPException(status_code=404, detail="patient not found")
+    return {"id": patient_id, **await pathway.patient_view(patient)}
 
 
 @router.get("/{patient_id}/trusted-view")
