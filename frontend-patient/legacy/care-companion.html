@@ -56,14 +56,15 @@ h3{font-size:22px;margin:22px 0 10px}
 .me{background:var(--peach);color:#35424a;border-bottom-right-radius:6px;align-self:flex-end}
 .go{display:inline-block;margin-top:10px;background:#fff;color:#35424a;border:0;border-radius:16px;padding:12px 16px;font:inherit;font-weight:bold;font-size:18px;cursor:pointer}
 .sug{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
-.sug button{background:var(--card);border:2px solid var(--line);color:var(--ink);border-radius:18px;padding:10px 14px;font:inherit;font-size:17px;cursor:pointer}
+.sug button{background:var(--card);border:2px solid var(--line);color:var(--ink);border-radius:18px;padding:10px 14px;font:inherit;font-size:17px;min-height:48px;cursor:pointer}
 .compose{display:flex;gap:10px;padding:10px 14px;border-top:2px solid var(--line);background:var(--bg)}
 .compose input{flex:1;min-width:0;font:inherit;font-size:19px;padding:14px 16px;border-radius:20px;border:2px solid var(--line);background:var(--card);color:var(--ink)}
 .compose button{border:0;border-radius:20px;background:var(--green);color:#35424a;font:inherit;font-weight:bold;font-size:19px;padding:0 20px;cursor:pointer}
-nav{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));background:var(--card);border-top:2px solid var(--line)}
-nav button{border:0;border-radius:22px;background:transparent;color:var(--ink);font:inherit;font-size:17px;padding:8px 0;min-height:72px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer}
+nav{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));background:var(--card);border-top:2px solid var(--line)}
+nav button{border:0;border-radius:22px;background:transparent;color:var(--ink);font:inherit;font-size:15px;padding:8px 0;min-height:72px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer}
 nav button span{font-size:30px}
 nav button.on{background:var(--lilac);color:#35424a;font-weight:bold}
+@media (max-width:380px){nav button{font-size:13px}nav button span{font-size:26px}}
 .help{width:100%;min-height:68px;border:0;border-radius:24px;background:var(--red);color:#35424a;font:inherit;font-weight:bold;font-size:22px;cursor:pointer}
 .tl{position:relative;padding-left:46px}
 .tl::before{content:"";position:absolute;left:19px;top:10px;bottom:10px;width:6px;border-radius:3px;background:linear-gradient(var(--green),var(--blue),var(--lilac),var(--green))}
@@ -80,6 +81,35 @@ nav button.on{background:var(--lilac);color:#35424a;font-weight:bold}
 .big{margin-top:16px;width:100%;min-height:64px;border:0;border-radius:22px;background:#fff;color:#35424a;font:inherit;font-weight:bold;font-size:21px;cursor:pointer}
 .status .chip{background:#fff}
 .status .chip.sel{background:var(--yellow)}
+/* Learn */
+.learnhint{color:var(--soft);font-size:17px;margin:6px 0 0}
+.askrow{display:flex;gap:10px;margin-top:14px}
+.askrow input{flex:1;min-width:0;font:inherit;font-size:19px;padding:14px 16px;border-radius:20px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
+.askrow button{border:0;border-radius:20px;background:var(--green);color:#35424a;font:inherit;font-weight:bold;font-size:19px;padding:0 22px;min-height:56px;cursor:pointer}
+.askrow button[disabled]{opacity:.55;cursor:default}
+.langs{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:8px;margin-top:12px}
+.langs button{min-height:56px;border-radius:18px;border:3px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:16px;padding:0 4px;cursor:pointer}
+.langs button.on{background:var(--lilac);border-color:#35424a;color:#35424a;font-weight:bold}
+.acard{background:var(--card);border:3px solid var(--line);border-radius:28px;padding:22px;margin-bottom:16px;color:#35424a;overflow-wrap:break-word}
+.acard.answer{background:var(--green);border-color:var(--green)}
+.acard.warn{background:var(--red);border-color:var(--red)}
+.acard.none{background:var(--yellow);border-color:var(--yellow)}
+.acard.loading{background:var(--blue);border-color:var(--blue)}
+.acard:focus{outline:none}
+.acard:focus-visible{outline:4px solid #6a8fd8;outline-offset:4px}
+.acard .qlabel{font-size:16px;font-weight:bold;letter-spacing:.06em;text-transform:uppercase;margin:0 0 10px}
+.acard p{margin:0 0 12px}
+.acard p:last-child{margin-bottom:0}
+.acard .learnhint{color:#35424a;opacity:.82;font-size:16px}
+.acard .qasked{font-weight:bold;font-size:19px;margin-bottom:12px}
+.acard .langtag{display:inline-block;background:#fff;border-radius:12px;padding:4px 10px;font-size:15px;font-weight:bold;margin-bottom:10px}
+.src{background:#fff;border-radius:18px;padding:14px 16px;margin-top:8px;font-size:17px}
+.src b{display:block;margin-bottom:4px}
+.src .srcnote{margin:0 0 8px;color:var(--soft);font-size:16px}
+.src a{display:inline-block;color:#35424a;font-weight:bold;font-size:16px;text-decoration:underline;padding:6px 0;min-height:32px}
+.callbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.linkbtn{border:0;background:#fff;color:#35424a;border-radius:16px;padding:12px 16px;font:inherit;font-weight:bold;font-size:18px;min-height:52px;cursor:pointer}
 button:focus-visible,a:focus-visible,input:focus-visible{outline:4px solid #6a8fd8;outline-offset:2px}
 </style>
 </head>
@@ -128,6 +158,32 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:4px solid #6a8f
 <div class="sug" id="sug"></div>
 </section>
 
+<section id="learn">
+<h1>Learn 📚</h1>
+<p class="sub">Plain-language answers from reviewed sources.</p>
+<div class="person">
+<b>What would you like to know?</b>
+<p class="learnhint">Ask about a test, a treatment or what happens next. Answers come from reviewed patient information — never a guess.</p>
+<form class="askrow" id="learnForm" onsubmit="return false">
+<input id="learnQ" type="text" placeholder="Type your question…" aria-label="Your question" autocomplete="off">
+<button id="learnAskBtn" type="submit">Ask</button>
+</form>
+<div class="sug" id="learnSug"></div>
+<div class="langs" role="group" aria-label="Answer language">
+<button type="button" data-lang="en" class="on" aria-pressed="true">English</button>
+<button type="button" data-lang="fi" aria-pressed="false">Selkosuomi</button>
+<button type="button" data-lang="sv" aria-pressed="false">Svenska</button>
+</div>
+</div>
+<div id="learnOut" aria-live="polite"></div>
+<div class="person">
+<b>Where the answers come from</b>
+<p class="learnhint">Learn rephrases reviewed Finnish patient information in plain language and always shows the source. If no reviewed passage matches, it says so and asks you to contact your nurse. It never diagnoses you or decides your care.</p>
+<p class="learnhint"><b>Sources:</b> Syöpätalo (Cancer Hub), Terveyskylä.fi; HUS patient guidance; Cancer Society of Finland.</p>
+<p class="learnhint">This is a demo with a small sample of sources. Learn is not an emergency service — if you need urgent help, call 112.</p>
+</div>
+</section>
+
 <section id="set">
 <h1>Settings</h1>
 <p class="sub">Make it comfortable to read.</p>
@@ -141,6 +197,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:4px solid #6a8f
 <button data-p="home" class="on"><span>🏠</span>Home</button>
 <button data-p="care"><span>🩺</span>My team</button>
 <button data-p="chatp"><span>💬</span>Ask</button>
+<button data-p="learn"><span>📚</span>Learn</button>
 <button data-p="set"><span>⚙</span>Settings</button>
 </nav>
 </div>
@@ -186,7 +243,7 @@ if(n=="set_text_size"){P.size={normal:"1",large:"1.15",extra_large:"1.3"}[a.size
 else if(n=="set_font"){P.font=a.font=="standard"?"plain":"dys"}
 else if(n=="set_theme"){if(["auto","light","dark"].indexOf(a.theme)>-1)P.theme=a.theme}
 else if(n=="reset_settings"){P.size="1";P.font="dys";P.theme="auto"}
-else if(n=="go_to_page"){var m={home:"home",team:"care",chat:"chatp",settings:"set"};if(m[a.page])show(m[a.page]);return}
+else if(n=="go_to_page"){var m={home:"home",team:"care",chat:"chatp",learn:"learn",settings:"set"};if(m[a.page])show(m[a.page]);return}
 else if(n=="offer_call"){var c={nurse:["Nurse Emma","+15550100"],doctor:["Dr. Patel","+15550101"],clinic:["Riverside Cancer Centre","+15550102"],family:["Anna","+15550103"]}[a.who];if(c){var l=document.createElement("a");l.className="go";l.href="tel:"+c[1];l.style.textDecoration="none";l.textContent="📞 Call "+c[0];log.lastChild.appendChild(l)}return}
 apply();try{localStorage.setItem("cc",JSON.stringify(P))}catch(x){}}
 function ask(q){if(!q.trim())return;var d=document.createElement("div");d.textContent=q;add("me",d.innerHTML);
@@ -208,6 +265,184 @@ else add("bot","I’m not sure. Your care team can help best.<br>")&&0;
 if(!r){var e2=log.lastChild;var b2=document.createElement("button");b2.className="go";b2.textContent="🩺 Go to My team";b2.onclick=function(){show("care")};e2.appendChild(b2)}},400)}
 document.getElementById("send").onclick=function(){var i=document.getElementById("in");ask(i.value);i.value=""};
 document.getElementById("in").addEventListener("keydown",function(e){if(e.key=="Enter"){e.preventDefault();document.getElementById("send").click()}});
+
+/* ---------- Learn ---------- */
+var LEARN_LANG="en",learnBusy=false,learnLast="",learnReq=0;
+var LEARN_NURSE={name:"Nurse Emma",phone:"+15550100"};
+var LEARN_SOURCE={label:"Syöpätalo (Cancer Hub), Terveyskylä.fi",url:"https://www.terveyskyla.fi/en",note:"The Cancer Hub explains cancer types, tests and treatments in plain language."};
+var LEARN_HUS_SOURCE={label:"HUS patient guidance, Western Uusimaa",url:"https://www.hus.fi/en",note:"Local practical details for visits, transport and what to bring."};
+var LEARN_CS_SOURCE={label:"Cancer Society of Finland (kaikkisyovasta.fi)",url:"https://www.kaikkisyovasta.fi/",note:"Everyday life with cancer, support and someone close to you."};
+var LEARN_FIXED={
+ en:{
+  safety:["This sounds like something you should not wait on.","If you feel very unwell right now, call 112 immediately.","If you are worried but not in immediate danger, call 116 117 (Päivystysapu) day or night.","This app cannot tell you what is causing your symptoms. Please speak to a nurse or doctor — do not wait for an answer here."],
+  no_source:"I don’t have a reviewed answer for that question, so I won’t guess. Please ask your nurse. Nurse Emma is available on weekdays 8–16.",
+  nurse:"You can call Nurse Emma on weekdays 8–16: +15550100."
+ },
+ fi:{
+  safety:["Tämä kuulostaa siltä, ettei sinun kannata odottaa.","Jos voit huonosti juuri nyt, soita heti 112.","Jos olet huolissasi muttet välittömässä vaarassa, soita päivystysapuun 116 117 ympäri vuorokauden.","Tämä sovellus ei voi kertoa, mikä oireesi aiheuttaa. Keskustele hoitajan tai lääkärin kanssa — älä jää odottamaan vastausta tästä."],
+  no_source:"Minulla ei ole tarkistettua vastausta tuohon kysymykseen, joten en arvaa. Kysy hoitajaltasi. Hoitaja Emma on tavoitettavissa arkisin klo 8–16.",
+  nurse:"Voit soittaa hoitaja Emmalle arkisin klo 8–16: +15550100."
+ },
+ sv:{
+  safety:["Det här låter som något du inte bör vänta med.","Om du mår mycket dåligt just nu, ring 112 direkt.","Om du är orolig men inte i omedelbar fara, ring 116 117 (jourhjälpen) dag och natt.","Den här appen kan inte säga vad som orsakar dina symtom. Tala med en sjuksköterska eller läkare — vänta inte på ett svar här."],
+  no_source:"Jag har inget granskat svar på den frågan, så jag gissar inte. Fråga din sjuksköterska. Sjuksköterska Emma är tillgänglig vardagar 8–16.",
+  nurse:"Du kan ringa sjuksköterska Emma vardagar 8–16: +15550100."
+ }
+};
+var LEARN_RED=/\b(chest pain|crushing chest|pain in my chest|pain in the chest|can ?not breathe|can.t breathe|cannot breathe|struggling to breathe|short of breath|gasping|coughing up blood|coughing blood|blood when i cough|bleeding a lot|heavy bleeding|fever|high temperature|unconscious|passed out|fainted|fainting|confused|very drowsy|seizure|suicid\w*|kill myself|harm myself|kuume|kuumetta|hengitysvaikeus|tajuton|bröstsmärta|medvetslös|feber)\b/i;
+var LEARN_SUG=["What is a bronchoscopy?","What is a CT scan?","What happens after my referral?","What should I bring to my visit?","Can someone come with me?"];
+var LEARN_CORPUS=[
+{id:"bronchoscopy",keys:["bronchoscopy","bronchoscope","bronkoskopia","bronkoskopi","tähystys","keuhkoputkien","camera","tube"],source:LEARN_SOURCE,
+ answer:{
+  en:"A bronchoscopy is a test that looks inside your breathing tubes. The doctor passes a thin, flexible tube with a small camera on the end through your nose or mouth and into your lungs.\n\nIt can take small samples of tissue, which are checked in a laboratory. The test usually takes about 15–30 minutes. You are normally awake but relaxed, and your throat is numbed first. You can ask for medicine to help you relax.\n\nYou usually go home the same day. Arrange for someone to take you home, because you may feel sleepy afterwards.",
+  fi:"Keuhkoputkien tähystys eli bronkoskopia on tutkimus, jossa katsotaan hengitysteiden sisään. Lääkäri vie ohuen, taipuisan letkun ja sen päässä olevan pienen kameran nenän tai suun kautta keuhkoihin.\n\nTutkimuksessa voidaan ottaa pieniä kudosnäytteitä, jotka tutkitaan laboratoriossa. Tutkimus kestää yleensä noin 15–30 minuuttia. Olet yleensä hereillä mutta rentoutunut, ja kurkku puudutetaan ensin. Voit saada rauhoittavaa lääkettä.\n\nYleensä pääset kotiin samana päivänä. Järjestä joku saattamaan sinut kotiin, sillä voit olla unelias tutkimuksen jälkeen.",
+  sv:"En bronkoskopi är en undersökning där man tittar in i luftvägarna. Läkaren för in ett tunt, böjligt rör med en liten kamera i änden genom näsan eller munnen och ner i lungorna.\n\nUndersökningen kan ta små vävnadsprover som undersöks på laboratorium. Den tar oftast 15–30 minuter. Du är vanligtvis vaken men avslappnad, och halsen bedövas först. Du kan få lugnande medicin.\n\nDu får oftast åka hem samma dag. Ordna så att någon följer dig hem, eftersom du kan vara trött efteråt."
+ }},
+{id:"ct",keys:["ct","ct scan","computed tomography","tt","tietokonetomografia","scanner","scan","skanning"],source:LEARN_SOURCE,
+ answer:{
+  en:"A CT scan is a special kind of X-ray. It takes many pictures from different angles, and a computer puts them together into detailed pictures of the inside of your body.\n\nYou lie on a table that slides into a large ring-shaped scanner. The scan itself is painless and takes only a few minutes, though getting ready can take longer.\n\nYou may be given a drink or an injection of a dye (contrast) to make the pictures clearer. Tell the staff if you have kidney problems, diabetes, or have reacted to contrast before.",
+  fi:"TT-tutkimus eli tietokonetomografia on erityinen röntgentutkimus. Siinä otetaan monta kuvaa eri suunnista, ja tietokone yhdistää ne tarkoiksi kuviksi kehon sisältä.\n\nMakaat pöydällä, joka liukuu suureen rengasmaiseen laitteeseen. Itse kuvaus on kivuton ja kestää vain muutaman minuutin, vaikka valmistelu voi kestää kauemmin.\n\nSaatetaan antaa varjoainetta juotavaksi tai ruiskeena, jotta kuvista tulee selkeämpiä. Kerro henkilökunnalle, jos sinulla on munuaisongelmia, diabetes tai olet aiemmin saanut oireita varjoaineesta.",
+  sv:"En CT-skning är en särskild sorts röntgen. Den tar många bilder från olika håll och en dator sätter ihop dem till detaljerade bilder av insidan av kroppen.\n\nDu ligger på en bänk som glider in i en stor ringformad maskin. Själva skanningen är smärtfri och tar bara några minuter, men förberedelserna kan ta längre tid.\n\nDu kan få kontrastvätska att dricka eller som spruta för att bilderna ska bli tydligare. Berätta för personalen om du har njurproblem, diabetes eller har reagerat på kontrastmedel tidigare."
+ }},
+{id:"xray",keys:["x-ray","xray","chest x-ray","röntgen","keuhkokuva","radiograph"],source:LEARN_SOURCE,
+ answer:{
+  en:"A chest X-ray is a quick, painless picture of your lungs, heart and ribs. You stand in front of a machine and hold your breath for a moment while the picture is taken.\n\nIt only takes a few minutes. You do not need to prepare, and you can eat and drink normally.\n\nAn X-ray cannot tell for sure whether something is cancer. If it shows something that needs a closer look, your doctor will arrange more tests, such as a CT scan.",
+  fi:"Keuhkojen röntgenkuva on nopea ja kivuton kuva keuhkoista, sydämestä ja kylkiluista. Seisot laitteen edessä ja pidät hetken hengitystä, kun kuva otetaan.\n\nKuvaus kestää vain muutaman minuutin. Sinun ei tarvitse valmistautua, ja voit syödä ja juoda normaalisti.\n\nRöntgenkuvasta ei voi varmasti sanoa, onko kyseessä syöpä. Jos kuvassa näkyy jotain, mitä pitää tutkia tarkemmin, lääkäri järjestää lisätutkimuksia, esimerkiksi TT-tutkimuksen.",
+  sv:"En lungröntgen är en snabb och smärtfri bild av lungorna, hjärtat och revbenen. Du står framför en maskin och håller andan en stund medan bilden tas.\n\nDet tar bara några minuter. Du behöver inte förbereda dig och kan äta och dricka som vanligt.\n\nEn röntgenbild kan inte säkert visa om det är cancer. Om den visar något som behöver undersökas närmare ordnar läkaren fler undersökningar, till exempel en CT-skning."
+ }},
+{id:"pathway",keys:["referral","pathway","lähete","remiss","treatment","hoito","behandling","6 weeks","6 viikkoa","6 veckor","lung clinic","keuhkoklinikka","lungklinik"],source:LEARN_SOURCE,
+ answer:{
+  en:"When your doctor sends a referral, the lung clinic aims to start treatment within 6 weeks if you need it. The clock starts on the day the referral is sent.\n\nFirst, a lung specialist reviews your referral. You may be invited for a CT scan at Jorvi Hospital and, if needed, a bronchoscopy at the HUS Heart and Lung Center.\n\nYour care team will tell you each next step and how to prepare. If you have not heard anything and are worried, call your nurse.",
+  fi:"Kun lääkäri lähettää lähetteen, keuhkoklinikka pyrkii aloittamaan hoidon 6 viikon kuluessa, jos hoitoa tarvitaan. Aika lasketaan lähetteen lähettämispäivästä.\n\nEnsin keuhkolääkäri käy lähetteen läpi. Sinut voidaan kutsua TT-tutkimukseen Jorvin sairaalaan ja tarvittaessa keuhkoputkien tähystykseen HUSin Sydän- ja keuhkokeskukseen.\n\nHoitotiimi kertoo jokaisesta seuraavasta vaiheesta ja siitä, miten voit valmistautua. Jos et ole kuullut mitään ja olet huolissasi, soita hoitajalle.",
+  sv:"När din läkare skickar en remiss strävar lungkliniken efter att behandlingen ska börja inom 6 veckor om du behöver den. Tiden räknas från dagen då remissen skickas.\n\nFörst går en lungläkare igenom remissen. Du kan bli kallad till en CT-skning på Jorvs sjukhus och vid behov en bronkoskopi vid HUS Hjärt- och lungcentrum.\n\nDitt vårdteam berättar om varje nästa steg och hur du ska förbereda dig. Om du inte har hört något och är orolig, ring din sjuksköterska."
+ }},
+{id:"visit",keys:["bring","prepare","preparation","ota mukaan","ta med","visit","appointment","käynti","besök","kela","suomi.fi","hsl","id","medicine list","get there","transport","travel","matkakorvaus","reseersättning","bus","taxi","matka","resa"],source:LEARN_HUS_SOURCE,
+ answer:{
+  en:"For hospital visits, bring your Kela card or ID, a list of your medicines, and any letters you have received. Wear loose, comfortable clothes.\n\nIf you are having sedation, arrange for someone to take you home and stay with you. You should not drive for 24 hours afterwards.\n\nAppointments are also sent to Suomi.fi Messages. If you need help getting there, ask about Kela travel reimbursement for a taxi or use HSL buses.",
+  fi:"Ota sairaalakäynnille mukaan Kela-kortti tai henkilötodistus, lista lääkkeistäsi ja saamasi kirjeet. Pue ylle väljät ja mukavat vaatteet.\n\nJos saat rauhoittavaa lääkettä, järjestä joku viemään sinut kotiin ja olemaan kanssasi. Et saa ajaa autoa 24 tuntiin tutkimuksen jälkeen.\n\nAjanvaraukset lähetetään myös Suomi.fi-viesteihin. Jos tarvitset apua paikalle pääsemiseen, kysy Kelan matkakorvausta taksille tai käytä HSL:n busseja.",
+  sv:"Till sjukhusbesök ska du ta med ditt Kela-kort eller din legitimation, en lista över dina mediciner och de brev du har fått. Ha på dig lösa, bekväma kläder.\n\nOm du får lugnande medicin ska du ordna så att någon följer dig hem och stannar hos dig. Du får inte köra bil på 24 timmar efteråt.\n\nTider skickas också till Suomi.fi-meddelanden. Om du behöver hjälp att ta dig dit, fråga om Kelas reseersättning för taxi eller åk HSL-buss."
+ }},
+{id:"support",keys:["support","tuki","stöd","family","perhe","familj","alone","yksin","ensam","trusted","läheinen","närstående","counselling","vertaistuki","someone with me","someone","come with","mukaan","följa med","någon"],source:LEARN_CS_SOURCE,
+ answer:{
+  en:"You do not have to go through this alone. You can bring someone you trust to appointments, and they can help you confirm appointments or send a check-in for you if you ask them to.\n\nPeer support is available through the Cancer Society of Finland and Terveyskylä’s Vertaistalo. Your nurse can also tell you about local support groups.\n\nIf you feel low or anxious, tell your care team. Help is part of your care.",
+  fi:"Sinun ei tarvitse käydä tätä läpi yksin. Voit ottaa mukaan jonkun, johon luotat, ja hän voi pyynnöstäsi auttaa ajanvarausten vahvistamisessa tai lähettää puolestasi check-inin.\n\nVertaisukea saat Suomen Syöpäpotilaat ry:ltä ja Terveyskylän Vertaistalosta. Hoitajasi voi kertoa myös paikallisista tukiryhmistä.\n\nJos mielesi on matalalla tai olet ahdistunut, kerro hoitotiimillesi. Apu on osa hoitoasi.",
+  sv:"Du behöver inte gå igenom detta ensam. Du kan ta med någon du litar på till tiderna, och de kan hjälpa dig att bekräfta tider eller skicka en check-in åt dig om du ber dem.\n\nKamratstöd finns via Finlands Cancerpatienter och Terveyskyläs Vertaistalo. Din sjuksköterska kan också berätta om lokala stödgrupper.\n\nOm du känner dig nedstämd eller orolig, berätta det för ditt vårdteam. Hjälp är en del av din vård."
+ }},
+{id:"medicines",keys:["medicine","medication","pill","lääke","läkemedel","medicin","prescription","resepti","recept","kanta","pharmacy","apteekki","apotek"],source:LEARN_HUS_SOURCE,
+ answer:{
+  en:"Your medicine list comes from your prescriptions in Kanta. In this demo, that link is a FHIR mock-up, not a real connection.\n\nTake your medicines exactly as your doctor prescribed. If you miss a dose, do not take two at once — call your nurse or pharmacy for advice.\n\nBring an up-to-date list of your medicines to every visit.",
+  fi:"Lääkelistasi tulee Kanta-palvelun resepteistä. Tässä demossa yhteys on FHIR-mallinnus, ei oikea yhteys.\n\nOta lääkkeet juuri niin kuin lääkäri on määrännyt. Jos unohdat annoksen, älä ota kahta kerralla — kysy neuvoa hoitajalta tai apteekista.\n\nOta ajantasainen lääkelista mukaan jokaiselle käynnille.",
+  sv:"Din läkemedelslista kommer från dina recept i Kanta. I den här demon är kopplingen en FHIR-attrapp, inte en riktig anslutning.\n\nTa dina mediciner precis som läkaren har ordinerat. Om du missar en dos, ta inte två på en gång — fråga din sjuksköterska eller ditt apotek.\n\nTa med en uppdaterad läkemedelslista till varje besök."
+ }}
+];
+function learnNode(tag,cls,text){var n=document.createElement(tag);if(cls)n.className=cls;if(text!=null)n.textContent=text;return n}
+function learnLink(href,label,cls){var a=learnNode("a",cls,label);a.href=href;return a}
+function learnNorm(s){return " "+String(s).toLowerCase().replace(/[^a-z0-9åäöé ]+/g," ").replace(/\s+/g," ").trim()+" "}
+function learnMatch(q){var n=learnNorm(q),best=null,score=0;
+ LEARN_CORPUS.forEach(function(e){var s=0;e.keys.forEach(function(k){var nk=learnNorm(k);if(n.indexOf(nk)>-1)s+=nk.trim().indexOf(" ")>-1?2:1});if(s>score){score=s;best=e}});
+ return best}
+function learnParas(el,text){String(text||"").split(/\n\s*\n/).forEach(function(p){if(p.trim())el.appendChild(learnNode("p",null,p.trim()))})}
+function learnOffline(q){
+ if(LEARN_RED.test(q))return {kind:"safety"};
+ var hit=learnMatch(q);if(!hit)return {kind:"no_source"};
+ var text=hit.answer[LEARN_LANG];
+ return {kind:"answer",answer:text||hit.answer.en,source:hit.source,language:text?LEARN_LANG:"en",sample_language:!text}}
+function learnNormalize(j){j=j||{};
+ var src=j.source||(j.sources&&j.sources[0])||null,kind=j.kind;
+ var ans=j.answer||j.text||j.message||j.reply||"";
+ if(!kind)kind=j.safety?"safety":(src?"answer":"no_source");
+ if(kind=="answer"&&(!src||!ans))kind="no_source";
+ return {kind:kind,answer:ans,source:src,language:j.language||j.lang||null,machine_translated:!!j.machine_translated}}
+function learnSpeak(btn,text,lang){
+ if(!("speechSynthesis" in window)){btn.textContent="Read-aloud not available";return}
+ var syn=window.speechSynthesis,old="🔊 Read aloud";
+ if(syn.speaking){syn.cancel();btn.textContent=old;return}
+ var u=new SpeechSynthesisUtterance(text);
+ u.lang={en:"en-GB",fi:"fi-FI",sv:"sv-SE"}[String(lang||LEARN_LANG).slice(0,2)]||"en-GB";u.rate=.95;
+ btn.textContent="⏹ Stop";
+ u.onend=u.onerror=function(){btn.textContent=old};
+ syn.cancel();syn.speak(u)}
+function learnRender(q,d){
+ var out=$("learnOut");out.innerHTML="";
+ var card=learnNode("div","acard "+(d.kind=="safety"?"warn":d.kind=="answer"?"answer":"none"));
+ card.tabIndex=-1;var speak=[],speakLang=d.language||LEARN_LANG,fx=LEARN_FIXED[LEARN_LANG]||LEARN_FIXED.en;
+ if(d.kind=="safety"){
+  card.appendChild(learnNode("p","qlabel","⚠ Safety message"));
+  card.appendChild(learnNode("p","qasked",q));
+  var msg=d.answer||fx.safety.join("\n\n");learnParas(card,msg);speak.push(msg);
+  var cb=learnNode("div","callbtns");
+  cb.appendChild(learnLink("tel:112","📞 Call 112","btn call"));
+  cb.appendChild(learnLink("tel:116117","📞 Call 116 117","btn msg"));
+  card.appendChild(cb);
+ }else if(d.kind=="no_source"){
+  card.appendChild(learnNode("p","qlabel","No reviewed answer"));
+  card.appendChild(learnNode("p","qasked",q));
+  learnParas(card,fx.no_source);
+  learnParas(card,fx.nurse);
+  speak.push(fx.no_source+" "+fx.nurse);
+  var nb=learnNode("div","callbtns");
+  nb.appendChild(learnLink("tel:"+LEARN_NURSE.phone,"📞 Call "+LEARN_NURSE.name,"btn call"));
+  nb.appendChild(learnLink("sms:"+LEARN_NURSE.phone,"💬 Message","btn msg"));
+  card.appendChild(nb);
+ }else{
+  card.appendChild(learnNode("p","qlabel","Answer"));
+  card.appendChild(learnNode("p","qasked",q));
+  if(d.machine_translated)card.appendChild(learnNode("span","langtag","Machine-translated"));
+  else if(d.sample_language)card.appendChild(learnNode("span","langtag","Sample answer in English"));
+  learnParas(card,d.answer);speak.push(d.answer);
+  var s=d.source||{},label=(typeof s=="string")?s:(s.label||s.title||s.name||"Reviewed source");
+  var box=learnNode("div","src");
+  box.appendChild(learnNode("b",null,"Source: "+label));
+  var note=(typeof s=="object")&&(s.note||s.passage||s.text);
+  if(note)box.appendChild(learnNode("p","srcnote",note));
+  if(typeof s=="object"&&s.url){var a=learnLink(s.url,"Open the source ↗");a.target="_blank";a.rel="noopener noreferrer";box.appendChild(a)}
+  card.appendChild(box);
+  speak.push("Source: "+label);
+  card.appendChild(learnNode("p","learnhint","General information only. It cannot diagnose you or change your care."));
+ }
+ var row=learnNode("div","btnrow");
+ var sb=learnNode("button","linkbtn","🔊 Read aloud");sb.type="button";
+ sb.onclick=function(){learnSpeak(sb,speak.join("\n\n"),speakLang)};
+ row.appendChild(sb);
+ var cl=learnNode("button","linkbtn","✕ Clear");cl.type="button";
+ cl.onclick=function(){out.innerHTML="";$("learnQ").focus()};
+ row.appendChild(cl);
+ card.appendChild(row);
+ out.appendChild(card);
+ try{card.focus({preventScroll:true})}catch(e){card.focus()}
+ card.scrollIntoView({block:"nearest",behavior:"smooth"})}
+function learnDone(){
+ learnBusy=false;var b=$("learnAskBtn");if(b)b.disabled=false}
+function learnAsk(q){
+ q=String(q||"").trim();if(!q)return;
+ learnLast=q;$("learnQ").value=q;
+ var out=$("learnOut");
+ if(LEARN_RED.test(q)){learnReq++;learnBusy=false;learnDone();out.innerHTML="";learnRender(q,{kind:"safety"});return}
+ if(learnBusy)return;
+ out.innerHTML="";
+ learnBusy=true;var btn=$("learnAskBtn");if(btn)btn.disabled=true;
+ var load=learnNode("div","acard loading");
+ load.appendChild(learnNode("p","qlabel","Looking this up…"));
+ load.appendChild(learnNode("p",null,"Searching reviewed patient information."));
+ out.appendChild(load);
+ var ctrl=("AbortController" in window)?new AbortController():null;
+ var timer=setTimeout(function(){if(ctrl)ctrl.abort()},12000);
+ var req=++learnReq;
+ var opts={method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({question:q,language:LEARN_LANG})};
+ if(ctrl)opts.signal=ctrl.signal;
+ fetch("/learn/ask",opts)
+  .then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json()})
+  .then(function(j){clearTimeout(timer);if(req!==learnReq)return;learnDone();learnRender(q,learnNormalize(j))})
+  .catch(function(){clearTimeout(timer);if(req!==learnReq)return;learnDone();learnRender(q,learnOffline(q))})}
+function learnSetLang(l){
+ LEARN_LANG=l;
+ document.querySelectorAll(".langs button").forEach(function(b){
+  var on=b.dataset.lang==l;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on?"true":"false")});
+ if(learnLast&&$("learnOut").childElementCount&&!learnBusy)learnAsk(learnLast)}
+LEARN_SUG.forEach(function(t){
+ var b=learnNode("button",null,t);b.type="button";b.onclick=function(){learnAsk(t)};$("learnSug").appendChild(b)});
+$("learnForm").addEventListener("submit",function(e){e.preventDefault();learnAsk($("learnQ").value)});
+document.querySelectorAll(".langs button").forEach(function(b){b.onclick=function(){learnSetLang(b.dataset.lang)}});
 </script>
 </body>
 </html>

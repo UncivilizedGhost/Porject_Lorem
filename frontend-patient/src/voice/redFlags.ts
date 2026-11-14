@@ -1,8 +1,97 @@
-// Owner: person 4 — mirror of server/app/services/learn/red_flags.py: fixed fi/sv/en word list.
-// A hit in a spoken Check-in answer or dictated Own Words speaks the fixed safety message at
-// once (priority). The answer is still saved unchanged; grading stays on the server (ADR-0006).
-export const RED_FLAG_WORDS: Record<string, string[]> = { fi: [], sv: [], en: [] };
+// Owner: person 4 — .scratch/learn-sms-fhir-voice/spec.md ("Learn (server)" / "Voice layer")
+// Fixed red-flag word list in Finnish, Swedish and English. Shared by Learn and Voice Mode.
+// A hit in a Learn question, a spoken Check-in answer or dictated Own Words triggers the fixed
+// safety message at once. It is not the grading engine; it never sets or lowers a grade (ADR-0006).
 
-export function containsRedFlag(_text: string, _language: string): boolean {
-  return false;
+export const RED_FLAG_WORDS: Record<string, string[]> = {
+  en: [
+    "chest pain",
+    "crushing chest",
+    "pain in my chest",
+    "pain in the chest",
+    "can not breathe",
+    "can't breathe",
+    "cannot breathe",
+    "struggling to breathe",
+    "short of breath",
+    "gasping",
+    "coughing up blood",
+    "coughing blood",
+    "blood when i cough",
+    "bleeding a lot",
+    "heavy bleeding",
+    "fever",
+    "high temperature",
+    "unconscious",
+    "passed out",
+    "fainted",
+    "fainting",
+    "confused",
+    "very drowsy",
+    "seizure",
+    "suicid",
+    "kill myself",
+    "harm myself",
+  ],
+  fi: [
+    "rintakipu",
+    "rintakipuja",
+    "hengitysvaikeus",
+    "hengästynyt",
+    "ei saa henkeä",
+    "ei saa ilmaa",
+    "hengenahdistus",
+    "verinen ysköskä",
+    "veriyskä",
+    "yskää verta",
+    "verenvuoto",
+    "verenvuodot",
+    "runsas verenvuoto",
+    "kuume",
+    "kuumetta",
+    "korkea kuume",
+    "tajuton",
+    "tajuioton",
+    "pyörtyy",
+    "pyörtyi",
+    "hämmentynyt",
+    "sekava",
+    "erittäin unelias",
+    "kohtaus",
+    "kohtauksia",
+    "epäilen tappavani itseni",
+    "tapan itseni",
+    "vahingoitan itseäni",
+  ],
+  sv: [
+    "bröstsmärta",
+    "bröstsmärtor",
+    "andnöd",
+    "andningsbesvär",
+    "får inte luft",
+    "får inte syre",
+    "hosta upp blod",
+    "blodig hosta",
+    "blod när jag hostar",
+    "kraftig blödning",
+    "blöder mycket",
+    "feber",
+    "hög feber",
+    "medvetslös",
+    "medvetslöshet",
+    "svimmar",
+    "svimmade",
+    "förvirrad",
+    "mycket trött",
+    "kramp",
+    "kramper",
+    "jag vill döda mig själv",
+    "jag ska ta livet av mig",
+    "skada mig själv",
+  ],
+};
+
+export function containsRedFlag(text: string, language: "fi" | "sv" | "en"): boolean {
+  const t = text.toLowerCase();
+  return RED_FLAG_WORDS[language]?.some((w) => t.includes(w.toLowerCase())) ?? false;
 }

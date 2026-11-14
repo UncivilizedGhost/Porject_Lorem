@@ -19,3 +19,50 @@ button {
 }
 button.primary { min-height: var(--target-primary); background: var(--teal); color: #fff; border: 0; }
 .card { background: var(--card); border-radius: var(--radius-card); padding: 16px; }
+
+/* ---------- Learn ---------- */
+.learn-screen { display: flex; flex-direction: column; gap: 14px; padding: 16px; }
+.learn-screen .sub { color: var(--secondary); margin: 0 0 8px; font-size: var(--text-small); }
+.learn-lang { display: flex; align-items: center; gap: 10px; }
+.learn-lang label { font-size: var(--text-small); color: var(--secondary); margin-right: 6px; }
+.learn-lang [role="group"] { display: flex; gap: 8px; }
+.learn-lang button { min-height: 44px; padding: 0 14px; border: 1px solid var(--secondary); background: var(--card); color: var(--ink); font: inherit; font-size: var(--text-body); cursor: pointer; border-radius: var(--radius-button); }
+.learn-lang button.on { border-color: var(--teal); background: var(--teal); color: #fff; font-weight: var(--weight-heading); }
+.learn-lang button:focus-visible { outline: 4px solid var(--teal); outline-offset: 2px; }
+
+.learn-suggested { display: flex; flex-direction: column; gap: 8px; }
+.learn-suggested h3 { margin: 0; font-size: var(--text-small); color: var(--secondary); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips button { min-height: 44px; padding: 8px 14px; border: 1px solid var(--line, var(--secondary)); background: var(--card); color: var(--ink); font: inherit; font-size: var(--text-body); cursor: pointer; border-radius: var(--radius-button); }
+.chips button:focus-visible { outline: 4px solid var(--teal); outline-offset: 2px; }
+
+.learn-ask { display: flex; flex-direction: column; gap: 8px; }
+.learn-ask label { font-size: var(--text-small); color: var(--secondary); }
+.input-row { display: flex; gap: 8px; align-items: center; }
+.input-row input { flex: 1; min-width: 0; padding: 10px 14px; border: 1px solid var(--line, var(--secondary)); border-radius: var(--radius-button); background: var(--card); color: var(--ink); font: inherit; font-size: var(--text-body); }
+.input-row input:focus-visible { outline: 4px solid var(--teal); outline-offset: 2px; }
+.input-row input:disabled { opacity: 0.5; cursor: default; }
+
+.answer-card { background: var(--card); border-radius: var(--radius-card); padding: 16px; border: 1px solid var(--line, var(--secondary)); }
+.answer-card h2 { margin: 0 0 10px; font-size: var(--text-body); color: var(--secondary); text-transform: uppercase; letter-spacing: 0.06em; }
+.answer-card p { margin: 0 0 10px; font-size: var(--text-body); line-height: 1.5; }
+.answer-card p:last-child { margin-bottom: 0; }
+.answer-card.answer { border-color: var(--teal); }
+.answer-card.no_source { border-color: var(--amber); background: #fbf6ec; }
+.answer-card.safety { border-color: var(--red); background: #fbeaea; }
+.answer-card .priority { color: var(--red); font-weight: var(--weight-heading); margin: 0 0 8px; }
+.answer-card .note { color: var(--secondary); font-size: var(--text-small); }
+
+.learn-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border: 1px solid var(--line, var(--secondary)); border-radius: var(--radius-button); background: var(--card); color: var(--ink); font: inherit; font-size: var(--text-body); text-decoration: none; cursor: pointer; }
+.chip.call { border-color: var(--red); color: var(--red); }
+.chip.msg { border-color: var(--teal); color: var(--teal); }
+.chip:focus-visible { outline: 4px solid var(--teal); outline-offset: 2px; }
+
+.learn-sources { margin-top: 8px; }
+.learn-sources strong { display: block; font-size: var(--text-small); color: var(--secondary); margin-bottom: 4px; }
+.learn-sources ul { margin: 0 0 0 16px; padding: 0; }
+.learn-sources a { color: var(--teal); text-decoration: underline; }
+
+button.ghost { min-height: 44px; padding: 0 14px; border: 1px solid var(--line, var(--secondary)); background: transparent; color: var(--ink); font: inherit; font-size: var(--text-body); cursor: pointer; border-radius: var(--radius-button); }
+button.ghost:focus-visible { outline: 4px solid var(--teal); outline-offset: 2px; }

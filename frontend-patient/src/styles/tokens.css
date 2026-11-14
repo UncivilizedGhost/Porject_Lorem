@@ -19,6 +19,7 @@
   --target-primary: 56px;
   --radius-button: 14px;
   --radius-card: 20px;
+  --line: #d9d4cb;
 }
 
 :root[data-text-size="l"] { --text-body: 19px; --text-small: 17px; }
