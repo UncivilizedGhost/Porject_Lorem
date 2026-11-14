@@ -1,15 +1,15 @@
 // Owner: person 2 — design port of app/timeline.html (artboard "4 · Pathway timeline").
 // The 6-week goal line and pathway_steps (done / next / later) from GET /patients/{id}, drawn as
 // the artboard's marker rail: teal checks for done, a thick ring for next, a thin grey ring for
-// later, and the next step's card in pale teal.
+// later, and the next step's card in pale teal. App copy follows the page language; step names
+// come from the server.
 import { useMemo, useRef } from "react";
 
 import { NoPathwayYet } from "../../components/NoPathwayYet";
+import { useI18n } from "../../i18n/LanguageProvider";
 import { formatDate, formatWeekday } from "../../lib/format";
 import { usePatient } from "../../lib/usePatient";
 import { useReadable } from "../../voice/useReadable";
-
-const GOAL = "If you need treatment, it starts within 6 weeks of your referral.";
 
 function ArrowDownIcon() {
   return (
@@ -29,7 +29,11 @@ function CheckIcon() {
 
 export function PathwayScreen() {
   const patient = usePatient();
-  const readable = useMemo(() => ({ heading: "Your pathway", body: GOAL }), []);
+  const { language, t } = useI18n();
+  const readable = useMemo(
+    () => ({ heading: t("pathway.title"), body: t("pathway.goal") }),
+    [t],
+  );
   useReadable(readable);
 
   // "Go to the current step": scrolls the next step into view (the frame scrolls, not the page)
@@ -43,7 +47,7 @@ export function PathwayScreen() {
   };
 
   if (patient === null) return <NoPathwayYet />;
-  if (!patient) return <p>Loading…</p>;
+  if (!patient) return <p>{t("common.loading")}</p>;
 
   const steps = patient.pathway_steps;
   const done = steps.filter((s) => s.state === "done").length;
@@ -53,12 +57,12 @@ export function PathwayScreen() {
 
   return (
     <section className="pathway">
-      <h1>Your pathway</h1>
+      <h1>{t("pathway.title")}</h1>
 
       {next && (
         <button type="button" className="jump-next" onClick={jumpToCurrent}>
           <ArrowDownIcon />
-          Go to the current step
+          {t("pathway.jump")}
         </button>
       )}
 
@@ -67,8 +71,8 @@ export function PathwayScreen() {
           <span className="goal-fill" style={{ width: `${percent}%` }} />
         </span>
         <div className="goal-row">
-          <span>Week {week}</span>
-          <span>{next ? `By ${formatDate(next.date)}` : "All steps done"}</span>
+          <span>{t("pathway.week", { n: week })}</span>
+          <span>{next ? t("pathway.by", { date: formatDate(next.date) }) : t("pathway.allDone")}</span>
         </div>
       </div>
 
@@ -85,10 +89,12 @@ export function PathwayScreen() {
                 ref={s.state === "next" ? nextCard : undefined}
                 tabIndex={s.state === "next" ? -1 : undefined}
               >
-                {s.state === "next" && <span className="chip-next">Next</span>}
+                {s.state === "next" && <span className="chip-next">{t("pathway.next")}</span>}
                 <span className="path-title">{s.label}</span>
                 <span className="path-meta">
-                  {s.date_is_estimate ? `Usually ${formatDate(s.date)}` : `${formatWeekday(s.date)} ${formatDate(s.date)}`}
+                  {s.date_is_estimate
+                    ? t("pathway.usually", { date: formatDate(s.date) })
+                    : `${formatWeekday(s.date, language)} ${formatDate(s.date)}`}
                 </span>
                 {s.location && <span className="path-meta">{s.location}</span>}
               </div>
@@ -97,7 +103,7 @@ export function PathwayScreen() {
         ))}
       </ol>
 
-      <p className="screen-sub">{GOAL}</p>
+      <p className="screen-sub">{t("pathway.goal")}</p>
     </section>
   );
 }

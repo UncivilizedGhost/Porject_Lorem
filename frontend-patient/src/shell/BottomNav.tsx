@@ -2,17 +2,20 @@
 // pill behind the icon (app/home.html). Contacts get Learn too.
 import { NavLink } from "react-router-dom";
 
-const tabs = [
+import { useI18n } from "../i18n/LanguageProvider";
+import type { MessageKey } from "../i18n/dict";
+
+const tabs: { to: string; key: MessageKey; icon: React.ReactNode }[] = [
   {
     to: "/home",
-    label: "Home",
+    key: "nav.home",
     icon: (
       <path d="M3.5 10L11 4l7.5 6v8h-5v-5h-5v5h-5z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
     ),
   },
   {
     to: "/pathway",
-    label: "Pathway",
+    key: "nav.pathway",
     icon: (
       <>
         <circle cx="6" cy="5" r="2" fill="none" stroke="currentColor" strokeWidth="1.7" />
@@ -23,7 +26,7 @@ const tabs = [
   },
   {
     to: "/medicines",
-    label: "Medicines",
+    key: "nav.medicines",
     icon: (
       <>
         <rect x="3" y="8" width="16" height="7" rx="3.5" fill="none" stroke="currentColor" strokeWidth="1.7" transform="rotate(-35 11 11.5)" />
@@ -33,7 +36,7 @@ const tabs = [
   },
   {
     to: "/learn",
-    label: "Learn",
+    key: "nav.learn",
     icon: (
       <>
         <path
@@ -47,14 +50,15 @@ const tabs = [
 ];
 
 export function BottomNav() {
+  const { t } = useI18n();
   return (
     <nav className="bottom-nav" aria-label="Main">
-      {tabs.map((t) => (
-        <NavLink key={t.to} to={t.to}>
+      {tabs.map((tab) => (
+        <NavLink key={tab.to} to={tab.to}>
           <span className="tab-icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 22 22" focusable="false">{t.icon}</svg>
+            <svg width="22" height="22" viewBox="0 0 22 22" focusable="false">{tab.icon}</svg>
           </span>
-          <span>{t.label}</span>
+          <span>{t(tab.key)}</span>
         </NavLink>
       ))}
     </nav>

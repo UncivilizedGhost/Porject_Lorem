@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import { api } from "../../api/client";
 import type { AdviceShown, Question } from "../../api/types";
 import { NumberPad, parseNumber } from "../../components/NumberPad";
+import { useI18n } from "../../i18n/LanguageProvider";
 import { actorFields, getSession } from "../../lib/session";
 import { useFlowBack } from "../../shell/FlowBack";
 import { useReadable } from "../../voice/useReadable";
@@ -15,6 +16,7 @@ import { CheckRing, OptionIcon } from "../SymptomReport/R4GuidedQuestion";
 import { CheckInResult } from "./CheckInResult";
 
 export function CheckInFlow() {
+  const { t } = useI18n();
   const [items, setItems] = useState<Question[]>();
   const [index, setIndex] = useState(0);
   const [raw, setRaw] = useState<Record<string, string>>({});
@@ -23,7 +25,8 @@ export function CheckInFlow() {
   const patientId = getSession()?.patientId ?? "";
 
   useEffect(() => {
-    api.rules().then((r) => setItems(r.checkin_items)).catch(() => setError("Could not load the questions. Please try again."));
+    api.rules().then((r) => setItems(r.checkin_items)).catch(() => setError(t("checkin.loadError")));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const q = items?.[index];
@@ -40,7 +43,7 @@ export function CheckInFlow() {
       const res = await api.checkin(patientId, { answers, ...actorFields() });
       setResult(res.advice_shown);
     } catch {
-      setError("Your check-in could not be sent. If you feel worse, phone 116 117 or 112.");
+      setError(t("checkin.sendError"));
     }
   };
 
@@ -51,7 +54,7 @@ export function CheckInFlow() {
   };
   const previous = () => setIndex(Math.max(0, index - 1));
 
-  const readable = useMemo(() => ({ heading: q?.prompt ?? "Weekly check-in" }), [q]);
+  const readable = useMemo(() => ({ heading: q?.prompt ?? t("checkin.title") }), [q, t]);
   useReadable(readable);
 
   const actions = useMemo(() => {
@@ -66,14 +69,14 @@ export function CheckInFlow() {
         : []),
       {
         id: "checkin:next",
-        label: last ? "Send check-in" : "Next question",
+        label: last ? t("checkin.send") : t("checkin.next"),
         synonyms: ["next"],
         run: goNext,
       },
-      ...(index > 0 ? [{ id: "checkin:prev", label: "Previous", run: previous }] : []),
+      ...(index > 0 ? [{ id: "checkin:prev", label: t("common.previous"), run: previous }] : []),
     ];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [q, answered, index, last]);
+  }, [q, answered, index, last, t]);
   useVoiceActions(actions);
 
   // The header's Back steps to the previous question instead of leaving the check-in;
@@ -85,7 +88,7 @@ export function CheckInFlow() {
   useFlowBack(back);
 
   if (result) return <CheckInResult advice={result} />;
-  if (!items || !q) return error ? <p role="alert">{error}</p> : <p>Loading…</p>;
+  if (!items || !q) return error ? <p role="alert">{error}</p> : <p>{t("common.loading")}</p>;
 
   const step = index + 1;
   const percent = Math.round((step / items.length) * 100);
@@ -93,7 +96,7 @@ export function CheckInFlow() {
   return (
     <section className="report-q checkin">
       <div className="q-head">
-        <h1 className="ci-title">Weekly check-in</h1>
+        <h1 className="ci-title">{t("checkin.title")}</h1>
         <div className="q-progress">
           <span className="q-bar"><span className="q-bar-fill" style={{ width: `${percent}%` }} /></span>
           <span className="q-count">{step} of {items.length}</span>
@@ -134,9 +137,9 @@ export function CheckInFlow() {
       {error && <p role="alert">{error}</p>}
 
       <div className="ci-actions">
-        <button type="button" onClick={previous} disabled={index === 0}>Previous</button>
+        <button type="button" onClick={previous} disabled={index === 0}>{t("common.previous")}</button>
         <button type="button" className="primary" disabled={!answered} onClick={goNext}>
-          {last ? "Send check-in" : "Next question"}
+          {last ? t("checkin.send") : t("checkin.next")}
         </button>
       </div>
     </section>

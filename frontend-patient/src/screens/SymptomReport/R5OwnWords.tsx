@@ -3,6 +3,7 @@
 // (read back before saving), typing keeps them as typed. Stored { text, source }. Optional.
 import { useMemo, useState } from "react";
 
+import { useI18n } from "../../i18n/LanguageProvider";
 import { useVoice } from "../../voice/VoiceProvider";
 import { useReadable } from "../../voice/useReadable";
 
@@ -32,19 +33,20 @@ interface Props {
 
 export function R5OwnWords({ onDone }: Props) {
   const { dictate } = useVoice();
+  const { t } = useI18n();
   const [text, setText] = useState("");
   const [source, setSource] = useState<"voice" | "typed">("typed");
   const [speaking, setSpeaking] = useState(false);
   const readable = useMemo(
-    () => ({ heading: "Anything to add in your own words?", body: "Speak or type. This is optional." }),
-    [],
+    () => ({ heading: t("report.ownTitle"), body: t("report.ownBubble") }),
+    [t],
   );
   useReadable(readable);
 
   const speak = async () => {
     setSpeaking(true);
     try {
-      const heard = await dictate({ prompt: "Tell the nurse in your own words" });
+      const heard = await dictate({ prompt: t("report.ownPlaceholder") });
       if (heard) {
         setText(heard);
         setSource("voice");
@@ -62,20 +64,20 @@ export function R5OwnWords({ onDone }: Props) {
   return (
     <section className="own">
       <div className="screen-heading">
-        <span className="eyebrow">Almost done</span>
-        <h1>Anything to add in your own words?</h1>
+        <span className="eyebrow">{t("report.ownEyebrow")}</span>
+        <h1>{t("report.ownTitle")}</h1>
       </div>
 
       <label className="own-bubble">
         <span className="own-bubble-label">
-          You said. Tap the text to change it.
+          {t("report.ownBubble")}
           <PencilIcon />
         </span>
         <textarea
           id="own-words"
           rows={4}
           value={text}
-          placeholder="Type here, or tap the microphone"
+          placeholder={t("report.ownPlaceholder")}
           onChange={(e) => { setText(e.target.value); setSource("typed"); }}
         />
       </label>
@@ -86,13 +88,13 @@ export function R5OwnWords({ onDone }: Props) {
           className="own-mic"
           onClick={speak}
           disabled={speaking}
-          aria-label="Speak your answer"
+          aria-label={t("report.speak")}
         >
           <MicIcon />
         </button>
         <span className="own-speak-text">
-          <span className="own-speak-title">{speaking ? "Listening…" : "Tap to speak"}</span>
-          <span className="own-speak-sub">Or tap the text to type</span>
+          <span className="own-speak-title">{speaking ? t("report.listening") : t("report.speak")}</span>
+          <span className="own-speak-sub">{t("report.speakSub")}</span>
         </span>
       </div>
 
@@ -103,9 +105,9 @@ export function R5OwnWords({ onDone }: Props) {
           disabled={text.trim() === ""}
           onClick={send}
         >
-          Send to Nurse Aino
+          {t("report.sendReport")}
         </button>
-        <button type="button" className="own-skip" onClick={() => onDone(null)}>Skip this step</button>
+        <button type="button" className="own-skip" onClick={() => onDone(null)}>{t("report.skip")}</button>
       </div>
     </section>
   );

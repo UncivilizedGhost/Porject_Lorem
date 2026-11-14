@@ -6,25 +6,27 @@ import { useMemo } from "react";
 import { Link } from "react-router-dom";
 
 import { NURSE_PHONE } from "../../components/HelpNumbers";
+import { useI18n } from "../../i18n/LanguageProvider";
 import { formatClock, formatDate, formatTime, formatWeekday } from "../../lib/format";
 import { useTrustedView } from "../../lib/usePatient";
 import { useReadable } from "../../voice/useReadable";
 
 export function TrustedPersonView() {
   const view = useTrustedView();
+  const { language, t } = useI18n();
   const readable = useMemo(
-    () => ({ heading: "Helping the patient", body: "Appointments and confirmations you can help with." }),
-    [],
+    () => ({ heading: t("trusted.title"), body: t("trusted.body") }),
+    [t],
   );
   useReadable(readable);
-  if (!view) return <p>Loading…</p>;
+  if (!view) return <p>{t("common.loading")}</p>;
 
   const next = view.next_step;
   const pending = next?.pending_confirmation ?? null;
   const appointment = view.appointments[0];
   const what = next?.what ?? appointment?.what;
   const when = next
-    ? `${formatWeekday(next.date)} ${formatDate(next.date)} at ${formatClock(next.time)}`
+    ? `${formatWeekday(next.date, language)} ${formatDate(next.date)} at ${formatClock(next.time)}`
     : appointment
       ? `${formatDate(appointment.at)} at ${formatTime(appointment.at)}`
       : "";
@@ -32,20 +34,17 @@ export function TrustedPersonView() {
 
   return (
     <section className="trusted">
-      <h1>Helping the patient</h1>
+      <h1>{t("trusted.title")}</h1>
 
       {what && (
         <div className="trusted-card">
-          <span className="chip chip-wait">{pending ? "He hasn't confirmed yet" : "Confirmed"}</span>
+          <span className="chip chip-wait">{pending ? t("trusted.pending") : t("trusted.confirmed")}</span>
           <span className="sent-title">{what}</span>
           <span className="path-meta">{when}{where ? ` · ${where}` : ""}</span>
           {pending && (
-            <Link className="primary" to={`/confirm/${pending.id}`}>Confirm appointment for them</Link>
+            <Link className="primary" to={`/confirm/${pending.id}`}>{t("trusted.confirm")}</Link>
           )}
-          <p className="trusted-note">
-            If he does not answer, the reminders escalate: a message and text on day 0, an automated
-            call on day 2, and Nurse Aino calls on day 3.
-          </p>
+          <p className="trusted-note">{t("trusted.note")}</p>
         </div>
       )}
 
@@ -55,8 +54,8 @@ export function TrustedPersonView() {
             <path d="M6 6h18v18H6zM15 11v8M11 15h8" />
           </svg>
           <span className="tile-text">
-            <span className="tile-title">Report a symptom for him</span>
-            <span className="tile-sub">Saved as reported by you</span>
+            <span className="tile-title">{t("trusted.report")}</span>
+            <span className="tile-sub">{t("trusted.reportSub")}</span>
           </span>
         </Link>
         <a className="tile tile-apricot" href={`tel:${NURSE_PHONE}`}>
@@ -64,15 +63,13 @@ export function TrustedPersonView() {
             <path d="M7 4h4l2 5-3 2a13 13 0 006 6l2-3 5 2v4a2 2 0 01-2 2A19 19 0 015 6a2 2 0 012-2z" />
           </svg>
           <span className="tile-text">
-            <span className="tile-title">Call Nurse Aino</span>
-            <span className="tile-sub">His nurse, weekdays 8–16</span>
+            <span className="tile-title">{t("home.callTitle")}</span>
+            <span className="tile-sub">{t("trusted.callSub")}</span>
           </span>
         </a>
       </div>
 
-      <p className="trusted-note">
-        You see appointments and confirmations only. Everything you do is shown to the nurse with your name.
-      </p>
+      <p className="trusted-note">{t("trusted.privacy")}</p>
     </section>
   );
 }

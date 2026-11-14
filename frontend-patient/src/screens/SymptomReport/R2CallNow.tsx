@@ -3,6 +3,7 @@
 // Aino was told too. The whole frame turns pale red while this screen is up.
 import { useMemo } from "react";
 
+import { useI18n } from "../../i18n/LanguageProvider";
 import { useTonePage } from "../../shell/PageTone";
 import { useReadable } from "../../voice/useReadable";
 
@@ -16,38 +17,39 @@ function WarningIcon() {
 }
 
 export function R2CallNow({ reason }: { reason: string | null }) {
+  const { t } = useI18n();
   useTonePage("alert");
   const readable = useMemo(
     () => ({
-      heading: "Call now",
-      priority: `Call now. ${reason ? `You told us: ${reason}. ` : ""}Phone 112 in an emergency, or 116 117 if you suddenly feel much worse.`,
+      heading: t("report.comeNow"),
+      priority: `${t("report.comeNow")} ${reason ? t("report.callReason", { reason }) : ""}${t("help.readPriority")}`,
     }),
-    [reason],
+    [reason, t],
   );
   useReadable(readable);
 
   return (
     <section className="alert-page" role="alert">
       <span className="alert-icon"><WarningIcon /></span>
-      <h1 className="alert-title">Please call now.</h1>
+      <h1 className="alert-title">{t("report.comeNow")}</h1>
       <p className="alert-lead">
-        {reason ? `You told us: ${reason}. ` : "You told us you are very unwell. "}
-        This needs to be checked today.
+        {reason ? t("report.callReason", { reason }) : t("report.callVeryUnwell")}
+        {t("report.callChecked")}
       </p>
 
       <div className="alert-calls">
         <a className="alert-button emergency" href="tel:112">
-          Call 112
-          <span>If it feels like an emergency</span>
+          {t("help.call112")}
+          <span>{t("report.call112sub")}</span>
         </a>
         <a className="alert-button urgent" href="tel:116117">
-          Call 116 117
-          <span>Medical helpline</span>
+          {t("help.call116")}
+          <span>{t("report.call116sub")}</span>
         </a>
       </div>
 
-      <p className="alert-lead">Or go to the nearest emergency department.</p>
-      <p className="alert-note">We have told Nurse Aino too.</p>
+      <p className="alert-lead">{t("report.orGo")}</p>
+      <p className="alert-note">{t("report.toldAino")}</p>
     </section>
   );
 }

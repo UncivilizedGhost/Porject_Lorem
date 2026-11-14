@@ -1,18 +1,21 @@
 // Owner: person 2 — design port of app/report-sent.html (artboard "R6 · Sent").
 // The check mark, what was sent, the "getting worse" card with a way to the help numbers, and one
 // big Home button. Green advice stays as a quiet card of its own.
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 
 import type { AdviceShown } from "../../api/types";
+import { useI18n } from "../../i18n/LanguageProvider";
+import type { MessageKey } from "../../i18n/dict";
 import { useReadable } from "../../voice/useReadable";
 
-const SELF_CARE: Record<string, string> = {
-  breathlessness: "Sit upright and rest. Slow, relaxed breaths help.",
-  cough: "Sip warm drinks and rest your voice.",
-  pain: "Rest, and take your usual pain relief as your nurse has advised.",
-  fever_unwell: "Drink plenty of fluids and rest.",
-  tired_appetite: "Eat small meals often, and rest when you need to.",
-  other: "Rest and keep a note of how it changes.",
+const SELF_CARE: Record<string, MessageKey> = {
+  breathlessness: "selfcare.breathlessness",
+  cough: "selfcare.cough",
+  pain: "selfcare.pain",
+  fever_unwell: "selfcare.fever_unwell",
+  tired_appetite: "selfcare.tired_appetite",
+  other: "selfcare.other",
 };
 
 interface Props {
@@ -20,8 +23,6 @@ interface Props {
   symptoms: string[];
   labels: Record<string, string>;
 }
-
-const readable = { heading: "Sent to Nurse Aino", body: "A nurse replies within 1–2 working days." };
 
 function CheckIcon() {
   return (
@@ -32,36 +33,41 @@ function CheckIcon() {
 }
 
 export function R6Sent({ advice, symptoms, labels }: Props) {
+  const { t } = useI18n();
+  const readable = useMemo(
+    () => ({ heading: t("report.sentTitle"), body: t("report.sentBody") }),
+    [t],
+  );
   useReadable(readable);
-  const names = symptoms.map((s) => labels[s] ?? s).join(", ") || "how you feel";
+  const names = symptoms.map((s) => labels[s] ?? s).join(", ");
 
   return (
     <section className="sent">
       <span className="sent-check"><CheckIcon /></span>
-      <h1>Sent to Nurse Aino</h1>
+      <h1>{t("report.sentTitle")}</h1>
 
       <div className="sent-card">
         <span className="sent-title">{names}</span>
-        <span className="sent-sub">A nurse reads your answers and replies within 1–2 working days.</span>
+        <span className="sent-sub">{t("report.sentBody")}</span>
       </div>
 
       {advice === "self_care" && (
         <div className="sent-card">
-          <span className="sent-title">Meanwhile</span>
+          <span className="sent-title">{t("report.meanwhile")}</span>
           <ul className="sent-list">
             {symptoms.map((s) => (
-              <li key={s}>{SELF_CARE[s] ?? SELF_CARE.other}</li>
+              <li key={s}>{t(SELF_CARE[s] ?? "selfcare.other")}</li>
             ))}
           </ul>
         </div>
       )}
 
       <div className="sent-amber">
-        <span className="sent-amber-title">Getting worse? Call 116 117. Emergency: 112.</span>
-        <Link className="dark-button" to="/help">Who to call</Link>
+        <span className="sent-amber-title">{t("report.amber")}</span>
+        <Link className="dark-button" to="/help">{t("report.whoToCall")}</Link>
       </div>
 
-      <Link className="sent-home" to="/home">Home</Link>
+      <Link className="sent-home" to="/home">{t("common.home")}</Link>
     </section>
   );
 }

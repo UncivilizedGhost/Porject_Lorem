@@ -2,6 +2,8 @@
 // <button> "Or tap here to confirm" under it. Used only for the three alarm cases.
 import { useRef, useState } from "react";
 
+import { useI18n } from "../i18n/LanguageProvider";
+
 interface Props {
   label: string;
   onConfirm: () => void;
@@ -12,6 +14,7 @@ const KEY_STEP = 25;
 const DONE_AT = 100;
 
 export function SlideToConfirm({ label, onConfirm, disabled = false }: Props) {
+  const { t } = useI18n();
   const track = useRef<HTMLDivElement>(null);
   const [value, setValue] = useState(0);
   const dragging = useRef(false);
@@ -32,7 +35,7 @@ export function SlideToConfirm({ label, onConfirm, disabled = false }: Props) {
         ref={track}
         className="slide-track"
         role="slider"
-        aria-label={`Slide to confirm: ${label}`}
+        aria-label={`${t("confirm.slide")}: ${label}`}
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={Math.round(value)}
@@ -61,10 +64,10 @@ export function SlideToConfirm({ label, onConfirm, disabled = false }: Props) {
         }}
       >
         <span className="slide-thumb" style={{ left: `${value}%` }} aria-hidden="true">→</span>
-        <span className="slide-hint" aria-hidden="true">Slide to confirm</span>
+        <span className="slide-hint" aria-hidden="true">{t("confirm.slide")}</span>
       </div>
       <button type="button" className="primary" disabled={disabled} onClick={onConfirm}>
-        Or tap here to confirm
+        {t("confirm.tap")}
       </button>
     </div>
   );

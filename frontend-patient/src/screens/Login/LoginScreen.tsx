@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { api } from "../../api/client";
+import { useI18n } from "../../i18n/LanguageProvider";
 import { setSession } from "../../lib/session";
 
 function BrandMark() {
@@ -26,6 +27,7 @@ function Chevron() {
 
 export function LoginScreen() {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [error, setError] = useState(false);
   const [busy, setBusy] = useState(false);
 
@@ -63,30 +65,30 @@ export function LoginScreen() {
             <BrandMark />
             Pathway Companion
           </span>
-          <h1 className="login-title">Lung cancer pathway support for Western Uusimaa</h1>
+          <h1 className="login-title">{t("login.title")}</h1>
         </div>
 
         <div className="role-tiles">
           <button type="button" className="role-tile" disabled={busy} onClick={() => enter("patient")}>
-            Patient
+            {t("login.patient")}
             <Chevron />
           </button>
           <button type="button" className="role-tile" disabled={busy} onClick={() => enter("trusted_person")}>
-            Support person
+            {t("login.support")}
             <Chevron />
           </button>
           <button type="button" className="role-tile" disabled>
-            Coordinator nurse
+            {t("login.coordinator")}
             <Chevron />
           </button>
           <button type="button" className="role-tile" disabled>
-            County decision-maker
+            {t("login.county")}
             <Chevron />
           </button>
         </div>
 
-        <p className="login-note">Coordinator nurse and county decision-maker are not part of this demo.</p>
-        {error && <p role="alert">We could not connect. Please try again.</p>}
+        <p className="login-note">{t("login.note")}</p>
+        {error && <p role="alert">{t("login.error")}</p>}
       </main>
     </div>
   );

@@ -7,6 +7,7 @@ import { useMemo } from "react";
 import type { ReactNode } from "react";
 
 import type { SymptomDef } from "../../api/types";
+import { useI18n } from "../../i18n/LanguageProvider";
 import { useReadable } from "../../voice/useReadable";
 import { useVoiceActions } from "../../voice/useVoiceActions";
 
@@ -56,10 +57,11 @@ interface Props {
 }
 
 export function R3PickSymptom({ symptoms, onPick, onUrgent }: Props) {
-  const heading = "What would you like to tell Nurse Aino about?";
-  const note = "Pick the one that bothers you most. You can add more at the end.";
+  const { t } = useI18n();
+  const heading = t("report.pickHeading");
+  const note = t("report.pickNote");
 
-  const readable = useMemo(() => ({ heading, body: note }), []);
+  const readable = useMemo(() => ({ heading, body: note }), [heading, note]);
   useReadable(readable);
 
   // "Something else" is a client-side option: GET /rules lists the named symptoms, and the
@@ -68,25 +70,25 @@ export function R3PickSymptom({ symptoms, onPick, onUrgent }: Props) {
 
   const actions = useMemo(
     () => [
-      { id: "pick:urgent", label: "Very unwell right now", run: onUrgent },
+      { id: "pick:urgent", label: t("report.urgent"), run: onUrgent },
       ...symptoms.map((s) => ({ id: `pick:${s.id}`, label: s.label, run: () => onPick(s.id) })),
-      ...(hasOther ? [] : [{ id: "pick:other", label: "Something else", run: () => onPick("other") }]),
+      ...(hasOther ? [] : [{ id: "pick:other", label: t("report.other"), run: () => onPick("other") }]),
     ],
-    [symptoms, hasOther, onPick, onUrgent],
+    [symptoms, hasOther, onPick, onUrgent, t],
   );
   useVoiceActions(actions);
 
   return (
     <section className="report-pick">
       <div className="screen-heading">
-        <span className="eyebrow">Report a symptom</span>
+        <span className="eyebrow">{t("report.eyebrow")}</span>
         <h1>{heading}</h1>
       </div>
 
       <div className="pick-grid">
         <button type="button" className="pick-tile wide urgent" onClick={onUrgent}>
           <TileIcon>{URGENT_ICON}</TileIcon>
-          <span className="pick-title">Very unwell right now</span>
+          <span className="pick-title">{t("report.urgent")}</span>
         </button>
 
         {symptoms.map((s) => {
@@ -107,7 +109,7 @@ export function R3PickSymptom({ symptoms, onPick, onUrgent }: Props) {
         {!hasOther && (
           <button type="button" className="pick-tile apricot" onClick={() => onPick("other")}>
             <TileIcon>{ICONS.other}</TileIcon>
-            <span className="pick-title">Something else</span>
+            <span className="pick-title">{t("report.other")}</span>
           </button>
         )}
       </div>

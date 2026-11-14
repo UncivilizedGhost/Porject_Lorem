@@ -4,8 +4,10 @@
 import { useEffect, useState } from "react";
 
 import { api } from "../api/client";
+import { useI18n } from "../i18n/LanguageProvider";
 
 export function DemoBar() {
+  const { t } = useI18n();
   const [day, setDay] = useState<number | null>(null);
   useEffect(() => {
     api.health().then((h) => setDay(h.current_demo_day)).catch(() => undefined);
@@ -17,8 +19,8 @@ export function DemoBar() {
   };
   return (
     <div className="demo-bar" role="status">
-      <span>Demo only · day {day ?? "–"}</span>
-      <button type="button" onClick={advance}>Advance one day</button>
+      <span>{t("demo.badge", { day: day ?? "–" })}</span>
+      <button type="button" onClick={advance}>{t("demo.advance")}</button>
     </div>
   );
 }

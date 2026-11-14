@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import { Link } from "react-router-dom";
 
 import { useVoice } from "../voice/VoiceProvider";
+import { useI18n } from "../i18n/LanguageProvider";
 import { useVoiceActions } from "../voice/useVoiceActions";
 import { BackButton } from "./BackButton";
 
@@ -30,9 +31,10 @@ function HelpIcon() {
 
 export function Header() {
   const { readPage } = useVoice();
+  const { t } = useI18n();
   const actions = useMemo(
-    () => [{ id: "header:read", label: "Read aloud", synonyms: ["read this page"], run: readPage }],
-    [readPage],
+    () => [{ id: "header:read", label: t("common.readAloud"), synonyms: ["read this page"], run: readPage }],
+    [readPage, t],
   );
   useVoiceActions(actions);
   return (
@@ -40,13 +42,13 @@ export function Header() {
       <BackButton />
       <span className="header-spacer" />
       <div className="header-actions">
-        <button type="button" className="icon-button" onClick={readPage} aria-label="Read aloud">
+        <button type="button" className="icon-button" onClick={readPage} aria-label={t("common.readAloud")}>
           <SpeakerIcon />
         </button>
-        <Link className="icon-button aa" to="/settings" aria-label="Text size and settings">Aa</Link>
+        <Link className="icon-button aa" to="/settings" aria-label={t("common.settings")}>Aa</Link>
         <Link className="help-pill" to="/help">
           <HelpIcon />
-          Help
+          {t("common.help")}
         </Link>
       </div>
     </header>

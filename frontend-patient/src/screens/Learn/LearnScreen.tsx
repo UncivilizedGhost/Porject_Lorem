@@ -7,6 +7,7 @@ import { useMemo, useState } from "react";
 
 import { api } from "../../api/client";
 import type { Language } from "../../api/types";
+import { useI18n } from "../../i18n/LanguageProvider";
 import type { Readable, VoiceAction } from "../../voice/types";
 import { useReadable } from "../../voice/useReadable";
 import { useVoiceActions } from "../../voice/useVoiceActions";
@@ -149,12 +150,15 @@ function CheckDot({ on }: { on: boolean }) {
 
 export function LearnScreen() {
   const { settings, dictate, readPage } = useVoice();
-  const [language, setLanguage] = useState<Language>(settings.language);
+  // The page language (Settings → Language) drives the screen's copy; the tiles below only
+  // choose the language the answer comes back in.
+  const { language: uiLanguage } = useI18n();
+  const [answerLanguage, setAnswerLanguage] = useState<Language>(settings.language);
   const [question, setQuestion] = useState("");
   const [result, setResult] = useState<LearnResult | null>(null);
   const [failed, setFailed] = useState(false);
   const [busy, setBusy] = useState(false);
-  const t = TEXT[language];
+  const t = TEXT[uiLanguage];
 
   const submit = async (q: string) => {
     const text = q.trim();
@@ -163,7 +167,7 @@ export function LearnScreen() {
     setBusy(true);
     setFailed(false);
     try {
-      setResult((await api.learnAsk({ question: text, language })) as LearnResult);
+      setResult((await api.learnAsk({ question: text, language: answerLanguage })) as LearnResult);
     } catch {
       setResult(null);
       setFailed(true);
@@ -179,20 +183,20 @@ export function LearnScreen() {
 
   const actions = useMemo<VoiceAction[]>(
     () => [
-      ...SUGGESTED[language].map((q) => ({ id: `learn_q_${q}`, label: q, run: () => submit(q) })),
+      ...SUGGESTED[answerLanguage].map((q) => ({ id: `learn_q_${q}`, label: q, run: () => submit(q) })),
       {
         id: "learn_ask",
-        label: TEXT[language].ask,
-        synonyms: [TEXT[language].askVoice],
-        confirm_text: `${TEXT[language].askVoice}?`,
+        label: TEXT[uiLanguage].ask,
+        synonyms: [TEXT[uiLanguage].askVoice],
+        confirm_text: `${TEXT[uiLanguage].askVoice}?`,
         run: () => {
           void dictateAndAsk(); // not awaited: it waits for the next spoken turns
         },
       },
-      { id: "learn_read_answer", label: TEXT[language].readAnswer, run: () => readPage() },
+      { id: "learn_read_answer", label: TEXT[uiLanguage].readAnswer, run: () => readPage() },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [language, readPage, dictate],
+    [answerLanguage, uiLanguage, readPage, dictate],
   );
   useVoiceActions(actions);
 
@@ -233,16 +237,16 @@ export function LearnScreen() {
         <legend>{t.languageGroup}</legend>
         <div className="opt-grid cols-3">
           {LANGUAGES.map((l) => (
-            <label key={l.code} className="opt answer-language" data-selected={language === l.code}>
+            <label key={l.code} className="opt answer-language" data-selected={answerLanguage === l.code}>
               <input
                 type="radio"
                 name="answer-language"
-                checked={language === l.code}
-                onChange={() => setLanguage(l.code)}
+                checked={answerLanguage === l.code}
+                onChange={() => setAnswerLanguage(l.code)}
               />
               <span className="opt-icons">
                 <span className="opt-icon opt-flag"><FlagIcon code={l.code} /></span>
-                <span className="opt-check"><CheckDot on={language === l.code} /></span>
+                <span className="opt-check"><CheckDot on={answerLanguage === l.code} /></span>
               </span>
               <span className="opt-label">{l.label}</span>
             </label>
@@ -253,7 +257,7 @@ export function LearnScreen() {
       <section className="ask-suggestions-wrap" aria-labelledby="suggested-label">
         <p className="ask-suggestions-label" id="suggested-label">{t.suggested}</p>
         <div className="ask-suggestions">
-          {SUGGESTED[language].map((q) => (
+          {SUGGESTED[answerLanguage].map((q) => (
             <button key={q} type="button" className="ask-chip" onClick={() => void submit(q)}>
               {q}
             </button>

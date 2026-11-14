@@ -7,9 +7,11 @@ import { useEffect, useMemo, useState } from "react";
 
 import { api } from "../../api/client";
 import type { Accessibility, Language, TextSize } from "../../api/types";
+import { useI18n } from "../../i18n/LanguageProvider";
 import { applyAccessibility } from "../../lib/applyAccessibility";
 import { getSession, setSession } from "../../lib/session";
 import { useReadable } from "../../voice/useReadable";
+import { useVoice } from "../../voice/VoiceProvider";
 import { useVoiceActions } from "../../voice/useVoiceActions";
 
 const DEFAULTS: Accessibility = { read_aloud: false, voice_mode: false, text_size: "m", high_contrast: false };
@@ -155,17 +157,17 @@ export function SettingsScreen() {
   const initial = useMemo(targetFromSession, []);
   const [kind, setKind] = useState<Target["kind"]>(initial?.kind ?? "patients");
   const [id, setId] = useState(initial?.id ?? "");
+  // The Language tiles are the app-wide switch: they set the page language (and the voice
+  // layer's language) immediately, then save the choice to the record.
+  const { language, setLanguage, t } = useI18n();
+  const { updateSettings } = useVoice();
   const [settings, setSettings] = useState<Accessibility>(DEFAULTS);
-  const [language, setLanguage] = useState<Language>("en");
   const [readingSpeed, setReadingSpeed] = useState<ReadingSpeed>("slow");
   const [error, setError] = useState(false);
 
   const readable = useMemo(
-    () => ({
-      heading: "Make it easier to use",
-      body: "Language, reading speed, appearance and voice. Staff at your health station can switch these on for you.",
-    }),
-    [],
+    () => ({ heading: t("settings.title"), body: t("settings.readBody") }),
+    [t],
   );
   useReadable(readable);
 
@@ -188,6 +190,7 @@ export function SettingsScreen() {
         if (cancelled) return;
         setSettings(r.accessibility);
         setLanguage(r.language);
+        updateSettings({ language: r.language });
         applyAccessibility(r.accessibility);
         document.documentElement.lang = r.language;
       })
@@ -208,6 +211,7 @@ export function SettingsScreen() {
     const { language: lang, ...access } = patch;
     if (lang) {
       setLanguage(lang);
+      updateSettings({ language: lang });
       document.documentElement.lang = lang;
     }
     const next = { ...settings, ...access };
@@ -239,21 +243,21 @@ export function SettingsScreen() {
   const actions = useMemo(
     () => [
       ...LANGUAGES.map((l) => ({ id: `settings:lang:${l.id}`, label: l.label, run: () => { void save({ language: l.id }); } })),
-      ...SIZES.map((s) => ({ id: `settings:size:${s.id}`, label: `Text size ${s.label}`, run: () => { void save({ text_size: s.id }); } })),
-      { id: "settings:voice_mode", label: "Voice mode", run: () => { void save({ voice_mode: !settings.voice_mode }); } },
-      { id: "settings:contrast", label: "High contrast", run: () => { void save({ high_contrast: !settings.high_contrast }); } },
+      ...SIZES.map((s) => ({ id: `settings:size:${s.id}`, label: t("settings.textSize", { size: s.label }), run: () => { void save({ text_size: s.id }); } })),
+      { id: "settings:voice_mode", label: t("settings.voiceMode"), run: () => { void save({ voice_mode: !settings.voice_mode }); } },
+      { id: "settings:contrast", label: t("settings.contrast"), run: () => { void save({ high_contrast: !settings.high_contrast }); } },
     ],
     // save closes over `settings`; re-register when the record changes.
-    [settings], // eslint-disable-line react-hooks/exhaustive-deps
+    [settings, t], // eslint-disable-line react-hooks/exhaustive-deps
   );
   useVoiceActions(actions);
 
   return (
     <section className="settings">
-      <h1>Make it easier to use</h1>
+      <h1>{t("settings.title")}</h1>
 
       <fieldset className="opt-fieldset">
-        <legend>Language</legend>
+        <legend>{t("settings.language")}</legend>
         <div className="opt-grid cols-3">
           {LANGUAGES.map((l) => (
             <Opt key={l.id} selected={language === l.id}>
@@ -274,11 +278,11 @@ export function SettingsScreen() {
       </fieldset>
 
       <fieldset className="opt-fieldset">
-        <legend>Reading speed</legend>
+        <legend>{t("settings.readingSpeed")}</legend>
         <div className="opt-grid cols-2">
           {([
-            { id: "normal" as ReadingSpeed, label: "Normal", icon: <PlayIcon /> },
-            { id: "slow" as ReadingSpeed, label: "Slow", icon: <SlowIcon /> },
+            { id: "normal" as ReadingSpeed, label: t("settings.normal"), icon: <PlayIcon /> },
+            { id: "slow" as ReadingSpeed, label: t("settings.slow"), icon: <SlowIcon /> },
           ]).map((s) => (
             <Opt key={s.id} selected={readingSpeed === s.id}>
               <input
@@ -298,7 +302,7 @@ export function SettingsScreen() {
       </fieldset>
 
       <fieldset className="opt-fieldset">
-        <legend>Appearance</legend>
+        <legend>{t("settings.appearance")}</legend>
         <div className="opt-grid cols-3">
           {SIZES.map((s) => (
             <Opt key={s.id} selected={settings.text_size === s.id} className={`text-size preview-${s.id}`}>
@@ -322,7 +326,7 @@ export function SettingsScreen() {
         <Opt selected={settings.voice_mode} className="toggle">
           <input
             type="checkbox"
-            aria-label="Voice mode"
+            aria-label={t("settings.voiceMode")}
             checked={settings.voice_mode}
             onChange={(e) => save({ voice_mode: e.target.checked })}
           />
@@ -330,13 +334,13 @@ export function SettingsScreen() {
             <span className="opt-icon"><MicIcon /></span>
             <span className="opt-check"><CheckDot on={settings.voice_mode} /></span>
           </span>
-          <span className="opt-label">Use the app by voice</span>
+          <span className="opt-label">{t("settings.voiceOn")}</span>
         </Opt>
 
         <Opt selected={settings.high_contrast} className="toggle">
           <input
             type="checkbox"
-            aria-label="High contrast"
+            aria-label={t("settings.contrast")}
             checked={settings.high_contrast}
             onChange={(e) => save({ high_contrast: e.target.checked })}
           />
@@ -344,17 +348,17 @@ export function SettingsScreen() {
             <span className="opt-icon"><ContrastIcon /></span>
             <span className="opt-check"><CheckDot on={settings.high_contrast} /></span>
           </span>
-          <span className="opt-label">Stronger contrast</span>
+          <span className="opt-label">{t("settings.contrastOn")}</span>
         </Opt>
       </div>
 
       {error && (
         <p className="error" role="alert">
-          Your choice is shown here but could not be saved. Please try again.
+          {t("settings.error")}
         </p>
       )}
 
-      <span className="settings-note">Staff at your health station can switch these on for you.</span>
+      <span className="settings-note">{t("settings.note")}</span>
     </section>
   );
 }

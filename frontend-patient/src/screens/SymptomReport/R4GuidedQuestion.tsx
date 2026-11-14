@@ -8,6 +8,7 @@ import type { ReactNode } from "react";
 
 import type { Question } from "../../api/types";
 import { NumberPad, parseNumber } from "../../components/NumberPad";
+import { useI18n } from "../../i18n/LanguageProvider";
 import { useVoice } from "../../voice/VoiceProvider";
 import { useReadable } from "../../voice/useReadable";
 import { useVoiceActions } from "../../voice/useVoiceActions";
@@ -90,6 +91,7 @@ export function R4GuidedQuestion({ question, label, index, total, onAnswer }: Pr
   const [value, setValue] = useState("");
   const [selected, setSelected] = useState("");
   const { settings } = useVoice();
+  const { t } = useI18n();
   const choices = useMemo(() => question.options ?? [], [question.options]);
   const readable = useMemo(() => ({ heading: question.prompt }), [question.prompt]);
   useReadable(readable);
@@ -151,12 +153,12 @@ export function R4GuidedQuestion({ question, label, index, total, onAnswer }: Pr
       {settings.voice_mode && (
         <p className="q-voice">
           <span className="q-mic"><MicIcon /></span>
-          <span>Or hold and say your answer. We read it back before saving.</span>
+          <span>{t("report.voiceHint")}</span>
         </p>
       )}
 
       <button type="button" className="q-next" disabled={!ready} onClick={submit}>
-        Next
+        {t("report.next")}
       </button>
     </section>
   );

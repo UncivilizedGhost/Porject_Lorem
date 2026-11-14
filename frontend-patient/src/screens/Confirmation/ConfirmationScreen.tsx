@@ -8,6 +8,7 @@ import { api } from "../../api/client";
 import { SlideToConfirm } from "../../components/SlideToConfirm";
 import { NURSE_PHONE } from "../../components/HelpNumbers";
 import { formatClock, formatDate, formatWeekday } from "../../lib/format";
+import { useI18n } from "../../i18n/LanguageProvider";
 import { actorFields, getSession } from "../../lib/session";
 import { useNextStepView } from "../../lib/usePatient";
 import { useTonePage } from "../../shell/PageTone";
@@ -24,6 +25,7 @@ function CheckIcon() {
 
 export function ConfirmationScreen() {
   const { stepId = "" } = useParams();
+  const { language, t } = useI18n();
   const isTrusted = getSession()?.role === "trusted_person";
   const next = useNextStepView()?.next_step ?? null;
   const [done, setDone] = useState(false);
@@ -40,10 +42,15 @@ export function ConfirmationScreen() {
     }
   };
 
-  const when = next ? `${formatWeekday(next.date)} ${formatDate(next.date)} at ${formatClock(next.time)}` : "";
+  const when = next
+    ? `${formatWeekday(next.date, language)} ${formatDate(next.date)} at ${formatClock(next.time)}`
+    : "";
   const readable = useMemo(
-    () => ({ heading: next ? `Confirm your ${next.what}` : "Confirm", body: next ? `${when}, ${next.where}` : "" }),
-    [next, when],
+    () => ({
+      heading: next ? t("confirm.heading", { what: next.what }) : t("confirm.doneTitle"),
+      body: next ? `${when}, ${next.where}` : "",
+    }),
+    [next, when, t],
   );
   useReadable(readable);
   const actions = useMemo(
@@ -65,35 +72,33 @@ export function ConfirmationScreen() {
     return (
       <section className="sent">
         <span className="sent-check"><CheckIcon /></span>
-        <h1>Confirmed</h1>
+        <h1>{t("confirm.doneTitle")}</h1>
         <div className="confirm-note">
-          Thank you. There will be no more reminders or calls about this step.
+          {t("confirm.doneBody")}
         </div>
-        <Link className="sent-home" to={isTrusted ? "/trusted" : "/home"}>Done</Link>
+        <Link className="sent-home" to={isTrusted ? "/trusted" : "/home"}>{t("confirm.done")}</Link>
       </section>
     );
   }
-  if (!next) return <p>Loading…</p>;
+  if (!next) return <p>{t("common.loading")}</p>;
 
   return (
     <section className="confirm-page">
       <div className="confirm-meta">
-        <span className="confirm-eyebrow">Please confirm you can come</span>
+        <span className="confirm-eyebrow">{t("confirm.eyebrow")}</span>
         <h1>{next.what}</h1>
         <span className="confirm-when">{when}</span>
         <span className="confirm-where">{next.where}</span>
       </div>
 
-      <p className="confirm-note">
-        If we don't hear from you, an automated call comes on day 2 and Nurse Aino calls on day 3.
-      </p>
+      <p className="confirm-note">{t("confirm.note")}</p>
 
       <div className="confirm-actions">
-        {failed && <p role="alert">We could not confirm this just now. Please try again.</p>}
+        {failed && <p role="alert">{t("confirm.failed")}</p>}
         <SlideToConfirm label={next.what} onConfirm={confirm} />
         <div className="confirm-row">
-          <Link className="confirm-secondary" to="/help">I need a new time</Link>
-          <a className="confirm-secondary" href={`tel:${NURSE_PHONE}`}>Call Nurse Aino</a>
+          <Link className="confirm-secondary" to="/help">{t("confirm.newTime")}</Link>
+          <a className="confirm-secondary" href={`tel:${NURSE_PHONE}`}>{t("home.callTitle")}</a>
         </div>
       </div>
     </section>

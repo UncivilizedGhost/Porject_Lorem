@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 
 import { api } from "../../api/client";
 import type { Option } from "../../api/types";
+import { useI18n } from "../../i18n/LanguageProvider";
 import { actorFields, getSession } from "../../lib/session";
 import { useReadable } from "../../voice/useReadable";
 import { useVoiceActions } from "../../voice/useVoiceActions";
@@ -48,6 +49,7 @@ function CheckRing({ on }: { on: boolean }) {
 }
 
 export function WarningSignsScreen() {
+  const { t } = useI18n();
   const [signs, setSigns] = useState<Option[]>();
   const [outcome, setOutcome] = useState<Outcome>(null);
   const [error, setError] = useState(false);
@@ -72,11 +74,11 @@ export function WarningSignsScreen() {
 
   const readable = useMemo(
     () => ({
-      heading: "Five signs worth telling a nurse",
-      body: "If you notice one of these, tap it once and a nurse will call you.",
-      priority: outcome?.grade === "red" ? "Seek care today. Call 112 or 116 117." : undefined,
+      heading: t("signs.title"),
+      body: t("signs.body"),
+      priority: outcome?.grade === "red" ? t("signs.readPriority") : undefined,
     }),
-    [outcome],
+    [outcome, t],
   );
   useReadable(readable);
   const actions = useMemo(
@@ -85,11 +87,11 @@ export function WarningSignsScreen() {
   );
   useVoiceActions(actions);
 
-  if (!signs) return error ? <p role="alert">We could not load the list. Please try again.</p> : <p>Loading…</p>;
+  if (!signs) return error ? <p role="alert">{t("signs.loadError")}</p> : <p>{t("common.loading")}</p>;
 
   return (
     <section className="signs-page">
-      <h1>Five signs worth telling a nurse</h1>
+      <h1>{t("signs.title")}</h1>
 
       <div className="signs">
         {signs.map((s) => {
@@ -107,26 +109,26 @@ export function WarningSignsScreen() {
                 <span className="q-check"><CheckRing on={sent} /></span>
               </span>
               <span className="sign-label">{s.label}</span>
-              {sent && <span className="sign-sent">Sent. Nurse Aino will call you.</span>}
+              {sent && <span className="sign-sent">{t("signs.sent")}</span>}
             </button>
           );
         })}
       </div>
 
-      {error && <p role="alert">We could not send that. Please try again.</p>}
+      {error && <p role="alert">{t("signs.error")}</p>}
 
       {outcome?.grade === "red" && (
         <div className="callout-red" role="alert">
-          <h2>Seek care today</h2>
-          <p>Do not wait for a call. Phone now.</p>
-          <a className="dark-button" href="tel:112">Call 112</a>
-          <a className="dark-button" href="tel:116117">Call 116 117</a>
+          <h2>{t("signs.redTitle")}</h2>
+          <p>{t("signs.redBody")}</p>
+          <a className="dark-button" href="tel:112">{t("help.call112")}</a>
+          <a className="dark-button" href="tel:116117">{t("help.call116")}</a>
         </div>
       )}
 
-      <p className="signs-note">Heavy bleeding or struggling to breathe: call 112.</p>
+      <p className="signs-note">{t("signs.note")}</p>
 
-      <Link className="continue-button" to="/home">Continue to your pathway</Link>
+      <Link className="continue-button" to="/home">{t("signs.continue")}</Link>
     </section>
   );
 }

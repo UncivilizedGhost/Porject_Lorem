@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { api } from "../../api/client";
 import type { Question, RulesCatalogue } from "../../api/types";
+import { useI18n } from "../../i18n/LanguageProvider";
 import { actorFields, getSession } from "../../lib/session";
 import { useFlowBack } from "../../shell/FlowBack";
 import { useVoiceActions } from "../../voice/useVoiceActions";
@@ -23,30 +24,32 @@ function questionsFor(rules: RulesCatalogue, symptom: string): Question[] {
 }
 
 function MoreOrDone({ onMore, onDone }: { onMore: () => void; onDone: () => void }) {
+  const { t } = useI18n();
   const actions = useMemo(
     () => [
-      { id: "more:add", label: "Add another symptom", run: onMore },
-      { id: "more:done", label: "No, that's all", run: onDone },
+      { id: "more:add", label: t("report.addAnother"), run: onMore },
+      { id: "more:done", label: t("report.thatIsAll"), run: onDone },
     ],
-    [onMore, onDone],
+    [onMore, onDone, t],
   );
   useVoiceActions(actions);
   return (
     <section className="more">
       <div className="screen-heading">
-        <span className="eyebrow">Your report</span>
-        <h1>Anything else?</h1>
+        <span className="eyebrow">{t("report.moreEyebrow")}</span>
+        <h1>{t("report.moreTitle")}</h1>
       </div>
-      <p className="screen-sub">Add another symptom, or send what you have to Nurse Aino.</p>
+      <p className="screen-sub">{t("report.moreSub")}</p>
       <div className="more-actions">
-        <button type="button" className="primary" onClick={onDone}>No, that's all</button>
-        <button type="button" onClick={onMore}>Add another symptom</button>
+        <button type="button" className="primary" onClick={onDone}>{t("report.thatIsAll")}</button>
+        <button type="button" onClick={onMore}>{t("report.addAnother")}</button>
       </div>
     </section>
   );
 }
 
 export function SymptomReportFlow() {
+  const { t } = useI18n();
   const [rules, setRules] = useState<RulesCatalogue>();
   // /report opens on the artboard's pick page. The Safety Check is still one tap away through
   // the red "Very unwell right now" tile, which goes straight to Call now.
@@ -56,7 +59,8 @@ export function SymptomReportFlow() {
   const [error, setError] = useState<string>();
 
   useEffect(() => {
-    api.rules().then(setRules).catch(() => setError("Could not load the questions. Please try again."));
+    api.rules().then(setRules).catch(() => setError(t("report.loadError")));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const patientId = getSession()?.patientId ?? "";
@@ -75,13 +79,13 @@ export function SymptomReportFlow() {
     (item: { id: string; label: string }) => {
       const d = { ...initialDraft, ticked: [item.id] };
       setStep({ screen: "R2", reason: item.label });
-      submit(d).catch(() => setError("Your report could not be sent, but you can still call now."));
+      submit(d).catch(() => setError(t("report.callError")));
     },
     [submit],
   );
   const none = useCallback(() => setStep({ screen: "R3" }), []);
   // The red tile on Pick a symptom: same fixed behaviour as a Safety Check tap, no grading.
-  const urgent = useCallback(() => setStep({ screen: "R2", reason: "Very unwell right now" }), []);
+  const urgent = useCallback(() => setStep({ screen: "R2", reason: t("report.urgent") }), [t]);
   const more = useCallback(() => setStep({ screen: "R3" }), []);
   const done = useCallback(() => setStep({ screen: "R5" }), []);
 
@@ -99,7 +103,7 @@ export function SymptomReportFlow() {
   useFlowBack(back);
 
   if (error && !rules) return <p role="alert">{error}</p>;
-  if (!rules) return <p>Loading…</p>;
+  if (!rules) return <p>{t("common.loading")}</p>;
 
   const labels = Object.fromEntries(rules.symptoms.map((s) => [s.id, s.label]));
 
@@ -114,7 +118,7 @@ export function SymptomReportFlow() {
         setStep({ screen: "R6", advice: result.advice_shown });
       }
     } catch {
-      setError("Your report could not be sent. If it is urgent, phone 116 117 or 112.");
+      setError(t("report.sendError"));
     }
   };
 
@@ -159,7 +163,7 @@ export function SymptomReportFlow() {
             <R4GuidedQuestion
               key={`${step.symptom}-${q.id}`}
               question={q}
-              label={labels[step.symptom] ?? "Something else"}
+              label={labels[step.symptom] ?? t("report.other")}
               index={step.questionIndex + 1}
               total={qs.length}
               onAnswer={(v) => answer(step.symptom, step.questionIndex, qs, q.id, v)}

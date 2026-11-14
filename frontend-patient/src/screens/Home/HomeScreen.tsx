@@ -1,30 +1,18 @@
 // Owner: person 2 — .scratch/patient-companion/spec.md (artboard "3 · Home (phase 2)")
 // Ported from app/home.html: greeting, one status line, the next step with its single primary
 // action, "Report a symptom" and "Call Nurse Aino" tiles, the weekly check-in row.
-// No phase names and no day counter. From GET /patients/{id}.
+// No phase names and no day counter. From GET /patients/{id}. All app copy is translated.
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { api } from "../../api/client";
 import { NURSE_PHONE } from "../../components/HelpNumbers";
 import { NoPathwayYet } from "../../components/NoPathwayYet";
+import { useI18n } from "../../i18n/LanguageProvider";
 import { formatClock, formatDate, formatWeekday } from "../../lib/format";
 import { usePatient } from "../../lib/usePatient";
 import { useReadable } from "../../voice/useReadable";
 import { useVoiceActions } from "../../voice/useVoiceActions";
-
-const STATUS_LINE = {
-  on_track: "Your tests are going as planned",
-  running_late: "Running late, Nurse Aino knows",
-} as const;
-
-/** "Good morning" before noon, then afternoon, then evening. */
-function greeting(now = new Date()): string {
-  const h = now.getHours();
-  if (h < 12) return "Good morning";
-  if (h < 18) return "Good afternoon";
-  return "Good evening";
-}
 
 function ChevronIcon() {
   return (
@@ -62,10 +50,13 @@ function PhoneIcon() {
 export function HomeScreen() {
   const patient = usePatient();
   const navigate = useNavigate();
+  const { language, t } = useI18n();
   const next = patient?.next_step ?? null;
   const pending = next?.pending_confirmation ?? null;
   const name = patient?.display_name ?? null;
-  const when = next ? `${formatWeekday(next.date)} ${formatDate(next.date)} at ${formatClock(next.time)}` : "";
+  const when = next
+    ? `${formatWeekday(next.date, language)} ${formatDate(next.date)} at ${formatClock(next.time)}`
+    : "";
 
   // How many check-in questions there are; the artboard shows "4 of 10 answered", but answers
   // are not stored server-side, so only the total and the time are real.
@@ -78,15 +69,21 @@ export function HomeScreen() {
     return () => { live = false; };
   }, []);
 
-  const hello = `${greeting()}${name ? `, ${name}` : ""}`;
+  const hour = new Date().getHours();
+  const greeting = t(hour < 12 ? "home.morning" : hour < 18 ? "home.afternoon" : "home.evening");
+  const hello = `${greeting}${name ? `, ${name}` : ""}`;
+  const statusLine = patient
+    ? t(patient.status === "on_track" ? "home.status.on_track" : "home.status.running_late")
+    : "";
+
   const readable = useMemo(
     () => ({
       heading: hello,
       body: patient
-        ? `${STATUS_LINE[patient.status]}.${next ? ` Next: ${next.what}, ${when}, ${next.where}.` : ""}`
+        ? `${statusLine}.${next ? t("home.readableNext", { what: next.what, when, where: next.where }) : ""}`
         : "",
     }),
-    [hello, patient, next, when],
+    [hello, patient, statusLine, next, when, t],
   );
   useReadable(readable);
 
@@ -95,22 +92,22 @@ export function HomeScreen() {
       ...(pending
         ? [{
             id: "home:confirm",
-            label: "Confirm appointment",
+            label: t("home.confirm"),
             synonyms: ["confirm"],
             confirm_text: `Confirm the ${next?.what} on ${when}?`,
             run: () => navigate(`/confirm/${pending.id}`),
           }]
         : []),
-      { id: "home:report", label: "Report a symptom", run: () => navigate("/report") },
-      { id: "home:call", label: "Call Nurse Aino", run: () => { window.location.href = `tel:${NURSE_PHONE}`; } },
-      { id: "home:checkin", label: "Weekly check-in", run: () => navigate("/check-in") },
+      { id: "home:report", label: t("home.reportTitle"), run: () => navigate("/report") },
+      { id: "home:call", label: t("home.callTitle"), run: () => { window.location.href = `tel:${NURSE_PHONE}`; } },
+      { id: "home:checkin", label: t("home.checkinTitle"), run: () => navigate("/check-in") },
     ],
-    [pending, next, when, navigate],
+    [pending, next, when, navigate, t],
   );
   useVoiceActions(actions);
 
   if (patient === null) return <NoPathwayYet />;
-  if (!patient) return <p>Loading…</p>;
+  if (!patient) return <p>{t("common.loading")}</p>;
 
   return (
     <section className="home">
@@ -121,26 +118,26 @@ export function HomeScreen() {
             className={`status-dot ${patient.status === "on_track" ? "status-ok" : ""}`}
             aria-hidden="true"
           />
-          {STATUS_LINE[patient.status]}
+          {statusLine}
         </p>
       </div>
 
       {next && (
         <div className="card next-step">
           <div className="next-facts">
-            <p className="eyebrow">Your next step</p>
+            <p className="eyebrow">{t("home.nextStep")}</p>
             <h2 className="next-title">{next.what}</h2>
             <p className="next-when">{when}</p>
             <p className="next-where">{next.where}</p>
           </div>
           <Link className="text-link" to="/pathway">
-            How to get there and what to bring
+            {t("home.howToGetThere")}
             <ChevronIcon />
           </Link>
           {pending && (
             <div className="confirm-block">
-              <span className="chip chip-wait">Not confirmed yet</span>
-              <Link className="primary" to={`/confirm/${pending.id}`}>Confirm appointment</Link>
+              <span className="chip chip-wait">{t("home.notConfirmed")}</span>
+              <Link className="primary" to={`/confirm/${pending.id}`}>{t("home.confirm")}</Link>
             </div>
           )}
         </div>
@@ -150,24 +147,24 @@ export function HomeScreen() {
         <Link className="tile" to="/report">
           <ReportIcon />
           <span className="tile-text">
-            <span className="tile-title">Report a symptom</span>
-            <span className="tile-sub">Tell Nurse Aino</span>
+            <span className="tile-title">{t("home.reportTitle")}</span>
+            <span className="tile-sub">{t("home.reportSub")}</span>
           </span>
         </Link>
         <a className="tile tile-apricot" href={`tel:${NURSE_PHONE}`}>
           <PhoneIcon />
           <span className="tile-text">
-            <span className="tile-title">Call Nurse Aino</span>
-            <span className="tile-sub">Weekdays 8–16</span>
+            <span className="tile-title">{t("home.callTitle")}</span>
+            <span className="tile-sub">{t("home.callSub")}</span>
           </span>
         </a>
       </div>
 
       <Link className="row-link" to="/check-in">
         <span>
-          <span className="row-link-title">Weekly check-in</span>
+          <span className="row-link-title">{t("home.checkinTitle")}</span>
           <span className="row-link-sub">
-            {checkinTotal ? `${checkinTotal} questions · 3 min` : "A few questions · 3 min"}
+            {checkinTotal ? t("home.checkinSubCount", { n: checkinTotal }) : t("home.checkinSub")}
           </span>
         </span>
         <ChevronIcon />

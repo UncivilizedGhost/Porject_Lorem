@@ -3,6 +3,8 @@
 //   times   9.30
 //   decimals with a comma: 38,6 °C
 
+import { weekdayName, type UiLanguage } from "../i18n/dict";
+
 /** A date-only ISO string ("2026-11-18") is read as a local date so no time zone can shift it. */
 function parse(iso: string): Date {
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
@@ -15,11 +17,10 @@ export function formatDate(iso: string, withYear = false): string {
   return withYear ? `${dm}${d.getFullYear()}` : dm;
 }
 
-const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
-/** "2026-11-18" → "Wednesday" (from the same local-date read as formatDate). */
-export function formatWeekday(iso: string): string {
-  return WEEKDAYS[parse(iso).getDay()];
+/** "2026-11-18" → "Wednesday", "keskiviikko" or "onsdag" (same local-date read as
+ * formatDate). English is the default for callers with no page language. */
+export function formatWeekday(iso: string, language: UiLanguage = "en"): string {
+  return weekdayName(parse(iso).getDay(), language);
 }
 
 export function formatTime(iso: string): string {

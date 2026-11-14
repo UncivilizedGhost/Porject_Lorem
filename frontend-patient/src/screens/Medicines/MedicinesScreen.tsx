@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 
 import { api } from "../../api/client";
 import type { Medicine } from "../../api/types";
+import { useI18n } from "../../i18n/LanguageProvider";
+import type { MessageKey } from "../../i18n/dict";
 import { actorFields, getSession } from "../../lib/session";
 import { usePatient } from "../../lib/usePatient";
 import { useReadable } from "../../voice/useReadable";
@@ -23,11 +25,11 @@ type Logged = { status: Status; at: string };
 /** Where the dose sits in the day, from the generic label the server sends. The artboard shows a
  * clock time per card; the contract has no dose time, so the two dosed slots use the demo times
  * the artboard uses and an as-needed medicine shows none. */
-function scheduleFor(medicine: Medicine): { line: string; time: string | null } {
+function scheduleFor(medicine: Medicine): { lineKey: MessageKey; time: string | null } {
   const label = medicine.label.toLowerCase();
-  if (label.includes("morning")) return { line: "With breakfast", time: "8.00" };
-  if (label.includes("evening")) return { line: "With dinner", time: "18.00" };
-  return { line: "When needed", time: null };
+  if (label.includes("morning")) return { lineKey: "medicines.withBreakfast", time: "8.00" };
+  if (label.includes("evening")) return { lineKey: "medicines.withDinner", time: "18.00" };
+  return { lineKey: "medicines.whenNeeded", time: null };
 }
 
 function clockNow(): string {
@@ -58,10 +60,10 @@ function CheckIcon() {
   );
 }
 
-const LOGGED: Record<Status, string> = {
-  taken: "Taken",
-  skipped: "Skipped",
-  side_effect: "Side effect noted",
+const LOGGED: Record<Status, MessageKey> = {
+  taken: "medicines.taken",
+  skipped: "medicines.skipped",
+  side_effect: "medicines.sideEffectNoted",
 };
 
 function MedicineCard({
@@ -77,6 +79,7 @@ function MedicineCard({
 }) {
   const schedule = scheduleFor(medicine);
   const navigate = useNavigate();
+  const { t } = useI18n();
 
   return (
     <li className="card medicine-card">
@@ -84,7 +87,7 @@ function MedicineCard({
         <span className="med-icon"><PillIcon /></span>
         <span className="med-text">
           <span className="med-title">{medicine.label}</span>
-          <span className="med-schedule">{schedule.line}</span>
+          <span className="med-schedule">{t(schedule.lineKey)}</span>
         </span>
         {schedule.time && <span className="med-time">{schedule.time}</span>}
       </div>
@@ -93,18 +96,18 @@ function MedicineCard({
         <p className="med-logged" data-status={logged.status} role="status">
           <CheckIcon />
           <span>
-            {LOGGED[logged.status]} at {logged.at}
+            {t("medicines.logged", { status: t(LOGGED[logged.status]), time: logged.at })}
           </span>
-          <span className="sr-only">Saved</span>
+          <span className="sr-only">{t("common.saved")}</span>
         </p>
       ) : (
         <>
           <button type="button" className="primary med-primary" onClick={() => { void onLog(medicine.id, "taken"); }}>
-            I took it
+            {t("medicines.took")}
           </button>
           <div className="med-actions">
             <button type="button" className="med-skip" onClick={() => { void onLog(medicine.id, "skipped"); }}>
-              I skipped it
+              {t("medicines.iSkipped")}
             </button>
             {/* A side effect is logged and then hands over to the Symptom Report, which is
                 where a nurse can act on it. */}
@@ -115,19 +118,20 @@ function MedicineCard({
                 navigate("/report");
               }}
             >
-              Side effect
+              {t("medicines.sideEffect")}
             </button>
           </div>
         </>
       )}
 
-      {failed && <p className="error" role="alert">Could not save. Please try again.</p>}
+      {failed && <p className="error" role="alert">{t("medicines.failed")}</p>}
     </li>
   );
 }
 
 export function MedicinesScreen() {
   const patient = usePatient();
+  const { t } = useI18n();
   const patientId = getSession()?.patientId ?? "";
   const [logged, setLogged] = useState<Record<string, Logged>>({});
   const [failed, setFailed] = useState<Record<string, boolean>>({});
@@ -145,10 +149,10 @@ export function MedicinesScreen() {
 
   const readable = useMemo(
     () => ({
-      heading: "Medicines today",
-      body: "From your prescriptions in Kanta (FHIR mock-up). For each medicine: I took it, I skipped it or Side effect.",
+      heading: t("medicines.title"),
+      body: t("medicines.readBody"),
     }),
-    [],
+    [t],
   );
   useReadable(readable);
 
@@ -192,14 +196,14 @@ export function MedicinesScreen() {
   return (
     <section className="medicines">
       <div className="screen-heading">
-        <h1>Medicines today</h1>
-        <span className="screen-sub">From your prescriptions in Kanta (FHIR mock-up)</span>
+        <h1>{t("medicines.title")}</h1>
+        <span className="screen-sub">{t("medicines.sub")}</span>
       </div>
 
       {patient === undefined ? (
-        <p className="muted">Loading…</p>
+        <p className="muted">{t("common.loading")}</p>
       ) : medicines.length === 0 ? (
-        <p className="muted">No medicines right now.</p>
+        <p className="muted">{t("medicines.empty")}</p>
       ) : (
         <ul className="medicine-list">
           {medicines.map((m) => (

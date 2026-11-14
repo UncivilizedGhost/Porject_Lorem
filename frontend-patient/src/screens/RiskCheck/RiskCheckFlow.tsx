@@ -9,6 +9,7 @@ import { api } from "../../api/client";
 import { ChoiceList } from "../../components/ChoiceList";
 import { NumberPad, parseNumber } from "../../components/NumberPad";
 import { ProgressBar } from "../../components/ProgressBar";
+import { useI18n } from "../../i18n/LanguageProvider";
 import { setSession } from "../../lib/session";
 import { useReadable } from "../../voice/useReadable";
 import { useVoiceActions } from "../../voice/useVoiceActions";
@@ -21,6 +22,7 @@ type Answers = Record<string, string | number>;
 
 export function RiskCheckFlow() {
   const navigate = useNavigate();
+  const { language, t } = useI18n();
   const [answers, setAnswers] = useState<Answers>({});
   const [index, setIndex] = useState(0);
   const [raw, setRaw] = useState("");
@@ -37,7 +39,7 @@ export function RiskCheckFlow() {
     try {
       const created = await api.createContact({
         county,
-        language: "en",
+        language,
         consent: { warning_sign_contact: consentGiven },
         risk_check: { taken: true, answers: riskAnswers },
       });
@@ -66,9 +68,9 @@ export function RiskCheckFlow() {
   };
 
   const headline = eligible
-    ? "You may be able to join the lung cancer screening"
+    ? t("risk.eligibleTitle")
     : askingConsent
-      ? "May a nurse contact you?"
+      ? t("risk.consentTitle")
       : question.prompt;
   const readable = useMemo(() => ({ heading: headline }), [headline]);
   useReadable(readable);
@@ -76,8 +78,8 @@ export function RiskCheckFlow() {
     () =>
       askingConsent && !eligible
         ? [
-            { id: "consent:yes", label: "Yes, a nurse may contact me", synonyms: ["yes"], run: () => decide(true) },
-            { id: "consent:no", label: "No, do not contact me", synonyms: ["no"], run: () => decide(false) },
+            { id: "consent:yes", label: t("risk.yes"), synonyms: ["yes"], run: () => decide(true) },
+            { id: "consent:no", label: t("risk.no"), synonyms: ["no"], run: () => decide(false) },
           ]
         : [],
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -89,9 +91,9 @@ export function RiskCheckFlow() {
     return (
       <section>
         <h1>{headline}</h1>
-        <p>Based on your answers, you fit the national screening pilot. It is free, and you choose whether to join.</p>
-        <a className="primary" href={PILOT_SIGNUP_URL} target="_blank" rel="noreferrer">Sign up for the screening</a>
-        <button type="button" onClick={() => navigate("/warning-signs")}>See the signs to watch for</button>
+        <p>{t("risk.eligibleBody")}</p>
+        <a className="primary" href={PILOT_SIGNUP_URL} target="_blank" rel="noreferrer">{t("risk.signup")}</a>
+        <button type="button" onClick={() => navigate("/warning-signs")}>{t("risk.seeSigns")}</button>
       </section>
     );
   }
@@ -100,16 +102,16 @@ export function RiskCheckFlow() {
     return (
       <section>
         <h1>{headline}</h1>
-        <p>If you say yes, a nurse may call you about your result. You can say no and still see it.</p>
+        <p>{t("risk.consentBody")}</p>
         {saveFailed ? (
           <>
-            <p role="alert">We could not save your answers.</p>
-            <button type="button" className="primary" onClick={() => submit(consent ?? false, answers)}>Try again</button>
+            <p role="alert">{t("risk.saveFailed")}</p>
+            <button type="button" className="primary" onClick={() => submit(consent ?? false, answers)}>{t("risk.retry")}</button>
           </>
         ) : (
           <>
-            <button type="button" className="primary" onClick={() => decide(true)}>Yes, a nurse may contact me</button>
-            <button type="button" onClick={() => decide(false)}>No, do not contact me</button>
+            <button type="button" className="primary" onClick={() => decide(true)}>{t("risk.yes")}</button>
+            <button type="button" onClick={() => decide(false)}>{t("risk.no")}</button>
           </>
         )}
       </section>
@@ -121,7 +123,7 @@ export function RiskCheckFlow() {
   return (
     <section className="report-q">
       <div className="q-head">
-        <span className="q-label">Screening check</span>
+        <span className="q-label">{t("risk.label")}</span>
         <div className="q-progress">
           <span className="q-bar">
             <span className="q-bar-fill" style={{ width: `${percent}%` }} />
@@ -142,7 +144,7 @@ export function RiskCheckFlow() {
           <>
             <NumberPad value={raw} onChange={setRaw} />
             <button type="button" className="q-next" disabled={raw === ""} onClick={() => answer(question.id, parseNumber(raw))}>
-              Next
+              {t("common.next")}
             </button>
           </>
         )}

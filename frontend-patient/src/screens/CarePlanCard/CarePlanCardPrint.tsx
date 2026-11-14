@@ -2,6 +2,7 @@
 // Print-stylesheet view of the next-step card: what / when / where, what to bring (Kela card),
 // how to get there (HSL, Kela taxi), Nurse Aino + help numbers in spec order.
 import { NURSE_PHONE } from "../../components/HelpNumbers";
+import { useI18n } from "../../i18n/LanguageProvider";
 import { formatClock, formatDate } from "../../lib/format";
 import { usePatient } from "../../lib/usePatient";
 import { NoPathwayYet } from "../../components/NoPathwayYet";
@@ -9,35 +10,36 @@ import "../../styles/print.css";
 
 export function CarePlanCardPrint() {
   const patient = usePatient();
+  const { t } = useI18n();
   const next = patient?.next_step ?? null;
   if (patient === null) return <NoPathwayYet />;
-  if (!patient) return <p>Loading…</p>;
+  if (!patient) return <p>{t("common.loading")}</p>;
   return (
     <main className="care-plan-card">
-      <h1>My care plan card</h1>
+      <h1>{t("card.title")}</h1>
       {next ? (
         <>
-          <h2>Next step</h2>
+          <h2>{t("card.nextStep")}</h2>
           <p><strong>{next.what}</strong></p>
           <p>{formatDate(next.date)} at {formatClock(next.time)}</p>
           <p>{next.where}</p>
-          <h2>Bring with you</h2>
+          <h2>{t("card.bring")}</h2>
           <ul>
             {next.what_to_bring.map((b) => <li key={b}>{b}</li>)}
           </ul>
-          <h2>How to get there</h2>
-          <p>Use the HSL journey planner. Kela taxi reimbursement may cover your trip.</p>
+          <h2>{t("card.howToGetThere")}</h2>
+          <p>{t("card.howToGetThereBody")}</p>
         </>
       ) : (
-        <p>There is no next step planned yet.</p>
+        <p>{t("card.noNext")}</p>
       )}
-      <h2>Who to call</h2>
+      <h2>{t("help.title")}</h2>
       <ol>
-        <li><strong>112</strong> in an emergency</li>
-        <li><strong>116 117</strong> if you suddenly feel much worse, day or night</li>
-        <li><strong>Nurse Aino</strong> {NURSE_PHONE}, weekdays 8–16</li>
+        <li><strong>112</strong> {t("card.emergency")}</li>
+        <li><strong>116 117</strong> {t("card.worse")}</li>
+        <li><strong>{t("help.nurse")}</strong> {NURSE_PHONE}, {t("card.nurseLine")}</li>
       </ol>
-      <button type="button" className="no-print" onClick={() => window.print()}>Print this card</button>
+      <button type="button" className="no-print" onClick={() => window.print()}>{t("card.print")}</button>
     </main>
   );
 }
