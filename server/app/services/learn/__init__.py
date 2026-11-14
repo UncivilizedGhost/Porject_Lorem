@@ -40,6 +40,13 @@ def _source(passage: dict) -> dict:
     return {"label": passage["source_label"], "url": passage["url"], "passage_id": passage["id"]}
 
 
+def build_prompt(question: str, language: str, passages: list[dict]) -> tuple[str, str]:
+    """(system, user) for the model; shared with scripts/pregenerate_answers.py."""
+    user = "Passages:\n" + "\n\n".join(f"[{p['title']}]\n{p['text']}" for p in passages)
+    user += f"\n\nQuestion: {question}"
+    return SYSTEM_PROMPT.format(language=LANGUAGE_NAMES[language]), user
+
+
 async def ask(question: str, language: str) -> dict:
     language = language if language in LANGUAGES else "en"
 
@@ -57,9 +64,7 @@ async def ask(question: str, language: str) -> dict:
     if ready:
         return {"kind": "answer", "text": ready, "sources": sources}
 
-    user ="Passages:\n" + "\n\n".join(f"[{p['title']}]\n{p['text']}" for p in passages)
-    user += f"\n\nQuestion: {question}"
-    system = SYSTEM_PROMPT.format(language=LANGUAGE_NAMES[language])
+    system, user = build_prompt(question, language, passages)
     try:
         text = await asyncio.wait_for(
             nemotron.complete(system, user, timeout_s=config.NEMOTRON_TIMEOUT_S),

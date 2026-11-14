@@ -123,7 +123,10 @@ async def test_pregenerated_summary_is_served_without_calling_the_model(client, 
         {"text": "Over-75s start late", "fact_ids": ["group_pct"]},
         {"text": "This one cites a fact that no longer exists", "fact_ids": ["gone"]},
     ]})
-    body = (await client.post("/dashboard/summary", json={"card_id": CARD})).json()
+    try:
+        body = (await client.post("/dashboard/summary", json={"card_id": CARD})).json()
+    finally:
+        await db.update("insight_cards", CARD, {"pregenerated_summary": None})  # the card is shared
     assert body["source"] == "pregenerated"
     assert body["sentences"] == [{"text": "Over-75s start late", "fact_ids": ["group_pct"]}]
     assert model.prompts == []

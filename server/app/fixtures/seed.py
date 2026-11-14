@@ -37,7 +37,11 @@ async def ensure_fixtures() -> None:
         await db.upsert("counties", county_id(doc["name"]), doc)
     for doc in load("actions.json"):
         await db.upsert("actions", doc["_id"], doc)
+    # AI summaries written ahead of time by scripts/pregenerate_answers.py, if any.
+    summaries = load("pregenerated_summaries.json") if (HERE / "pregenerated_summaries.json").is_file() else {}
     for doc in load("insight_cards.json"):
+        if doc["_id"] in summaries:
+            doc = {**doc, "pregenerated_summary": summaries[doc["_id"]]}
         await db.upsert("insight_cards", doc["_id"], doc)
     for clinician in load("clinicians.json"):
         await db.upsert("clinicians", clinician["_id"], clinician)
