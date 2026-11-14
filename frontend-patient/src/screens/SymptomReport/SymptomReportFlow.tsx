@@ -41,7 +41,9 @@ function MoreOrDone({ onMore, onDone }: { onMore: () => void; onDone: () => void
 
 export function SymptomReportFlow() {
   const [rules, setRules] = useState<RulesCatalogue>();
-  const [step, setStep] = useState<Step | { screen: "more" }>({ screen: "R1" });
+  // /report opens on the artboard's pick page. The Safety Check is still one tap away through
+  // the red "Very unwell right now" tile, which goes straight to Call now.
+  const [step, setStep] = useState<Step | { screen: "more" }>({ screen: "R3" });
   const [draft, setDraft] = useState<ReportDraft>(initialDraft);
   const [pending, setPending] = useState<Record<string, string | number>>({});
   const [error, setError] = useState<string>();
@@ -71,6 +73,8 @@ export function SymptomReportFlow() {
     [submit],
   );
   const none = useCallback(() => setStep({ screen: "R3" }), []);
+  // The red tile on Pick a symptom: same fixed behaviour as a Safety Check tap, no grading.
+  const urgent = useCallback(() => setStep({ screen: "R2", reason: "Very unwell right now" }), []);
   const more = useCallback(() => setStep({ screen: "R3" }), []);
   const done = useCallback(() => setStep({ screen: "R5" }), []);
 
@@ -114,6 +118,7 @@ export function SymptomReportFlow() {
       {step.screen === "R3" && (
         <R3PickSymptom
           symptoms={rules.symptoms}
+          onUrgent={urgent}
           onPick={(symptom) => {
             const qs = questionsFor(rules, symptom);
             if (qs.length === 0) {
