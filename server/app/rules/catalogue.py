@@ -180,7 +180,7 @@ _OTHER_DEFS: list[Q] = [
 _SCALE = [_opt("none", "None", "green"), _opt("mild", "Mild", "green")]
 
 _CHECKIN_DEFS: list[Q] = [
-    _number("temperature", "What is your temperature today?", "°C"),
+    _number("temperature", "Current temperature", "°C"),
     _choice(
         "breathlessness",
         "Breathlessness",

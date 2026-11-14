@@ -16,7 +16,7 @@ import {
 } from "react";
 
 import { match } from "./matcher";
-import { readingOrder, speak, stopSpeaking } from "./readAloud";
+import { pageReadingOrder, speak, stopSpeaking } from "./readAloud";
 import { containsRedFlag, SAFETY_MESSAGE } from "./redFlags";
 import { STRINGS } from "./strings";
 import type { Readable, VoiceAction } from "./types";
@@ -125,7 +125,7 @@ export function VoiceProvider({
   const readPage = useCallback(() => {
     const token = ++readToken.current;
     stopSpeaking();
-    const parts = readingOrder(readableRef.current);
+    const parts = pageReadingOrder(readableRef.current);
     void (async () => {
       for (const part of parts) {
         if (token !== readToken.current) return;

@@ -13,6 +13,26 @@ export function readingOrder(r: Readable): string[] {
   return [r.priority, r.heading, r.body].filter((s): s is string => Boolean(s && s.trim()));
 }
 
+/** What the screen is showing right now. `main` leaves the header and the bottom nav out. */
+export function visiblePageText(): string {
+  if (typeof document === "undefined") return "";
+  const main = document.querySelector("main");
+  if (!main) return "";
+  return (main as HTMLElement).innerText.replace(/\s+/g, " ").trim();
+}
+
+/** Safety text first, then everything the page shows. Reading the rendered page keeps every
+ * screen covered — lists, options and buttons included — even where a screen registered only a
+ * heading. Falls back to the screen's own strings when nothing is painted yet. */
+export function pageReadingOrder(r: Readable): string[] {
+  const page = visiblePageText();
+  if (!page) return readingOrder(r);
+  const priority = r.priority?.trim();
+  if (!priority) return [page];
+  // Do not say the safety line twice when it is also printed on the page.
+  return [priority, page.split(priority).join(" ").replace(/\s+/g, " ").trim()].filter(Boolean);
+}
+
 function playBlob(blob: Blob, mine: number): Promise<void> {
   return new Promise((resolve) => {
     if (mine !== generation) return resolve();

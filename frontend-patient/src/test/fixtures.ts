@@ -51,7 +51,7 @@ export const rules: RulesCatalogue = {
         { id: "a_lot", label: "A lot" },
       ],
     },
-    { id: "temperature", prompt: "What is your temperature today?", kind: "number", unit: "°C" },
+    { id: "temperature", prompt: "Current temperature", kind: "number", unit: "°C" },
   ],
   warning_signs: [
     { id: "worsening_cough", label: "A cough that is getting worse" },

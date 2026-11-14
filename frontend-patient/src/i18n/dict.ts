@@ -113,7 +113,7 @@ export const MESSAGES = {
     "Kunde inte spara. Försök igen.",
   ],
 
-  "learn.title": ["Ask about your care", "Kysy hoidostasi", "Fråga om din vård"],
+  "learn.title": ["Ask about care", "Kysy hoidostasi", "Fråga om din vård"],
   "learn.intro": [
     "Ask about tests and what to expect.",
     "Kysy tutkimuksista ja siitä, mitä odottaa.",
@@ -573,6 +573,119 @@ export const MESSAGES = {
     "Lepää ja kirjaa muistiin, miten oire muuttuu.",
     "Vila och anteckna hur det förändras.",
   ],
+
+  /* ----------------------------------------------------------------------------------------
+   * Trusted Person variants. `translate` prefers "<key>.trusted" when the session role is
+   * trusted_person, so only the lines where "you" would be wrong for a helper are repeated
+   * here. Anything without a variant keeps the patient's wording.
+   * -------------------------------------------------------------------------------------- */
+  "nav.trusted": ["Helping", "Autan", "Hjälper"],
+  "nav.checkin": ["Check-in", "Tarkistus", "Koll"],
+  "nav.help": ["Help", "Apua", "Hjälp"],
+
+  "report.eyebrow.trusted": [
+    "Report a symptom for them",
+    "Ilmoita oireesta hänen puolestaan",
+    "Rapportera ett symtom för hen",
+  ],
+  "report.r1Heading.trusted": [
+    "Is any of this happening to them right now?",
+    "Tapahtuuko jokin näistä hänelle juuri nyt?",
+    "Händer något av detta med hen just nu?",
+  ],
+  "report.r1Body.trusted": [
+    "Tap what is happening to them, or None of these.",
+    "Napauta sitä, mitä hänelle tapahtuu, tai Ei mikään näistä.",
+    "Tryck på det som händer hen, eller Inget av dessa.",
+  ],
+  "report.pickHeading.trusted": [
+    "What would you like to tell Nurse Aino about them?",
+    "Mistä haluat kertoa hoitaja Ainolle hänen osaltaan?",
+    "Vad vill du berätta för sjuksköterska Aino om hen?",
+  ],
+  "report.pickNote.trusted": [
+    "Pick the one that bothers them most. You can add more at the end.",
+    "Valitse se, joka vaivaa häntä eniten. Voit lisätä muita lopuksi.",
+    "Välj det som besvärar hen mest. Du kan lägga till fler i slutet.",
+  ],
+  "report.urgent.trusted": [
+    "They are very unwell right now",
+    "Hän voi hyvin huonosti juuri nyt",
+    "Hen mår mycket dåligt just nu",
+  ],
+  "report.other.trusted": [
+    "Something else they describe",
+    "Jokin muu, jonka hän kuvaa",
+    "Något annat som hen beskriver",
+  ],
+  "report.ownTitle.trusted": [
+    "Anything to add about them in your own words?",
+    "Haluatko lisätä jotain hänestä omin sanoin?",
+    "Något att tillägga om hen med egna ord?",
+  ],
+  "report.ownPlaceholder.trusted": [
+    "Describe it here, or tap the microphone",
+    "Kuvaile tähän tai napauta mikrofonia",
+    "Beskriv här eller tryck på mikrofonen",
+  ],
+  "report.sentBody.trusted": [
+    "A nurse reads the answers and replies within 1–2 working days.",
+    "Hoitaja lukee vastaukset ja vastaa 1–2 arkipäivässä.",
+    "En sjuksköterska läser svaren och svarar inom 1–2 vardagar.",
+  ],
+  "report.callVeryUnwell.trusted": [
+    "They are very unwell. ",
+    "Hän on erittäin huonovointinen. ",
+    "Hen mår mycket dåligt. ",
+  ],
+
+  "confirm.eyebrow.trusted": [
+    "Please confirm they can come",
+    "Vahvista, että hän pääsee tulemaan",
+    "Bekräfta att hen kan komma",
+  ],
+  "confirm.heading.trusted": [
+    "Confirm the {what}",
+    "Vahvista: {what}",
+    "Bekräfta: {what}",
+  ],
+  "confirm.note.trusted": [
+    "If we don't hear from you or them, an automated call comes on day 2 and Nurse Aino calls on day 3.",
+    "Jos emme kuule sinusta tai hänestä, automaattinen soitto tulee päivänä 2 ja hoitaja Aino soittaa päivänä 3.",
+    "Om vi inte hör av dig eller hen kommer ett automatiskt samtal dag 2 och sjuksköterska Aino ringer dag 3.",
+  ],
+
+  "help.title.trusted": [
+    "Who to call for them",
+    "Kenelle soittaa hänen puolestaan",
+    "Vem du ska ringa för hen",
+  ],
+  "help.sub.trusted": [
+    "If they need help now, these numbers are fastest.",
+    "Jos hän tarvitsee apua nyt, nämä numerot ovat nopeimmat.",
+    "Om hen behöver hjälp nu är dessa nummer snabbast.",
+  ],
+  "help.nurseSub.trusted": [
+    "Report it for them and Nurse Aino replies in 1–2 working days",
+    "Ilmoita hänen puolestaan, niin hoitaja Aino vastaa 1–2 arkipäivässä",
+    "Rapportera för hen, så svarar sjuksköterska Aino inom 1–2 vardagar",
+  ],
+
+  "checkin.title.trusted": [
+    "Weekly check-in for them",
+    "Viikkotarkistus hänestä",
+    "Veckokoll för hen",
+  ],
+  "signs.title.trusted": [
+    "Warning signs to watch for",
+    "Varoitusmerkit, joita seurata",
+    "Varningstecken att hålla koll på",
+  ],
+  "signs.body.trusted": [
+    "Tap what they have. The nurse is told straight away.",
+    "Napauta sitä, mitä hänellä on. Hoitajalle ilmoitetaan heti.",
+    "Tryck på det hen har. Sjuksköterskan får veta direkt.",
+  ],
 } as const;
 
 export type MessageKey = keyof typeof MESSAGES;
@@ -592,8 +705,13 @@ export function translate(
   language: UiLanguage,
   key: MessageKey,
   vars?: Record<string, string | number>,
+  role: "patient" | "trusted_person" = "patient",
 ): string {
-  let text: string = MESSAGES[key][INDEX[language]];
+  // A Trusted Person reads a few lines in their own voice ("Is any of this happening to them?").
+  // A variant exists only where the patient's wording would be wrong; the rest falls back.
+  const variant = role === "trusted_person" ? (`${key}.trusted` as MessageKey) : null;
+  const row = variant && variant in MESSAGES ? MESSAGES[variant] : MESSAGES[key];
+  let text: string = row[INDEX[language]];
   if (vars) {
     for (const [name, value] of Object.entries(vars)) {
       text = text.split(`{${name}}`).join(String(value));

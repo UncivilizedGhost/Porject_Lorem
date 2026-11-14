@@ -1,12 +1,13 @@
 // Owner: person 2 — design port of app/index.html (artboard "0 · Demo login").
 // The brand line, the headline and the role tiles. Patient → GET /demo/identities; Support
 // person → the trusted view. The two coordinator roles are shown but disabled, as in the artboard.
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { api } from "../../api/client";
 import { useI18n } from "../../i18n/LanguageProvider";
 import { setSession } from "../../lib/session";
+import { useReadable } from "../../voice/useReadable";
 
 function BrandMark() {
   return (
@@ -30,6 +31,9 @@ export function LoginScreen() {
   const { t } = useI18n();
   const [error, setError] = useState(false);
   const [busy, setBusy] = useState(false);
+  // The login screen sits outside the shell, so this is the only way it gets a voice.
+  const readable = useMemo(() => ({ heading: t("login.title"), body: t("login.note") }), [t]);
+  useReadable(readable);
 
   const enter = async (role: "patient" | "trusted_person") => {
     setBusy(true);

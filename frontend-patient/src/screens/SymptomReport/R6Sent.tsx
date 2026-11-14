@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import type { AdviceShown } from "../../api/types";
 import { useI18n } from "../../i18n/LanguageProvider";
 import type { MessageKey } from "../../i18n/dict";
+import { getSession } from "../../lib/session";
 import { useReadable } from "../../voice/useReadable";
 
 const SELF_CARE: Record<string, MessageKey> = {
@@ -67,7 +68,12 @@ export function R6Sent({ advice, symptoms, labels }: Props) {
         <Link className="dark-button" to="/help">{t("report.whoToCall")}</Link>
       </div>
 
-      <Link className="sent-home" to="/home">{t("common.home")}</Link>
+      <Link
+        className="sent-home"
+        to={getSession()?.role === "trusted_person" ? "/trusted" : "/home"}
+      >
+        {t("common.home")}
+      </Link>
     </section>
   );
 }

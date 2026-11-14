@@ -1,17 +1,22 @@
 // Owner: person 2 — .scratch/patient-companion/spec.md (artboard "Printable care-plan card")
 // Print-stylesheet view of the next-step card: what / when / where, what to bring (Kela card),
 // how to get there (HSL, Kela taxi), Nurse Aino + help numbers in spec order.
+import { useMemo } from "react";
+
 import { NURSE_PHONE } from "../../components/HelpNumbers";
 import { useI18n } from "../../i18n/LanguageProvider";
 import { formatClock, formatDate } from "../../lib/format";
 import { usePatient } from "../../lib/usePatient";
 import { NoPathwayYet } from "../../components/NoPathwayYet";
+import { useReadable } from "../../voice/useReadable";
 import "../../styles/print.css";
 
 export function CarePlanCardPrint() {
   const patient = usePatient();
   const { t } = useI18n();
   const next = patient?.next_step ?? null;
+  // Registers the card so Read-aloud can speak it; the text itself comes from <main>.
+  useReadable(useMemo(() => ({ heading: t("card.title") }), [t]));
   if (patient === null) return <NoPathwayYet />;
   if (!patient) return <p>{t("common.loading")}</p>;
   return (

@@ -3,7 +3,7 @@
 // slot (person 4, shown when Voice Mode is on) · BottomNav, all inside the phone frame from
 // app/home.html so the app looks like the artboards on any screen size.
 import { useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 import { api } from "../api/client";
 import type { Accessibility } from "../api/types";
@@ -29,8 +29,21 @@ function useSavedAccessibility() {
   }, []);
 }
 
+/** Screens written for the patient. A Trusted Person is sent to their own view instead. */
+const PATIENT_ONLY = ["/home", "/pathway", "/medicines"];
+
 function Frame() {
   const tone = usePageTone();
+  const { pathname } = useLocation();
+  const session = getSession();
+  // The role is chosen on the login screen. No role at all means this page was opened directly.
+  if (!session) return <Navigate to="/" replace />;
+  if (
+    session.role === "trusted_person" &&
+    PATIENT_ONLY.some((path) => pathname === path || pathname.startsWith(`${path}/`))
+  ) {
+    return <Navigate to="/trusted" replace />;
+  }
   return (
     <div className="app-frame" data-tone={tone ?? undefined}>
       <DemoBar />

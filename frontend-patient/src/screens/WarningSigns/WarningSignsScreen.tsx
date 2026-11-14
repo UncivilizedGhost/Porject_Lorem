@@ -128,7 +128,12 @@ export function WarningSignsScreen() {
 
       <p className="signs-note">{t("signs.note")}</p>
 
-      <Link className="continue-button" to="/home">{t("signs.continue")}</Link>
+      <Link
+        className="continue-button"
+        to={getSession()?.role === "trusted_person" ? "/trusted" : "/home"}
+      >
+        {t("signs.continue")}
+      </Link>
     </section>
   );
 }

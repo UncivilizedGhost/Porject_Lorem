@@ -3,6 +3,7 @@
 // <html lang> follows so screen readers pronounce the page correctly.
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
+import { getSession } from "../lib/session";
 import { translate, type MessageKey, type UiLanguage } from "./dict";
 
 const STORAGE_KEY = "pathway.language";
@@ -46,7 +47,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     }
   }, [language]);
 
-  const t = useCallback<Translate>((key, vars) => translate(language, key, vars), [language]);
+  // The role comes from the login tiles: a Trusted Person gets "<key>.trusted" where one exists.
+  const t = useCallback<Translate>(
+    (key, vars) => translate(language, key, vars, getSession()?.role ?? "patient"),
+    [language],
+  );
   const value = useMemo(() => ({ language, setLanguage, t }), [language, setLanguage, t]);
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;

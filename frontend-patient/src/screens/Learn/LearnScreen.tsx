@@ -1,4 +1,4 @@
-// Owner: person 4 — design port of app/learn.html (artboard "9 · Learn" / "Ask about your care").
+// Owner: person 4 — design port of app/learn.html (artboard "9 · Learn" / "Ask about care").
 // A labelled question row with Ask, the answer card with its reviewed source, and the "answers
 // only come from reviewed sources" note. Answers come only from the reviewed corpus on the server
 // → POST /learn/ask. Safety and "ask your nurse" replies are fixed text and never pretend to be
@@ -52,7 +52,7 @@ const SUGGESTED: Record<Language, string[]> = {
 
 const TEXT: Record<Language, Record<string, string>> = {
   en: {
-    title: "Ask about your care",
+    title: "Ask about care",
     intro: "Ask about tests and what to expect.",
     label: "Your question",
     ask: "Ask",
