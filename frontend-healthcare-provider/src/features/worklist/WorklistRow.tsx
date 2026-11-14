@@ -1,6 +1,7 @@
 // Owner: person 3 — .scratch/coordinator-worklist/spec.md (artboard "Coordinator worklist")
 // One row: reason, delivery status, Pathway Clock (Patients only), "reported by", the
 // must-acknowledge control on red rows, and the one-tap actions the server offers for it.
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import type { WorklistRow as Row } from "../../api/types";
@@ -27,12 +28,27 @@ const BUTTONS: Record<RowAction, string> = {
 
 interface Props {
   row: Row;
-  onAction: (row: Row, action: RowAction) => void;
+  onAction: (row: Row, action: RowAction) => void | Promise<void>;
 }
 
 export function WorklistRow({ row, onAction }: Props) {
   const red = row.level === "red";
   const waiting = row.waiting_working_days;
+  const [busy, setBusy] = useState<RowAction | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const run = async (a: RowAction) => {
+    setBusy(a);
+    setError(null);
+    try {
+      await onAction(row, a);
+    } catch (e) {
+      setError(`${BUTTONS[a]} failed: ${e instanceof Error ? e.message : "try again"}`);
+    } finally {
+      setBusy(null);
+    }
+  };
+
   return (
     <li className={`wl-row wl-band-${row.band} ${red && !row.acknowledged ? "wl-must-ack" : ""}`}>
       <div className="wl-head">
@@ -78,8 +94,15 @@ export function WorklistRow({ row, onAction }: Props) {
         {(Object.keys(BUTTONS) as RowAction[])
           .filter((a) => row.actions.includes(a))
           .map((a) => (
-            <button key={a} type="button" className="wl-btn" onClick={() => onAction(row, a)}>
-              {BUTTONS[a]}
+            <button
+              key={a}
+              type="button"
+              className={`wl-btn ${busy === a ? "wl-busy" : ""}`}
+              disabled={busy !== null}
+              aria-busy={busy === a}
+              onClick={() => run(a)}
+            >
+              {busy === a ? "Working…" : BUTTONS[a]}
             </button>
           ))}
         {row.actions.includes("open_card") && row.detail_ref && (
@@ -88,6 +111,11 @@ export function WorklistRow({ row, onAction }: Props) {
           </Link>
         )}
       </div>
+      {error && (
+        <p role="alert" className="wl-error">
+          {error}
+        </p>
+      )}
     </li>
   );
 }
