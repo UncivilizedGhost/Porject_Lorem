@@ -104,7 +104,7 @@ async def test_next_step_says_what_when_where_and_what_to_bring(client):
     assert next_step["what"] == "Chest CT"
     assert next_step["where"] == "Jorvi Hospital, Espoo (HUS imaging)"
     assert next_step["date"].startswith("2026-11-21")
-    assert next_step["time"] == "09.30"
+    assert next_step["time"] == "09:30"
     assert "Kela card" in next_step["what_to_bring"]
     assert next_step["pending_confirmation"] is None
 

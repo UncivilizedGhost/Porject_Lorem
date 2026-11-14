@@ -74,6 +74,7 @@ test("a Trusted Person confirms on the Patient's behalf and is named", async () 
       trusted_person_name: "Liisa Virtanen",
     }),
   );
+  expect(mockApi.getPatient).not.toHaveBeenCalled(); // a Trusted Person only reads the trusted view
 });
 
 test("a failed confirmation is explained and can be retried", async () => {
