@@ -28,6 +28,7 @@ from app.routers import (
     voice,
     worklist,
 )
+from app.services import voice as voice_service
 
 
 @asynccontextmanager
@@ -39,7 +40,8 @@ async def lifespan(_: FastAPI):
         await ensure_seeded()
     except Exception as exc:  # noqa: BLE001 - the server still starts; /health reports db: false
         print(f"[startup] database not reachable, skipping schema + seed: {exc}")
-    # TODO(person 4): log loudly if the ElevenLabs key is missing (ADR-0005).
+    if warning := voice_service.startup_warning():
+        print(warning)
     yield
     await db.close_pool()
 
