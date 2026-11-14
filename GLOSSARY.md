@@ -89,24 +89,20 @@ A wellbeing services county (hyvinvointialue), the geographic aggregation unit f
 _Avoid_: Region, Area.
 
 **Insight Card**:
-The Equity Dashboard's third level: one gap (what, where, who), its Cause Codes, the Matched Actions with simulated effect ranges, and the human decision taken on it.
-_Avoid_: Recommendation, Alert (a Patient-level signal on the Worklist).
+The Equity Dashboard's third level, one per vulnerable group of a County: the group's gap (what, where, who), its Cause Codes, an AI summary and the Recommended Actions. It summarises and recommends; it records no decision.
+_Avoid_: Alert (a Patient-level signal on the Worklist).
 
 **Action Library**:
 The curated, hand-authored set of actions an Insight Card can show, each tied to a national strategy or roadmap action and to cited evidence with an evidence badge.
-_Avoid_: Recommendations, Playbook.
+_Avoid_: Playbook.
 
-**Matched Action**:
-An Action Library entry whose gap pattern matches an Insight Card. The system matches; it never invents, ranks or recommends — a person decides.
-_Avoid_: Recommended action, Suggested action.
+**Recommended Action**:
+An Action Library entry whose gap pattern fits an Insight Card's group. The recommendation is a fixed rule, never a model's choice, and each one states where it comes from.
+_Avoid_: Matched action, Suggested action.
 
 **Cause Code**:
 The reason days are lost at a pathway stage, aggregated per County: unconfirmed, transport, waiting for a slot. Synthetic in the MVP.
 _Avoid_: Root cause, Reason (unqualified).
-
-**Decision Log**:
-The append-only record of who approved, adapted or rejected which Matched Actions on an Insight Card, when, why, with which owner, and on which numbers and evidence as shown at the time.
-_Avoid_: Audit log (no production audit logging in the MVP), History.
 
 ### Accessibility
 

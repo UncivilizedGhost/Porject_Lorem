@@ -1,30 +1,630 @@
 {
-  "western-uusimaa/missed-first-visits-75": [
+  "western-uusimaa/age/85+": [
     {
-      "text": "In Western Uusimaa, 35% of people aged 75 and over start treatment within the 6-week target (n=273), against 54% across the county",
+      "text": "29.7% of people aged 85 and over in Western Uusimaa start treatment within the 6-week target (n=105)",
+      "fact_ids": [
+        "group_pct"
+      ]
+    },
+    {
+      "text": "The county rate is 53.6% of all patients in Western Uusimaa",
+      "fact_ids": [
+        "county_pct"
+      ]
+    },
+    {
+      "text": "The share of people aged 85 and over starting treatment within the 6-week target is 23.9 percentage points below the county rate",
+      "fact_ids": [
+        "group_vs_county"
+      ]
+    },
+    {
+      "text": "Actions include 'Phone or SMS reminders, with a nurse call when the visit is not confirmed', 'National pathway time limits, with waiting-time reporting as a funding condition', and 'Named coordinator for every patient, recorded in the register'",
+      "fact_ids": [
+        "action_reminders_nurse_call",
+        "action_national_pathway_time_limits",
+        "action_named_coordinator"
+      ]
+    }
+  ],
+  "western-uusimaa/age/18-39": [
+    {
+      "text": "72.4% of people aged 18-39 in Western Uusimaa start treatment within the 6-week target",
+      "fact_ids": [
+        "group_pct"
+      ]
+    },
+    {
+      "text": "The county rate is 53.6% of all patients in Western Uusimaa",
+      "fact_ids": [
+        "county_pct"
+      ]
+    },
+    {
+      "text": "The share of people aged 18-39 starting treatment within the 6-week target is 18.8 percentage points above the county rate",
+      "fact_ids": [
+        "group_vs_county"
+      ]
+    },
+    {
+      "text": "Actions include 'National pathway time limits, with waiting-time reporting as a funding condition' with no published effect estimate and 'Named coordinator for every patient, recorded in the register' with no published effect estimate",
+      "fact_ids": [
+        "action_national_pathway_time_limits",
+        "action_named_coordinator"
+      ]
+    }
+  ],
+  "western-uusimaa/age/40-49": [
+    {
+      "text": "68.1% of people aged 40-49 in Western Uusimaa start treatment within the 6-week target (n=104)",
+      "fact_ids": [
+        "group_pct"
+      ]
+    },
+    {
+      "text": "The county rate is 53.6% of all patients in Western Uusimaa",
+      "fact_ids": [
+        "county_pct"
+      ]
+    },
+    {
+      "text": "The share of people aged 40-49 starting treatment within the 6-week target is 14.5 percentage points above the county rate",
+      "fact_ids": [
+        "group_vs_county"
+      ]
+    },
+    {
+      "text": "Actions include 'National pathway time limits, with waiting-time reporting as a funding condition' and 'Named coordinator for every patient, recorded in the register', both with no published effect estimate",
+      "fact_ids": [
+        "action_national_pathway_time_limits",
+        "action_named_coordinator"
+      ]
+    }
+  ],
+  "western-uusimaa/age/50-59": [
+    {
+      "text": "64% of people aged 50-59 in Western Uusimaa start treatment within the 6-week target (n=76)",
+      "fact_ids": [
+        "group_pct"
+      ]
+    },
+    {
+      "text": "The county rate is 53.6% of all patients in Western Uusimaa",
+      "fact_ids": [
+        "county_pct"
+      ]
+    },
+    {
+      "text": "The share of people aged 50-59 starting treatment within the 6-week target is 10.4 percentage points above the county rate",
+      "fact_ids": [
+        "group_vs_county"
+      ]
+    },
+    {
+      "text": "Actions include 'National pathway time limits, with waiting-time reporting as a funding condition' with no published effect estimate and 'Named coordinator for every patient, recorded in the register' with no published effect estimate",
+      "fact_ids": [
+        "action_national_pathway_time_limits",
+        "action_named_coordinator"
+      ]
+    }
+  ],
+  "western-uusimaa/age/60-64": [
+    {
+      "text": "59% of people aged 60-64 in Western Uusimaa start treatment within the 6-week target (n=43)",
+      "fact_ids": [
+        "group_pct"
+      ]
+    },
+    {
+      "text": "The county rate is 53.6% of all patients in Western Uusimaa",
+      "fact_ids": [
+        "county_pct"
+      ]
+    },
+    {
+      "text": "The share of people aged 60-64 starting treatment within the 6-week target is 5.4 percentage points above the county rate",
+      "fact_ids": [
+        "group_vs_county"
+      ]
+    },
+    {
+      "text": "Actions include 'National pathway time limits, with waiting-time reporting as a funding condition' and 'Named coordinator for every patient, recorded in the register', both with no published effect estimate",
+      "fact_ids": [
+        "action_national_pathway_time_limits",
+        "action_named_coordinator"
+      ]
+    }
+  ],
+  "western-uusimaa/age/65-74": [
+    {
+      "text": "60.4% of people aged 65-74 in Western Uusimaa start treatment within the 6-week target (n=321)",
+      "fact_ids": [
+        "group_pct"
+      ]
+    },
+    {
+      "text": "53.6% of all patients in Western Uusimaa start treatment within the 6-week target",
+      "fact_ids": [
+        "county_pct"
+      ]
+    },
+    {
+      "text": "The share of people aged 65-74 starting treatment within the 6-week target is 6.8 percentage points above the county rate",
+      "fact_ids": [
+        "group_vs_county"
+      ]
+    },
+    {
+      "text": "The top causes of delayed referral stages are \"waiting for a slot\" at 55%, \"no transport to the visit\" at 24%, and \"visit not confirmed\" at 21%",
+      "fact_ids": [
+        "cause_waiting_for_slot",
+        "cause_transport",
+        "cause_unconfirmed"
+      ]
+    }
+  ],
+  "western-uusimaa/age/75-84": [
+    {
+      "text": "38.8% of people aged 75-84 in Western Uusimaa start treatment within the 6-week target (n=168)",
+      "fact_ids": [
+        "group_pct"
+      ]
+    },
+    {
+      "text": "The county rate is 53.6% of all patients in Western Uusimaa",
+      "fact_ids": [
+        "county_pct"
+      ]
+    },
+    {
+      "text": "The share of people aged 75-84 starting treatment within the 6-week target is 14.8 percentage points below the county rate",
+      "fact_ids": [
+        "group_vs_county"
+      ]
+    },
+    {
+      "text": "12% of people aged 75 and over in Western Uusimaa start treatment late because they miss the first visit",
+      "fact_ids": [
+        "missed_share"
+      ]
+    }
+  ],
+  "western-uusimaa/language/Arabic": [
+    {
+      "text": "36.5% of Arabic speakers in Western Uusimaa start treatment within the 6-week target, compared with 53.6% of all patients in Western Uusimaa",
       "fact_ids": [
         "group_pct",
         "county_pct"
       ]
     },
     {
-      "text": "The gap is widest among those aged 85 and over, at 30%",
+      "text": "The share of Arabic speakers starting treatment within the 6-week target is 17.1 percentage points below the county rate",
       "fact_ids": [
-        "age_85+"
+        "group_vs_county"
       ]
     },
     {
-      "text": "About 12% of this group start late because they miss the first visit, losing about 14 days each",
+      "text": "Among delayed referral stages in Western Uusimaa, 24% have the Cause Code \"no transport to the visit\", 21% have the Cause Code \"visit not confirmed\", and 55% have the Cause Code \"waiting for a slot\"",
       "fact_ids": [
-        "missed_share",
-        "days_lost"
+        "cause_transport",
+        "cause_unconfirmed",
+        "cause_waiting_for_slot"
       ]
     },
     {
-      "text": "Phone reminders cut missed appointments by 43% in one Danish hospital, but even with no missed visits at all this group would reach only 47%",
+      "text": "Actions include 'Targeted, community-based communication for language groups: multilingual and culturally sensitive invitations and materials, with clinic staff prompted to raise screening and early care-seeking', 'National pathway time limits, with waiting-time reporting as a funding condition', and 'Named coordinator for every patient, recorded in the register'; each has no published effect estimate",
       "fact_ids": [
-        "action_reminders_nurse_call",
-        "max_achievable"
+        "action_language_group_communication",
+        "action_national_pathway_time_limits",
+        "action_named_coordinator"
+      ]
+    }
+  ],
+  "western-uusimaa/language/Finnish": [
+    {
+      "text": "54.1% of Finnish speakers in Western Uusimaa start treatment within the 6-week target (n=724)",
+      "fact_ids": [
+        "group_pct"
+      ]
+    },
+    {
+      "text": "The share of Finnish speakers starting treatment within the 6-week target is 0.5 percentage points above the county rate",
+      "fact_ids": [
+        "group_vs_county"
+      ]
+    },
+    {
+      "text": "53.6% of all patients in Western Uusimaa start treatment within the 6-week target",
+      "fact_ids": [
+        "county_pct"
+      ]
+    },
+    {
+      "text": "55% of delayed referral stages in Western Uusimaa have the Cause Code 'waiting for a slot'",
+      "fact_ids": [
+        "cause_waiting_for_slot"
+      ]
+    }
+  ],
+  "western-uusimaa/language/Russian": [
+    {
+      "text": "39.8% of Russian speakers in Western Uusimaa start treatment within the 6-week target (n=38)",
+      "fact_ids": [
+        "group_pct"
+      ]
+    },
+    {
+      "text": "The county rate is 53.6% of all patients in Western Uusimaa",
+      "fact_ids": [
+        "county_pct"
+      ]
+    },
+    {
+      "text": "The share of Russian speakers starting treatment within the 6-week target is 13.8 percentage points below the county rate",
+      "fact_ids": [
+        "group_vs_county"
+      ]
+    },
+    {
+      "text": "Cause Code 'no transport to the visit' accounts for 24% of delayed referral stages in Western Uusimaa",
+      "fact_ids": [
+        "cause_transport"
+      ]
+    }
+  ],
+  "western-uusimaa/language/Swedish": [
+    {
+      "text": "59.2% of Swedish speakers in Western Uusimaa start treatment within the 6-week target (n=33)",
+      "fact_ids": [
+        "group_pct"
+      ]
+    },
+    {
+      "text": "53.6% of all patients in Western Uusimaa start treatment within the 6-week target",
+      "fact_ids": [
+        "county_pct"
+      ]
+    },
+    {
+      "text": "The share of Swedish speakers starting treatment within the 6-week target is 5.6 percentage points above the county rate",
+      "fact_ids": [
+        "group_vs_county"
+      ]
+    },
+    {
+      "text": "For delayed referral stages in Western Uusimaa, 24% have the Cause Code \"no transport to the visit\", 21% have the Cause Code \"visit not confirmed\", and 55% have the Cause Code \"waiting for a slot\"",
+      "fact_ids": [
+        "cause_transport",
+        "cause_unconfirmed",
+        "cause_waiting_for_slot"
+      ]
+    }
+  ],
+  "western-uusimaa/language/Estonian": [
+    {
+      "text": "44.4% of Estonian speakers in Western Uusimaa start treatment within the 6-week target (n=18)",
+      "fact_ids": [
+        "group_pct"
+      ]
+    },
+    {
+      "text": "53.6% of all patients in Western Uusimaa start treatment within the 6-week target",
+      "fact_ids": [
+        "county_pct"
+      ]
+    },
+    {
+      "text": "The share of Estonian speakers starting treatment within the 6-week target is 9.2 percentage points below the county rate",
+      "fact_ids": [
+        "group_vs_county"
+      ]
+    },
+    {
+      "text": "24% of delayed referral stages in Western Uusimaa have the Cause Code 'no transport to the visit', 21% have 'visit not confirmed', and 55% have 'waiting for a slot'",
+      "fact_ids": [
+        "cause_transport",
+        "cause_unconfirmed",
+        "cause_waiting_for_slot"
+      ]
+    }
+  ],
+  "western-uusimaa/language/Ukrainian": [
+    {
+      "text": "43.8% of Ukrainian speakers in Western Uusimaa start treatment within the 6-week target (n=8)",
+      "fact_ids": [
+        "group_pct"
+      ]
+    },
+    {
+      "text": "53.6% of all patients in Western Uusimaa start treatment within the 6-week target",
+      "fact_ids": [
+        "county_pct"
+      ]
+    },
+    {
+      "text": "The share of Ukrainian speakers starting treatment within the 6-week target is 9.8 percentage points below the county rate",
+      "fact_ids": [
+        "group_vs_county"
+      ]
+    },
+    {
+      "text": "24% of delayed referral stages in Western Uusimaa have the Cause Code 'no transport to the visit'",
+      "fact_ids": [
+        "cause_transport"
+      ]
+    }
+  ],
+  "western-uusimaa/ethnicity/Finnish-born": [
+    {
+      "text": "56.4% of Finnish-born patients in Western Uusimaa start treatment within the 6-week target (n=655)",
+      "fact_ids": [
+        "group_pct"
+      ]
+    },
+    {
+      "text": "The county rate is 53.6% of all patients in Western Uusimaa",
+      "fact_ids": [
+        "county_pct"
+      ]
+    },
+    {
+      "text": "The share of Finnish-born patients starting treatment within the 6-week target is 2.8 percentage points above the county rate",
+      "fact_ids": [
+        "group_vs_county"
+      ]
+    },
+    {
+      "text": "The top causes of delayed referral stages are 'waiting for a slot' at 55%, 'no transport to the visit' at 24%, and 'visit not confirmed' at 21%",
+      "fact_ids": [
+        "cause_waiting_for_slot",
+        "cause_transport",
+        "cause_unconfirmed"
+      ]
+    }
+  ],
+  "western-uusimaa/ethnicity/Not recorded": [
+    {
+      "text": "47.2% of patients whose ethnicity is not recorded in Western Uusimaa start treatment within the 6-week target (n=18)",
+      "fact_ids": [
+        "group_pct"
+      ]
+    },
+    {
+      "text": "The county rate is 53.6% of all patients in Western Uusimaa",
+      "fact_ids": [
+        "county_pct"
+      ]
+    },
+    {
+      "text": "The share of patients whose ethnicity is not recorded starting treatment within the 6-week target is 6.4 percentage points below the county rate",
+      "fact_ids": [
+        "group_vs_county"
+      ]
+    },
+    {
+      "text": "Actions include 'National pathway time limits, with waiting-time reporting as a funding condition' and 'Named coordinator for every patient, recorded in the register', both with no published effect estimate",
+      "fact_ids": [
+        "action_national_pathway_time_limits",
+        "action_named_coordinator"
+      ]
+    }
+  ],
+  "western-uusimaa/ethnicity/Foreign-born (EU/EEA)": [
+    {
+      "text": "45.6% of Foreign-born (EU/EEA) patients in Western Uusimaa start treatment within the 6-week target (n=54)",
+      "fact_ids": [
+        "group_pct"
+      ]
+    },
+    {
+      "text": "The county rate is 53.6% of all patients in Western Uusimaa",
+      "fact_ids": [
+        "county_pct"
+      ]
+    },
+    {
+      "text": "The share of Foreign-born (EU/EEA) patients starting treatment within the 6-week target is 8 percentage points below the county rate",
+      "fact_ids": [
+        "group_vs_county"
+      ]
+    },
+    {
+      "text": "Actions include 'National pathway time limits, with waiting-time reporting as a funding condition' and 'Named coordinator for every patient, recorded in the register', both with no published effect estimate",
+      "fact_ids": [
+        "action_national_pathway_time_limits",
+        "action_named_coordinator"
+      ]
+    }
+  ],
+  "western-uusimaa/ethnicity/Foreign-born (non-EU)": [
+    {
+      "text": "39.8% of Foreign-born (non-EU) patients in Western Uusimaa start treatment within the 6-week target (n=104)",
+      "fact_ids": [
+        "group_pct"
+      ]
+    },
+    {
+      "text": "53.6% of all patients in Western Uusimaa start treatment within the 6-week target",
+      "fact_ids": [
+        "county_pct"
+      ]
+    },
+    {
+      "text": "The share of Foreign-born (non-EU) patients starting treatment within the 6-week target is 13.8 percentage points below the county rate",
+      "fact_ids": [
+        "group_vs_county"
+      ]
+    },
+    {
+      "text": "Actions include 'National pathway time limits, with waiting-time reporting as a funding condition' with no published effect estimate and 'Named coordinator for every patient, recorded in the register' with no published effect estimate",
+      "fact_ids": [
+        "action_national_pathway_time_limits",
+        "action_named_coordinator"
+      ]
+    }
+  ],
+  "western-uusimaa/education_group/basic": [
+    {
+      "text": "48.2% of people with basic education in Western Uusimaa start treatment within the 6-week target (n=269)",
+      "fact_ids": [
+        "group_pct"
+      ]
+    },
+    {
+      "text": "The county rate is 53.6% of all patients in Western Uusimaa",
+      "fact_ids": [
+        "county_pct"
+      ]
+    },
+    {
+      "text": "The share of people with basic education starting treatment within the 6-week target is 5.4 percentage points below the county rate",
+      "fact_ids": [
+        "group_vs_county"
+      ]
+    },
+    {
+      "text": "Delayed referral stages in Western Uusimaa have the Cause Code 'no transport to the visit' in 24% of cases, 'visit not confirmed' in 21%, and 'waiting for a slot' in 55%",
+      "fact_ids": [
+        "cause_transport",
+        "cause_unconfirmed",
+        "cause_waiting_for_slot"
+      ]
+    }
+  ],
+  "western-uusimaa/education_group/tertiary": [
+    {
+      "text": "57.5% of people with tertiary education in Western Uusimaa start treatment within the 6-week target (n=215)",
+      "fact_ids": [
+        "group_pct"
+      ]
+    },
+    {
+      "text": "The county rate for all patients is 53.6%",
+      "fact_ids": [
+        "county_pct"
+      ]
+    },
+    {
+      "text": "The share of people with tertiary education starting treatment within the 6-week target is 3.9 percentage points above the county rate",
+      "fact_ids": [
+        "group_vs_county"
+      ]
+    },
+    {
+      "text": "Actions include 'National pathway time limits, with waiting-time reporting as a funding condition' and 'Named coordinator for every patient, recorded in the register', both with no published effect estimate",
+      "fact_ids": [
+        "action_national_pathway_time_limits",
+        "action_named_coordinator"
+      ]
+    }
+  ],
+  "western-uusimaa/education_group/upper secondary": [
+    {
+      "text": "55.5% of people with upper secondary education in Western Uusimaa start treatment within the 6-week target (n=347)",
+      "fact_ids": [
+        "group_pct"
+      ]
+    },
+    {
+      "text": "The county rate is 53.6% of all patients in Western Uusimaa",
+      "fact_ids": [
+        "county_pct"
+      ]
+    },
+    {
+      "text": "The share of people with upper secondary education starting treatment within the 6-week target is 1.9 percentage points above the county rate",
+      "fact_ids": [
+        "group_vs_county"
+      ]
+    },
+    {
+      "text": "Cause codes for delayed referral stages include 'no transport to the visit' at 24%, 'visit not confirmed' at 21%, and 'waiting for a slot' at 55%",
+      "fact_ids": [
+        "cause_transport",
+        "cause_unconfirmed",
+        "cause_waiting_for_slot"
+      ]
+    }
+  ],
+  "western-uusimaa/municipality_type/rural": [
+    {
+      "text": "43.4% of people in rural municipalities in Western Uusimaa start treatment within the 6-week target (n=41)",
+      "fact_ids": [
+        "group_pct"
+      ]
+    },
+    {
+      "text": "This is 10.2 percentage points below the county rate of 53.6% of all patients in Western Uusimaa",
+      "fact_ids": [
+        "group_vs_county",
+        "county_pct"
+      ]
+    },
+    {
+      "text": "The most common cause of delayed referral stages is 'waiting for a slot' at 55%",
+      "fact_ids": [
+        "cause_waiting_for_slot"
+      ]
+    },
+    {
+      "text": "Actions include 'National pathway time limits, with waiting-time reporting as a funding condition' and 'Named coordinator for every patient, recorded in the register', both with no published effect estimate",
+      "fact_ids": [
+        "action_national_pathway_time_limits",
+        "action_named_coordinator"
+      ]
+    }
+  ],
+  "western-uusimaa/municipality_type/urban": [
+    {
+      "text": "55% of people in urban municipalities in Western Uusimaa start treatment within the 6-week target (n=526)",
+      "fact_ids": [
+        "group_pct"
+      ]
+    },
+    {
+      "text": "This is 1.4 percentage points above the county rate",
+      "fact_ids": [
+        "group_vs_county"
+      ]
+    },
+    {
+      "text": "The county rate is 53.6% of all patients in Western Uusimaa starting treatment within the 6-week target",
+      "fact_ids": [
+        "county_pct"
+      ]
+    },
+    {
+      "text": "Actions include 'National pathway time limits, with waiting-time reporting as a funding condition' and 'Named coordinator for every patient, recorded in the register', both with no published effect estimate",
+      "fact_ids": [
+        "action_national_pathway_time_limits",
+        "action_named_coordinator"
+      ]
+    }
+  ],
+  "western-uusimaa/municipality_type/semi-urban": [
+    {
+      "text": "52.5% of people in semi-urban municipalities in Western Uusimaa start treatment within the 6-week target (n=264)",
+      "fact_ids": [
+        "group_pct"
+      ]
+    },
+    {
+      "text": "The county rate is 53.6% of all patients in Western Uusimaa",
+      "fact_ids": [
+        "county_pct"
+      ]
+    },
+    {
+      "text": "The share of people in semi-urban municipalities starting treatment within the 6-week target is 1.1 percentage points below the county rate",
+      "fact_ids": [
+        "group_vs_county"
+      ]
+    },
+    {
+      "text": "Actions include 'National pathway time limits, with waiting-time reporting as a funding condition' with no published effect estimate and 'Named coordinator for every patient, recorded in the register' with no published effect estimate",
+      "fact_ids": [
+        "action_national_pathway_time_limits",
+        "action_named_coordinator"
       ]
     }
   ]

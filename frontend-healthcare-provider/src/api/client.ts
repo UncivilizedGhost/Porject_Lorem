@@ -3,11 +3,8 @@ import type {
   CountyDetail,
   CountySummary,
   DashboardAction,
-  DecisionInput,
-  DecisionRow,
+  GroupRef,
   InsightCardDoc,
-  SimulationResult,
-  SuggestionsResult,
   SummaryResult,
 } from "./types";
 
@@ -58,15 +55,12 @@ export const api = {
   counties: () => request<CountySummary[]>("GET", "/dashboard/counties"),
   county: (name: string) => request<CountyDetail>("GET", `/dashboard/counties/${encodeURIComponent(name)}`),
   actions: () => request<DashboardAction[]>("GET", "/dashboard/actions"),
-  insight: (cardId: string) => request<InsightCardDoc>("GET", `/dashboard/insight/${cardId}`),
-  simulate: (body: { card_id: string; dials: Record<string, number> }) =>
-    request<SimulationResult>("POST", "/dashboard/simulate", body),
-  summary: (cardId: string) => request<SummaryResult>("POST", "/dashboard/summary", { card_id: cardId }),
-  suggest: (body: { county: string; dimension: string; group: string }) =>
-    request<SuggestionsResult>("POST", "/dashboard/suggest", body),
-  createDecision: (body: DecisionInput) => request<DecisionRow>("POST", "/dashboard/decisions", body),
-  decisions: (cardId: string) =>
-    request<DecisionRow[]>("GET", `/dashboard/decisions?card_id=${encodeURIComponent(cardId)}`),
+  insight: ({ county, dimension, group }: GroupRef) =>
+    request<InsightCardDoc>(
+      "GET",
+      `/dashboard/counties/${encodeURIComponent(county)}/insight?dimension=${encodeURIComponent(dimension)}&group=${encodeURIComponent(group)}`,
+    ),
+  summary: (body: GroupRef) => request<SummaryResult>("POST", "/dashboard/summary", body),
 
   // person 4: sim log
   simLog: (limit = 50) => request<unknown[]>("GET", `/sim/log?limit=${limit}`),

@@ -20,6 +20,7 @@ def load(name: str) -> list[dict]:
 
 
 COORDINATOR_ID = "coordinator-aino"
+COORDINATOR_COUNTY = "Western Uusimaa"
 # The oldest two bands pool into the card's 75+ baseline.
 OVER_75_BANDS = ("75-84", "85+")
 
@@ -36,41 +37,15 @@ def over_75_baseline(county: dict) -> dict:
     return {"pct_within_target": round(sum(c["pct_within_target"] * c["n"] for c in cells) / n, 1), "n": n}
 
 
-def cached_summary(card: dict, baseline: dict, county: dict, actions: list[dict]) -> list[dict]:
-    """Fallback text derived from the same numbers as the facts, so the two cannot disagree."""
-    older = county["breakdown"]["age"].get("85+")
-    sentences = [{
-        "text": (f"In {card['where']}, {baseline['pct_within_target']:.0f}% of {card['who'].lower()} start "
-                 f"treatment within the 6-week target (n={baseline['n']}), against "
-                 f"{county['pct_within_target']:.0f}% across the county"),
-        "fact_ids": ["group_pct", "county_pct"],
-    }]
-    if older:
-        sentences.append({
-            "text": f"The gap is widest among those aged 85 and over, at {older['pct_within_target']:.0f}%",
-            "fact_ids": ["age_85+"],
-        })
-    sentences.append({
-        "text": (f"About {baseline['missed_visit_share']:.0f}% of this group start late because they miss the "
-                 f"first visit, losing about {baseline['days_lost_to_missed_visits']:.0f} days each"),
-        "fact_ids": ["missed_share", "days_lost"],
-    })
-    reminders = next((a for a in actions if a["_id"] == "reminders_nurse_call" and a.get("effect")), None)
-    if reminders:
-        cut = reminders["effect"]["high"] * 100
-        reachable = baseline["pct_within_target"] + baseline["missed_visit_share"]
-        sentences.append({
-            "text": (f"Phone reminders cut missed appointments by {cut:.0f}% in one Danish hospital, but even "
-                     f"with no missed visits at all this group would reach only {reachable:.0f}%"),
-            "fact_ids": [f"action_{reminders['_id']}", "max_achievable"],
-        })
-    return sentences
+def pregenerated_summaries() -> dict[str, list[dict]]:
+    """Insight Card id → sentences. Read on demand; the file is small."""
+    return json.loads(PREGENERATED_SUMMARIES.read_text(encoding="utf-8")) if PREGENERATED_SUMMARIES.is_file() else {}
 
 
 async def ensure_clock_and_coordinator() -> None:
     await db.upsert("clock_state", "demo", {"current_demo_day": 0}, overwrite=False)
     await db.upsert(
-        "coordinators", COORDINATOR_ID, {"name": "Nurse Aino", "county": "Western Uusimaa"}, overwrite=False
+        "coordinators", COORDINATOR_ID, {"name": "Nurse Aino", "county": COORDINATOR_COUNTY}, overwrite=False
     )
 
 
@@ -82,17 +57,11 @@ async def ensure_fixtures() -> None:
     actions = load("actions.json")
     for doc in actions:
         await db.upsert("actions", doc["_id"], doc)
-    summaries = (
-        json.loads(PREGENERATED_SUMMARIES.read_text(encoding="utf-8")) if PREGENERATED_SUMMARIES.is_file() else {}
-    )
     by_name = {doc["name"]: doc for doc in counties}
     for doc in load("insight_cards.json"):
         county = by_name.get(doc["where"])
         if county is not None:
-            baseline = {**doc["baseline"], **over_75_baseline(county)}
-            doc = {**doc, "baseline": baseline, "cached_summary": cached_summary(doc, baseline, county, actions)}
-        if doc["_id"] in summaries:
-            doc = {**doc, "pregenerated_summary": summaries[doc["_id"]]}
+            doc = {**doc, "baseline": {**doc["baseline"], **over_75_baseline(county)}}
         await db.upsert("insight_cards", doc["_id"], doc)
     for clinician in load("clinicians.json"):
         await db.upsert("clinicians", clinician["_id"], clinician)

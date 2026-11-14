@@ -1,11 +1,12 @@
 // Owner: person 1 — .scratch/equity-dashboard/spec.md
-// Unconfirmed / transport / waiting for a slot as shares for the stage. Synthetic badge.
+// Visit not confirmed / no transport / waiting for a slot as shares for the stage. Synthetic badge.
+// Labels match the wording of the AI summary facts (server: summary_facts.CAUSE_LABEL).
 import { formatPercent } from "../../../lib/format";
 import { SyntheticBadge } from "./SyntheticBadge";
 
 const LABEL: Record<string, string> = {
-  unconfirmed: "Unconfirmed",
-  transport: "Transport",
+  unconfirmed: "Visit not confirmed",
+  transport: "No transport to the visit",
   waiting_for_slot: "Waiting for a slot",
 };
 

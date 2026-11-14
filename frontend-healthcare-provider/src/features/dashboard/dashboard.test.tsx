@@ -1,7 +1,7 @@
 // Owner: person 1 — seam 3 (components, API client mocked). .scratch/equity-dashboard/spec.md
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
 
 import { api } from "../../api/client";
 import type { CountyDetail, CountySummary } from "../../api/types";
@@ -13,11 +13,6 @@ vi.mock("../../api/client", () => ({
   api: {
     counties: vi.fn(),
     county: vi.fn(),
-    insight: vi.fn(),
-    simulate: vi.fn(),
-    summary: vi.fn(),
-    decisions: vi.fn(),
-    createDecision: vi.fn(),
   },
 }));
 
@@ -101,8 +96,11 @@ const WU: CountyDetail = {
     education_group: { basic: { pct_within_target: 56, n: 150, small_sample: false } },
     municipality_type: { rural: { pct_within_target: 58, n: 100, small_sample: false } },
   },
-  insight_card_id: "western-uusimaa/missed-first-visits-75",
 };
+
+function CardAddress() {
+  return <p>card page {useLocation().search}</p>;
+}
 
 function renderCounty() {
   mocked.county.mockResolvedValue(WU);
@@ -111,7 +109,7 @@ function renderCounty() {
       <Routes>
         <Route path="/dashboard" element={<p>overview page</p>} />
         <Route path="/dashboard/county/:name" element={<CountyView />} />
-        <Route path="/dashboard/county/:name/insight/:cardSlug" element={<p>card page</p>} />
+        <Route path="/dashboard/county/:name/insight" element={<CardAddress />} />
       </Routes>
     </MemoryRouter>,
   );
@@ -156,10 +154,23 @@ describe("county pathway view", () => {
     }
   });
 
-  test("links the over-75 gap to its Insight Card and back to the overview", async () => {
+  test("ranks the vulnerable groups, and each one opens its own Insight Card", async () => {
     renderCounty();
-    await userEvent.click(await screen.findByRole("link", { name: /Insight Card/i }));
-    expect(await screen.findByText("card page")).toBeInTheDocument();
+    const ranking = await screen.findByRole("group", { name: /vulnerability ranking/i });
+    const links = within(ranking).getAllByRole("link");
+    expect(links).toHaveLength(4); // the suppressed cell is not ranked
+    expect(links[0]).toHaveTextContent("75+"); // lowest share of a large group ranks first
+    expect(links.every((l) => /Insight Card/.test(l.textContent ?? ""))).toBe(true);
+    expect(within(ranking).queryByRole("button")).not.toBeInTheDocument();
+    await userEvent.click(links[0]);
+    expect(await screen.findByText("card page ?dimension=age&group=75%2B")).toBeInTheDocument();
+  });
+
+  test("has no single county-wide Insight Card link outside the ranking", async () => {
+    renderCounty();
+    const ranking = await screen.findByRole("group", { name: /vulnerability ranking/i });
+    const outside = screen.getAllByRole("link").filter((l) => !ranking.contains(l));
+    expect(outside.map((l) => l.textContent)).toEqual(["← National overview"]);
   });
 
   test("has a way back to the national overview", async () => {

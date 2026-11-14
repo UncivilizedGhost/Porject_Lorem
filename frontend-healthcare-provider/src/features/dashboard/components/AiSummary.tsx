@@ -1,6 +1,6 @@
 // Owner: person 1 — .scratch/equity-dashboard/spec.md
 // Renders POST /dashboard/summary: every sentence carries links to the facts it cites (the evidence
-// URL when the fact has one, else an anchor to the fact list below). Says when the text is pre-written.
+// URL when the fact has one, else an anchor to the fact list below). Says when the text is pre-written or rule-built.
 import type { SummaryResult } from "../../../api/types";
 
 export function AiSummary({ summary }: { summary: SummaryResult | null }) {
@@ -13,10 +13,10 @@ export function AiSummary({ summary }: { summary: SummaryResult | null }) {
         <>
           <p className="muted">
             {summary.source === "live"
-              ? "Written by an AI model from the facts below. It explains; it does not decide."
+              ? "Written by an AI model from the facts below."
               : summary.source === "pregenerated"
-                ? "Written by an AI model ahead of time from the facts below. It explains; it does not decide."
-                : "Pre-written summary shown because the AI service was not available. It uses the same facts."}
+                ? "Written by an AI model ahead of time from the facts below."
+                : "Built from the facts below by fixed rules, because the AI service was not available."}
           </p>
           <p>
             {summary.sentences.map((s) => (

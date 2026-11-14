@@ -106,9 +106,8 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .vuln-panel { display: grid; gap: 12px; }
 .vuln-formula { margin: 0; font-size: var(--fs-small); color: var(--muted); }
 .vuln-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-.vuln-button { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto auto; gap: 16px; align-items: center; width: 100%; padding: 14px 16px; text-align: left; border: var(--border); border-left: var(--edge) solid var(--line); border-radius: var(--radius); background: var(--surface); color: var(--ink); cursor: pointer; }
+.vuln-button { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto auto; gap: 16px; align-items: center; width: 100%; padding: 14px 16px; text-align: left; border: var(--border); border-left: var(--edge) solid var(--line); border-radius: var(--radius); background: var(--surface); color: var(--ink); text-decoration: none; }
 .vuln-button:hover { background: #f7f9fb; }
-.vuln-button[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
 .vuln-rank { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--line); background: var(--surface); color: var(--ink); font-size: var(--fs-h3); font-weight: var(--fw-num); }
 .vuln-tier-1 { border-left-color: var(--vuln-1); background: var(--red-tint); }
 .vuln-tier-1:hover { background: #f8dccb; }
@@ -119,18 +118,12 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .vuln-tier-3 { border-left-color: var(--vuln-3); }
 .vuln-tier-3 .vuln-rank { border-color: var(--vuln-3); }
 /* Selection outlines the card in accent but keeps the rank colour on the left edge */
-.vuln-tier-1[aria-pressed="true"] { border-left-color: var(--vuln-1); }
-.vuln-tier-2[aria-pressed="true"] { border-left-color: var(--vuln-2); }
-.vuln-tier-3[aria-pressed="true"] { border-left-color: var(--vuln-3); }
 .vuln-group { font-size: var(--fs-h3); font-weight: var(--fw-label); }
 .vuln-dim { display: block; margin-top: 2px; font-size: var(--fs-small); color: var(--muted); }
+.vuln-open { display: block; margin-top: 4px; font-size: var(--fs-small); font-weight: var(--fw-label); color: var(--accent); }
 .vuln-missed { font-size: var(--fs-small); color: var(--muted); }
 .vuln-score { text-align: right; font-size: var(--fs-num-m); font-weight: var(--fw-num); font-variant-numeric: tabular-nums; line-height: 1; }
 .vuln-score-label { display: block; margin-top: 3px; font-size: var(--fs-caption); font-weight: 400; color: var(--muted); }
-.suggestion-box { display: grid; gap: 8px; padding-top: 12px; border-top: var(--border); }
-.suggestion-box h3 { margin: 0; font-size: var(--fs-h3); }
-.suggestion-result { display: grid; gap: 8px; }
-.suggestion-result p { margin: 0; }
 
 .cause-list { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 6px; }
 .cause-list li { display: grid; grid-template-columns: 150px 1fr 56px; gap: 8px; align-items: center; }
@@ -142,9 +135,8 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .action h3 { margin: 0 0 8px; font-size: var(--fs-h3); }
 .evidence-badge { font-size: var(--fs-caption); font-weight: var(--fw-label); padding: 2px 8px; border-radius: 999px; border: 1px solid var(--ink); }
 .evidence-links { padding-left: 18px; font-size: var(--fs-small); }
+.action-because { margin: 8px 0; font-size: var(--fs-small); color: var(--muted); }
 .no-effect { font-style: italic; color: var(--muted); }
-.dial input[type="range"] { width: 100%; min-height: var(--target-min); accent-color: var(--accent); padding: 0; }
-.sim-rows { list-style: none; padding: 0; display: grid; gap: 8px; }
 textarea, input:not([type="radio"]) { display: block; width: 100%; font: inherit; padding: 6px 8px; margin: 4px 0 12px; }
 fieldset { border: 0; padding: 0; margin: 0 0 12px; }
 fieldset label { margin-right: 16px; }
@@ -168,21 +160,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .dashboard .card > h2:first-child { margin-bottom: var(--space-3); }
 .card-facts { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-5); }
 .card-facts p { margin: 0; }
-.next-step { margin: 0; }
-.next-step .button-link { display: inline-flex; align-items: center; min-height: var(--target-min); font-weight: var(--fw-label); }
 .dimension-tabs button { min-height: 36px; }
 .vuln-button { min-height: var(--target-min); }
 .evidence-links a, .summary-sentence a { color: var(--accent); }
-.sim-rows li { padding: var(--space-2) 0; border-bottom: var(--border); }
-.target-gap { display: grid; gap: var(--space-2); margin-top: var(--space-3); padding-top: var(--space-3); border-top: var(--border); }
-.target-gap h3, .target-gap p { margin: 0; }
-.gap-outcome { display: block; margin-top: var(--space-1); padding: var(--space-2) var(--space-3); border-left: var(--edge) solid; border-radius: 4px; font-weight: var(--fw-label); }
-.gap-outcome[data-reachable="true"] { border-color: var(--green); background: #e3f4ee; color: #00573f; }
-.gap-outcome[data-reachable="false"] { border-color: var(--red); background: var(--red-tint); color: var(--red-ink); }
 @media (prefers-reduced-motion: reduce) {
   .tile { transition: none; }
   .tile:hover { transform: none; }
 }
 @media (forced-colors: active) {
-  .phase[data-exceeded="true"], .gap-outcome { border-color: CanvasText; }
+  .phase[data-exceeded="true"] { border-color: CanvasText; }
 }

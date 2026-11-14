@@ -19,12 +19,6 @@
       "referral": 10,
       "diagnosis": 21,
       "treatment": 14
-    },
-    "cached_summary": [
-      { "text": "In Western Uusimaa, 35% of people aged 75 and over start treatment within the 6-week target (n=273), against 54% across the county", "fact_ids": ["group_pct", "county_pct"] },
-      { "text": "The gap is widest among those aged 85 and over, at 30%", "fact_ids": ["age_85+"] },
-      { "text": "About 12% of this group start late because they miss the first visit, losing about 14 days each", "fact_ids": ["missed_share", "days_lost"] },
-      { "text": "Phone reminders cut missed appointments by 43% in one Danish hospital, but even with no missed visits at all this group would reach only 47%", "fact_ids": ["action_reminders_nurse_call", "max_achievable"] }
-    ]
+    }
   }
 ]
