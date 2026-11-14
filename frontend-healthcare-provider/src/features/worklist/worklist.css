@@ -1,0 +1,21 @@
+/* Owner: person 3. Worklist rows and the R7 card. Red is never colour alone: it carries a text label. */
+.wl-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.wl-row { background: var(--surface); border: 1px solid var(--line); border-left: 6px solid var(--line); border-radius: var(--radius); padding: 12px 16px; }
+.wl-band-1 { border-left-color: var(--red); }
+.wl-band-2 { border-left-color: var(--yellow); }
+.wl-band-3 { border-left-color: var(--accent); }
+.wl-must-ack { background: #fdf0ee; outline: 2px solid var(--red); }
+.wl-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; }
+.wl-time { margin-left: auto; }
+.wl-muted { color: var(--muted); margin: 2px 0; font-size: 13px; }
+.wl-reason { margin: 6px 0; font-size: 16px; }
+.wl-level { font-weight: 700; font-size: 12px; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; color: #fff; }
+.wl-red { background: var(--red); }
+.wl-yellow { background: var(--yellow); }
+.wl-green { background: var(--green); }
+.wl-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; align-items: center; }
+.wl-btn { border: 1px solid var(--accent); background: var(--surface); color: var(--accent); border-radius: 8px; padding: 6px 12px; font: inherit; cursor: pointer; text-decoration: none; }
+.wl-workload { color: var(--muted); }
+.r7-card { max-width: 760px; }
+.r7-report { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 16px; margin: 12px 0; }
+.r7-own-words { background: #eef5f6; border-left: 4px solid var(--accent); margin: 8px 0; padding: 8px 12px; }

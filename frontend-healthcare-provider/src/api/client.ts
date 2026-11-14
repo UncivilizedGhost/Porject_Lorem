@@ -1,5 +1,7 @@
 // One API client wrapping fetch. Tests mock this module.
 
+import type { AlertCard, WorklistResponse } from "./types";
+
 const BASE = "/api";
 
 async function request<T>(method: string, path: string, body?: unknown): Promise<T> {
@@ -20,14 +22,18 @@ export const api = {
   reset: () => request<unknown>("POST", "/demo/reset"),
 
   // person 3: worklist
-  worklist: (coordinatorId: string) => request<unknown>("GET", `/worklist?coordinator_id=${coordinatorId}`),
+  worklist: (coordinatorId: string) =>
+    request<WorklistResponse>("GET", `/worklist?coordinator_id=${coordinatorId}`),
+  alertCard: (alertId: string) => request<AlertCard>("GET", `/alerts/${alertId}`),
   acknowledge: (alertId: string, coordinatorId: string) =>
     request<unknown>("POST", `/alerts/${alertId}/acknowledge`, { coordinator_id: coordinatorId }),
   alertAction: (alertId: string, body: { action: string; note?: string }) =>
     request<unknown>("POST", `/alerts/${alertId}/actions`, body),
   promote: (contactId: string) => request<unknown>("POST", `/contacts/${contactId}/promote`),
-  callbackHandled: (contactId: string) => request<unknown>("POST", `/contacts/${contactId}/callback-handled`),
-  stepHandled: (stepId: string) => request<unknown>("POST", `/escalation-steps/${stepId}/handled`),
+  callbackHandled: (contactId: string, status: "handled" | "booked" = "handled") =>
+    request<unknown>("POST", `/contacts/${contactId}/callback-handled`, { status }),
+  stepHandled: (stepId: string, outcome?: string) =>
+    request<unknown>("POST", `/escalation-steps/${stepId}/handled`, outcome ? { outcome } : undefined),
   clinicians: (type: string) => request<unknown>("GET", `/clinicians?type=${type}`),
   availability: (id: string, from: string, to: string) =>
     request<unknown>("GET", `/clinicians/${id}/availability?from=${from}&to=${to}`),
