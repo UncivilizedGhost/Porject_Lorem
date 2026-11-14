@@ -7,6 +7,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { api } from "../../api/client";
 import type { Question, RulesCatalogue } from "../../api/types";
 import { actorFields, getSession } from "../../lib/session";
+import { useFlowBack } from "../../shell/FlowBack";
 import { useVoiceActions } from "../../voice/useVoiceActions";
 import { initialDraft, type ReportDraft, type Step } from "./machine";
 import { R1SafetyCheck } from "./R1SafetyCheck";
@@ -31,10 +32,16 @@ function MoreOrDone({ onMore, onDone }: { onMore: () => void; onDone: () => void
   );
   useVoiceActions(actions);
   return (
-    <section>
-      <h1>Anything else?</h1>
-      <button type="button" onClick={onMore}>Add another symptom</button>
-      <button type="button" className="primary" onClick={onDone}>No, that's all</button>
+    <section className="more">
+      <div className="screen-heading">
+        <span className="eyebrow">Your report</span>
+        <h1>Anything else?</h1>
+      </div>
+      <p className="screen-sub">Add another symptom, or send what you have to Nurse Aino.</p>
+      <div className="more-actions">
+        <button type="button" className="primary" onClick={onDone}>No, that's all</button>
+        <button type="button" onClick={onMore}>Add another symptom</button>
+      </div>
     </section>
   );
 }
@@ -77,6 +84,19 @@ export function SymptomReportFlow() {
   const urgent = useCallback(() => setStep({ screen: "R2", reason: "Very unwell right now" }), []);
   const more = useCallback(() => setStep({ screen: "R3" }), []);
   const done = useCallback(() => setStep({ screen: "R5" }), []);
+
+  // The header's Back undoes one step of the report; null (pick page, sent page) leaves the flow.
+  const back = useMemo<(() => void) | null>(() => {
+    if (step.screen === "R4") {
+      return step.questionIndex > 0
+        ? () => setStep({ screen: "R4", symptom: step.symptom, questionIndex: step.questionIndex - 1 })
+        : () => { setPending({}); setStep({ screen: "R3" }); };
+    }
+    if (step.screen === "R5") return () => setStep({ screen: "more" });
+    if (step.screen === "more" || step.screen === "R2") return () => setStep({ screen: "R3" });
+    return null;
+  }, [step]);
+  useFlowBack(back);
 
   if (error && !rules) return <p role="alert">{error}</p>;
   if (!rules) return <p>Loading…</p>;
@@ -139,6 +159,9 @@ export function SymptomReportFlow() {
             <R4GuidedQuestion
               key={`${step.symptom}-${q.id}`}
               question={q}
+              label={labels[step.symptom] ?? "Something else"}
+              index={step.questionIndex + 1}
+              total={qs.length}
               onAnswer={(v) => answer(step.symptom, step.questionIndex, qs, q.id, v)}
             />
           );

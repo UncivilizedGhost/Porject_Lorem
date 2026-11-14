@@ -226,6 +226,7 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 /* ------------------------------------------------------------ home */
 .home { display: flex; flex-direction: column; gap: var(--space-4); }
 .home-heading { display: flex; flex-direction: column; gap: 6px; }
+.home-greeting { font-size: 1.76em; line-height: 1.15; letter-spacing: -0.01em; }
 .status-line {
   display: flex; align-items: center; gap: 8px;
   font-size: 0.94em; color: var(--secondary);
@@ -234,10 +235,22 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
   width: 10px; height: 10px; border-radius: var(--radius-pill);
   background: var(--amber); flex: none;
 }
+.status-dot.status-ok { background: var(--teal); }
+.next-step { gap: 14px; }
 .next-facts { display: flex; flex-direction: column; gap: 4px; }
 .next-title { font-size: 1.41em; line-height: 1.2; }
 .next-when { font-size: 1.12em; }
 .next-where { color: var(--secondary); }
+/* The artboard's quiet in-card link to the pathway, chevron on the right. */
+.text-link {
+  min-height: 44px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.94em; font-weight: 600;
+  color: var(--teal); text-decoration: none;
+}
+.text-link:hover { color: var(--teal-dark); text-decoration: underline; }
+.text-link svg { flex: none; }
+.tile > svg, .row-link > svg { flex: none; }
 
 .disclosure summary {
   display: flex; align-items: center; gap: 8px;
@@ -627,6 +640,134 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .opt.toggle { min-height: 96px; }
 .opt.text-size { min-height: 84px; gap: 4px; }
 .opt.text-size .opt-icons { justify-content: flex-end; }
+
+/* ------------------------------------------------------ report question */
+.report-q { display: flex; flex-direction: column; gap: 18px; }
+.q-head { display: flex; flex-direction: column; gap: 8px; }
+.q-label { font-size: 1em; font-weight: 600; color: var(--teal); }
+.q-progress { display: flex; align-items: center; gap: 10px; font-size: 0.88em; color: var(--secondary); }
+.q-bar {
+  flex: 1; height: 8px; overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: #e7e2da;
+}
+:root[data-contrast="high"] .q-bar { background: #ffffff; box-shadow: inset 0 0 0 1px var(--ink); }
+.q-bar-fill {
+  display: block; height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--teal);
+  transition: width 0.2s ease;
+}
+.q-count { flex: none; }
+.q-field { border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.q-prompt {
+  margin: 0 0 14px; padding: 0;
+  font-size: 1.65em; font-weight: 700; line-height: 1.2; letter-spacing: -0.01em;
+}
+/* 124 px tiles: icon and check ring on top, the answer in bold underneath. */
+.q-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.q-opt {
+  position: relative;
+  min-height: 124px; box-sizing: border-box;
+  display: flex; flex-direction: column; justify-content: space-between; gap: 10px;
+  padding: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-tile);
+  color: var(--ink);
+  cursor: pointer;
+}
+.q-opt:hover { filter: brightness(0.98); }
+.q-opt:focus-within { outline: var(--focus); outline-offset: 2px; }
+.q-opt[data-selected="true"] {
+  background: var(--chip-teal-bg);
+  border: 2px solid var(--teal);
+  padding: 13px;
+}
+.q-opt input {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  margin: 0; opacity: 0;
+  cursor: pointer;
+}
+.q-opt-icons { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.q-opt-icon { display: flex; color: var(--teal); }
+.q-check { display: flex; color: var(--check-off); }
+.q-opt[data-selected="true"] .q-check { color: var(--teal); }
+.q-opt-label { font-size: 1em; font-weight: 700; line-height: 1.25; }
+/* An odd number of answers leaves the last one full width and shorter, as in the artboard. */
+.q-options > .q-opt:last-child:nth-child(odd) { grid-column: span 2; min-height: 96px; }
+.q-voice {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: #ebe6de;
+  font-size: 0.94em; line-height: 1.35;
+}
+:root[data-contrast="high"] .q-voice { background: var(--card); border: 1px solid var(--border); }
+.q-mic {
+  flex: none; width: 56px; height: 56px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-pill);
+  background: var(--ink); color: var(--on-action);
+}
+.q-next {
+  margin: 0; width: 100%; min-height: 60px;
+  border: 0; border-radius: var(--radius-button);
+  background: var(--teal); color: var(--on-action);
+  font: inherit; font-size: 1.12em; font-weight: 700;
+}
+.q-next:hover { filter: brightness(0.94); }
+.q-next:disabled { opacity: 0.5; }
+
+/* -------------------------------------------------- report in your words */
+.own { display: flex; flex-direction: column; gap: 16px; }
+/* The nurse's note: apricot, with one squared corner, holding the words themselves. */
+.own-bubble {
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 16px;
+  background: var(--tile-apricot);
+  border-radius: 20px 20px 20px 6px;
+}
+.own-bubble-label {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  font-size: 0.88em; font-weight: 600; color: var(--tile-apricot-ink);
+}
+.own-bubble textarea {
+  min-height: 120px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  font-size: 1em; line-height: 1.45;
+  color: var(--ink);
+  resize: vertical;
+}
+.own-bubble textarea:focus-visible { outline: var(--focus); outline-offset: 4px; }
+.own-speak { display: flex; align-items: center; gap: 14px; }
+.own-mic {
+  flex: none; width: 72px; height: 72px; margin: 0; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  border: 0; border-radius: var(--radius-pill);
+  background: var(--ink); color: var(--on-action);
+  box-shadow: 0 0 0 6px var(--chip-teal-bg);
+}
+.own-mic:disabled { opacity: 0.6; }
+.own-speak-text { display: flex; flex-direction: column; gap: 2px; }
+.own-speak-title { font-size: 1.12em; font-weight: 700; }
+.own-speak-sub { font-size: 0.94em; color: var(--secondary); }
+.own-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+.own-send { width: 100%; min-height: 64px; margin: 0; font-size: 1.24em; }
+.own-skip {
+  align-self: center;
+  min-height: var(--target-min); margin: 0; padding: 0 12px;
+  border: 0; background: transparent; color: var(--teal);
+  font-size: 0.94em; font-weight: 600;
+}
+
+/* ------------------------------------------------------- anything else? */
+.more { display: flex; flex-direction: column; gap: 14px; }
+.more-actions { display: flex; flex-direction: column; gap: 8px; }
+.more-actions button { width: 100%; margin: 0; font-size: 1em; }
 
 /* --------------------------------------------------------------- forms */
 textarea {

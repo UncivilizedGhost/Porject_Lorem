@@ -12,6 +12,7 @@ import { getSession } from "../lib/session";
 import { HoldToTalkButton } from "../voice/HoldToTalkButton";
 import { BottomNav } from "./BottomNav";
 import { DemoBar } from "./DemoBar";
+import { FlowBackProvider } from "./FlowBack";
 import { Header } from "./Header";
 
 /** Saved text size and contrast follow the person onto every screen. A Trusted Person only
@@ -30,14 +31,16 @@ function useSavedAccessibility() {
 export function AppShell() {
   useSavedAccessibility();
   return (
-    <div className="app-frame">
-      <DemoBar />
-      <Header />
-      <main>
-        <Outlet />
-      </main>
-      <HoldToTalkButton />
-      <BottomNav />
-    </div>
+    <FlowBackProvider>
+      <div className="app-frame">
+        <DemoBar />
+        <Header />
+        <main>
+          <Outlet />
+        </main>
+        <HoldToTalkButton />
+        <BottomNav />
+      </div>
+    </FlowBackProvider>
   );
 }
