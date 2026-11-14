@@ -1,5 +1,6 @@
 /* Dashboard / Worklist tokens: separate from the patient design system. Status colours are Okabe-Ito.
-   Map bands differ in lightness, not only hue (colour-vision safe); see the dataviz skill. */
+   Map bands diverge at the Norway benchmark (70%): orange below, blue at or above, darkest at both
+   ends so the counties furthest behind stand out as much as the leaders (orange/blue is colour-vision safe). */
 :root {
   --bg: #f7f8fa;
   --surface: #ffffff;
@@ -13,10 +14,10 @@
   --green: #009e73;
 
   /* % within target bands */
-  --band-under-60: #c7d3e3;
-  --band-60-69: #8fa9c9;
-  --band-70-79: #4f7cae;   /* meets Norway */
-  --band-80-plus: #1f4e82; /* meets Sweden */
+  --band-under-60: #b34700; /* white text, AA */
+  --band-60-69: #f5c6a0;
+  --band-70-79: #a8cbe8;    /* meets Norway */
+  --band-80-plus: #1f5f99;  /* meets Sweden; white text, AA */
 
   /* Text-safe variants of the status hues (AA on white); the raw hues are for fills and borders only */
   --red-ink: #a63f00;
