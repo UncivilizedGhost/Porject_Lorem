@@ -1,15 +1,17 @@
 // Owner: person 1 — .scratch/equity-dashboard/spec.md (artboard "0 · Demo login")
-// Fake login: accepts any username and password, sets a demo session and opens
-// the worklist. No real credentials are checked and no backend call is made.
+// Fake login: accepts any username and password. Coordinator → GET /demo/identities → /worklist;
+// County viewer → /dashboard. No real credentials are checked.
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { setSession } from "../lib/session";
+import { api } from "../api/client";
+import { type Role, setSession } from "../lib/session";
 
 export function LoginScreen() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState<Role>("coordinator");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -19,11 +21,16 @@ export function LoginScreen() {
     setSubmitting(true);
     try {
       // Fake authentication: accept any username/password combination.
-      await new Promise((resolve) => setTimeout(resolve, 250));
-      setSession({ role: "coordinator", coordinatorId: username || "demo-user" });
+      if (role === "county_viewer") {
+        setSession({ role: "county_viewer" });
+        navigate("/dashboard");
+        return;
+      }
+      const { coordinator_id } = await api.identities();
+      setSession({ role: "coordinator", coordinatorId: coordinator_id });
       navigate("/worklist");
     } catch {
-      setError("Could not sign in. Try again.");
+      setError("Could not reach the server. Is it running?");
     } finally {
       setSubmitting(false);
     }
@@ -51,6 +58,11 @@ export function LoginScreen() {
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
+        <label htmlFor="role">Sign in as</label>
+        <select id="role" name="role" value={role} onChange={(event) => setRole(event.target.value as Role)}>
+          <option value="coordinator">Coordinator</option>
+          <option value="county_viewer">County viewer</option>
+        </select>
         <button type="submit" disabled={submitting}>
           {submitting ? "Signing in…" : "Sign in"}
         </button>

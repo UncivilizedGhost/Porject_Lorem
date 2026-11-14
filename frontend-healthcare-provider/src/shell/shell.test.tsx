@@ -45,20 +45,21 @@ describe("login", () => {
   });
 
   test("accepts any credentials, sets a coordinator session and opens the worklist", async () => {
+    mocked.identities.mockResolvedValue({ coordinator_id: "coord-1" });
     renderLogin();
     await userEvent.type(screen.getByLabelText("Username"), "any-user");
     await userEvent.type(screen.getByLabelText("Password"), "any-password");
     await userEvent.click(screen.getByRole("button", { name: "Sign in" }));
     expect(await screen.findByText("worklist page")).toBeInTheDocument();
-    expect(getSession()).toEqual({ role: "coordinator", coordinatorId: "any-user" });
+    expect(getSession()).toEqual({ role: "coordinator", coordinatorId: "coord-1" });
   });
 
-  test("signs in with an empty username using a demo id", async () => {
+  test("signs in as a county viewer and opens the dashboard", async () => {
     renderLogin();
-    await userEvent.type(screen.getByLabelText("Password"), "any-password");
+    await userEvent.selectOptions(screen.getByLabelText("Sign in as"), "county_viewer");
     await userEvent.click(screen.getByRole("button", { name: "Sign in" }));
-    expect(await screen.findByText("worklist page")).toBeInTheDocument();
-    expect(getSession()).toEqual({ role: "coordinator", coordinatorId: "demo-user" });
+    expect(await screen.findByText("dashboard page")).toBeInTheDocument();
+    expect(getSession()).toEqual({ role: "county_viewer" });
   });
 });
 
