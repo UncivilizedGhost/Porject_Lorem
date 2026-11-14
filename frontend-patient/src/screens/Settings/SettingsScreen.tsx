@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { api } from "../../api/client";
 import type { Accessibility, Language, TextSize } from "../../api/types";
+import { isUiLanguage } from "../../i18n/dict";
 import { useI18n } from "../../i18n/LanguageProvider";
 import { applyAccessibility } from "../../lib/applyAccessibility";
 import { Icon } from "../../components/Icon";
@@ -133,10 +134,11 @@ export function SettingsScreen() {
       .then((r) => {
         if (cancelled) return;
         setSettings(r.accessibility);
-        setLanguage(r.language);
-        updateSettings({ language: r.language });
+        const lang = isUiLanguage(r.language) ? r.language : "en";
+        setLanguage(lang);
+        updateSettings({ language: lang });
         applyAccessibility(r.accessibility);
-        document.documentElement.lang = r.language;
+        document.documentElement.lang = lang;
       })
       .catch(() => {
         // The stored session can outlive a demo reset; follow the current demo identity once.

@@ -6,6 +6,11 @@ export type UiLanguage = "en" | "fi" | "sv";
 
 const INDEX: Record<UiLanguage, 0 | 1 | 2> = { en: 0, fi: 1, sv: 2 };
 
+/** Records and old stored settings can carry a language outside the three the app translates. */
+export function isUiLanguage(value: unknown): value is UiLanguage {
+  return value === "en" || value === "fi" || value === "sv";
+}
+
 export const MESSAGES = {
   "nav.home": ["Home", "Etusivu", "Hem"],
   "nav.pathway": ["Pathway", "Hoitopolku", "Vårdväg"],
@@ -728,7 +733,10 @@ export function translate(
   // A variant exists only where the patient's wording would be wrong; the rest falls back.
   const variant = role === "trusted_person" ? (`${key}.trusted` as MessageKey) : null;
   const row = variant && variant in MESSAGES ? MESSAGES[variant] : MESSAGES[key];
-  let text: string = row[INDEX[language]];
+  // A bad record language, or a key from stale code, must never crash a screen: fall back to
+  // English, then to the key itself.
+  const index = INDEX[language] ?? 0;
+  let text: string = row?.[index] ?? row?.[0] ?? key;
   if (vars) {
     for (const [name, value] of Object.entries(vars)) {
       text = text.split(`{${name}}`).join(String(value));

@@ -47,6 +47,9 @@ def _now() -> str:
 async def create_contact(body: dict[str, Any]):
     """person 2: body county, language, consent, risk_check answers, trusted_people?, accessibility?. risk_group computed server-side."""
     now = _now()
+    # A null or unknown language would make the companion's translate() crash, so store only the
+    # three the app translates and fall back to English.
+    language = body.get("language")
     check = body.get("risk_check") or {}
     answers = check.get("answers") or {}
     group = None
@@ -62,7 +65,7 @@ async def create_contact(body: dict[str, Any]):
         "county": body["county"],
         "display_name": body.get("display_name") or DEMO_PATIENT_NAME,
         "phone": body.get("phone"),
-        "language": body.get("language", "en"),
+        "language": language if language in accessibility.LANGUAGES else "en",
         "consent": {**(body.get("consent") or {}), "at": now},
         "risk_check": {"taken": bool(check.get("taken")), "risk_group": group, "at": now if group else None},
         "warning_sign_tap": None,
