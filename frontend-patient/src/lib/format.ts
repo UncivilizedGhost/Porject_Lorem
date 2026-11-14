@@ -15,6 +15,13 @@ export function formatDate(iso: string, withYear = false): string {
   return withYear ? `${dm}${d.getFullYear()}` : dm;
 }
 
+const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+/** "2026-11-18" → "Wednesday" (from the same local-date read as formatDate). */
+export function formatWeekday(iso: string): string {
+  return WEEKDAYS[parse(iso).getDay()];
+}
+
 export function formatTime(iso: string): string {
   const d = new Date(iso);
   return `${d.getHours()}.${String(d.getMinutes()).padStart(2, "0")}`;

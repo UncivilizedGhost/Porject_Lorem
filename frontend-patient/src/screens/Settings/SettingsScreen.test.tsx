@@ -51,14 +51,12 @@ test("high contrast switches the contrast tokens", async () => {
   expect(document.documentElement.dataset.contrast).toBe("high");
 });
 
-test("Read aloud, Voice Mode and language are saved the same way", async () => {
+test("Voice Mode and language are saved the same way", async () => {
   const user = userEvent.setup();
   renderScreen();
-  await user.click(await screen.findByRole("checkbox", { name: /read aloud/i }));
-  await user.click(screen.getByRole("checkbox", { name: /voice mode/i }));
+  await user.click(await screen.findByRole("checkbox", { name: /voice mode/i }));
   await user.click(screen.getByRole("radio", { name: "Svenska" }));
-  await waitFor(() => expect(mockApi.patchAccessibility).toHaveBeenCalledTimes(3));
-  expect(mockApi.patchAccessibility).toHaveBeenCalledWith("patients", "p1", { read_aloud: true });
+  await waitFor(() => expect(mockApi.patchAccessibility).toHaveBeenCalledTimes(2));
   expect(mockApi.patchAccessibility).toHaveBeenCalledWith("patients", "p1", { voice_mode: true });
   expect(mockApi.patchAccessibility).toHaveBeenCalledWith("patients", "p1", { language: "sv" });
 });

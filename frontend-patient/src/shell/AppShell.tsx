@@ -1,6 +1,7 @@
 // Owner: person 2 — .scratch/patient-companion/spec.md ("App and stack" → shared shell)
-// Order: DemoBar · Header (Read aloud · Aa · Help, Back on flow screens) · content ·
-// hold-to-talk slot (person 4, shown when Voice Mode is on) · BottomNav.
+// Order: DemoBar · Header (Aa · Help, Back on flow screens) · content · hold-to-talk
+// slot (person 4, shown when Voice Mode is on) · BottomNav, all inside the phone frame from
+// app/home.html so the app looks like the artboards on any screen size.
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 
@@ -29,7 +30,7 @@ function useSavedAccessibility() {
 export function AppShell() {
   useSavedAccessibility();
   return (
-    <>
+    <div className="app-frame">
       <DemoBar />
       <Header />
       <main>
@@ -37,6 +38,6 @@ export function AppShell() {
       </main>
       <HoldToTalkButton />
       <BottomNav />
-    </>
+    </div>
   );
 }

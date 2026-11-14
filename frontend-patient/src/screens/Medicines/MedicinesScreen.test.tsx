@@ -40,7 +40,7 @@ test("a side effect or a skipped dose is logged in one tap", async () => {
   const user = userEvent.setup();
   renderScreen();
   const nausea = (await screen.findByText("Medicine for nausea, when needed")).closest("li")!;
-  await user.click(within(nausea).getByRole("button", { name: "Skipped" }));
+  await user.click(within(nausea).getByRole("button", { name: "I skipped it" }));
   await waitFor(() =>
     expect(mockApi.medicationLog).toHaveBeenCalledWith("p1", {
       medicine_id: "med_nausea", status: "skipped", actor: "self",
@@ -72,7 +72,7 @@ test("a plain medicine has a one-tap Taken button", async () => {
   const user = userEvent.setup();
   renderScreen();
   const nausea = (await screen.findByText("Medicine for nausea, when needed")).closest("li")!;
-  await user.click(within(nausea).getByRole("button", { name: "Taken" }));
+  await user.click(within(nausea).getByRole("button", { name: "I took it" }));
   await waitFor(() =>
     expect(mockApi.medicationLog).toHaveBeenCalledWith("p1", {
       medicine_id: "med_nausea", status: "taken", actor: "self",
