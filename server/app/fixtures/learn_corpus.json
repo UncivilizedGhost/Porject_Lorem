@@ -5,7 +5,7 @@
     "title": "What is a bronchoscopy?",
     "text": "A bronchoscopy is an examination of your airways. A doctor passes a thin, flexible tube with a small camera through your nose or mouth and down into your windpipe and lungs. The doctor can look at the airways and take small tissue samples, called biopsies, to be studied in a laboratory. You are usually given medicine to numb your throat, and sometimes medicine to help you relax. The test is not usually painful, but it can make you cough. You will be told beforehand if you need to stop eating or drinking, and the staff will explain what to do after the test.",
     "source_label": "Syöpätalo (Cancer Hub), Terveyskylä.fi",
-    "url": "https://hus.fi/en/treatments-and-examinations/support-cancer-treatment"
+    "url": "https://www.terveyskyla.fi/syopatalo"
   },
   {
     "id": "bronchoscopy_fi",
@@ -13,7 +13,7 @@
     "title": "Mikä on bronkoskopia?",
     "text": "Bronkoskopia eli keuhkoputkien tähystys on tutkimus, jossa katsotaan hengitysteitä. Lääkäri vie nenän tai suun kautta ohuen, taipuisan putken, jonka päässä on pieni kamera, henkitorveen ja keuhkoputkiin. Samalla lääkäri voi ottaa pieniä kudosnäytteitä eli biopsioita tutkittavaksi laboratoriossa. Kurkku puudutetaan, ja tarvittaessa saat myös rauhoittavaa lääkettä. Tutkimus ei yleensä satu, mutta se voi aiheuttaa yskimistä. Saat etukäteen ohjeet siitä, pitääkö sinun olla syömättä tai juomatta, ja henkilökunta kertoo, miten toimit tutkimuksen jälkeen.",
     "source_label": "Syöpätalo (Cancer Hub), Terveyskylä.fi",
-    "url": "https://hus.fi/en/treatments-and-examinations/support-cancer-treatment"
+    "url": "https://www.terveyskyla.fi/syopatalo"
   },
   {
     "id": "bronchoscopy_sv",
@@ -21,7 +21,7 @@
     "title": "Vad är en bronkoskopi?",
     "text": "En bronkoskopi är en undersökning av luftvägarna. En läkare för in en tunn, böjlig slang med en liten kamera genom näsan eller munnen ner i luftstrupen och lungorna. Läkaren kan också ta små vävnadsprover, så kallade biopsier, som undersöks på ett laboratorium. Halsen bedövas och vid behov får du lugnande medicin. Undersökningen gör oftast inte ont, men den kan få dig att hosta. Du får besked i förväg om du måste avstå från mat och dryck, och personalen berättar hur du ska göra efter undersökningen.",
     "source_label": "Syöpätalo (Cancer Hub), Terveyskylä.fi",
-    "url": "https://hus.fi/en/treatments-and-examinations/support-cancer-treatment"
+    "url": "https://www.terveyskyla.fi/syopatalo"
   },
   {
     "id": "ct_en",
@@ -29,7 +29,7 @@
     "title": "What is a CT scan?",
     "text": "A CT scan, or computed tomography, takes many X-ray pictures of your body from different angles and puts them together into detailed images. For a chest CT you lie on a table that slides through a large ring. The scan itself takes only a few minutes and does not hurt. You may be given a contrast agent through a vein, which can feel warm for a moment. The images show the lungs and the lymph nodes, and help the doctors see what needs to be examined or treated next. Tell the staff if you are pregnant, have an allergy or have kidney problems.",
     "source_label": "Syöpätalo (Cancer Hub), Terveyskylä.fi",
-    "url": "https://hus.fi/en/treatments-and-examinations/support-cancer-treatment"
+    "url": "https://www.terveyskyla.fi/syopatalo"
   },
   {
     "id": "ct_fi",
@@ -37,7 +37,7 @@
     "title": "Mikä on tietokonetomografia (TT)?",
     "text": "Tietokonetomografia eli TT-kuvaus ottaa monta röntgenkuvaa kehostasi eri suunnista ja yhdistää ne tarkoiksi kuviksi. Keuhkojen TT-kuvauksessa makaat pöydällä, joka liukuu suuren renkaan läpi. Itse kuvaus kestää vain muutaman minuutin eikä satu. Sinulle voidaan antaa suoneen varjoainetta, joka voi tuntua hetken lämpimältä. Kuvista nähdään keuhkot ja imusolmukkeet, ja ne auttavat lääkäreitä päättämään, mitä tutkitaan tai hoidetaan seuraavaksi. Kerro henkilökunnalle, jos olet raskaana, sinulla on allergia tai munuaisongelmia.",
     "source_label": "Syöpätalo (Cancer Hub), Terveyskylä.fi",
-    "url": "https://hus.fi/en/treatments-and-examinations/support-cancer-treatment"
+    "url": "https://www.terveyskyla.fi/syopatalo"
   },
   {
     "id": "ct_sv",
@@ -45,7 +45,7 @@
     "title": "Vad är en datortomografi (DT)?",
     "text": "En datortomografi tar många röntgenbilder av kroppen från olika håll och sätter ihop dem till detaljerade bilder. Vid en datortomografi av lungorna ligger du på en brits som glider genom en stor ring. Själva undersökningen tar bara några minuter och gör inte ont. Du kan få kontrastmedel i en ven, som kan kännas varmt en stund. Bilderna visar lungorna och lymfkörtlarna och hjälper läkarna att se vad som behöver undersökas eller behandlas härnäst. Berätta för personalen om du är gravid, har en allergi eller njurproblem.",
     "source_label": "Syöpätalo (Cancer Hub), Terveyskylä.fi",
-    "url": "https://hus.fi/en/treatments-and-examinations/support-cancer-treatment"
+    "url": "https://www.terveyskyla.fi/syopatalo"
   },
   {
     "id": "xray_en",
@@ -101,7 +101,7 @@
     "title": "What is the 6-week goal?",
     "text": "In Finland the national aim is that cancer is diagnosed and treatment is started within about six weeks of the referral being received. The time is counted in steps: the first visit, imaging such as a CT scan, tests such as a bronchoscopy, and the treatment plan. It is a goal for the care system, not a promise about your own case, and your care team may need more time if your situation needs it. If the next step has not been booked, ask your nurse.",
     "source_label": "Finnish Ministry of Social Affairs and Health, cancer care guidance (STM 2010:6)",
-    "url": "https://www.iccp-portal.org/system/files/plans/selv_2010_6_syovan_hoito_verkko.pdf"
+    "url": "https://stm.fi/"
   },
   {
     "id": "six_week_goal_fi",
@@ -109,7 +109,7 @@
     "title": "Mikä on kuuden viikon tavoite?",
     "text": "Suomessa kansallisena tavoitteena on, että syöpä diagnosoidaan ja hoito aloitetaan noin kuuden viikon kuluessa lähetteen saapumisesta. Aika lasketaan vaiheittain: ensimmäinen käynti, kuvantaminen kuten TT-kuvaus, tutkimukset kuten bronkoskopia ja hoitosuunnitelma. Tämä on hoitojärjestelmän tavoite, ei lupaus sinun omasta tilanteestasi, ja hoitotiimi voi tarvita enemmän aikaa, jos tilanteesi sitä vaatii. Jos seuraavaa vaihetta ei ole vielä varattu, kysy hoitajalta.",
     "source_label": "Sosiaali- ja terveysministeriö, syövän hoito (STM 2010:6)",
-    "url": "https://www.iccp-portal.org/system/files/plans/selv_2010_6_syovan_hoito_verkko.pdf"
+    "url": "https://stm.fi/"
   },
   {
     "id": "six_week_goal_sv",
@@ -117,7 +117,7 @@
     "title": "Vad är sexveckorsmålet?",
     "text": "I Finland är det nationella målet att cancer diagnostiseras och behandling inleds inom ungefär sex veckor efter att remissen har kommit in. Tiden räknas i steg: första besöket, bilddiagnostik som datortomografi, undersökningar som bronkoskopi och behandlingsplanen. Det är ett mål för vårdsystemet, inte ett löfte om just ditt fall, och vårdteamet kan behöva mer tid om din situation kräver det. Om nästa steg inte är bokat, fråga din sjuksköterska.",
     "source_label": "Social- och hälsovårdsministeriet, cancervård (STM 2010:6)",
-    "url": "https://www.iccp-portal.org/system/files/plans/selv_2010_6_syovan_hoito_verkko.pdf"
+    "url": "https://stm.fi/"
   },
   {
     "id": "kela_travel_en",
@@ -173,7 +173,7 @@
     "title": "What is a needle biopsy?",
     "text": "A needle biopsy takes a small tissue sample through the skin with a thin needle. It is used when the area to be checked cannot be reached with a bronchoscopy. You are given local anaesthetic, and a scan such as a CT is used to guide the needle. Afterwards you are observed for a while, because the lung can sometimes be irritated. The sample is studied in a laboratory.",
     "source_label": "Syöpätalo (Cancer Hub), Terveyskylä.fi",
-    "url": "https://hus.fi/en/treatments-and-examinations/support-cancer-treatment"
+    "url": "https://www.terveyskyla.fi/syopatalo"
   },
   {
     "id": "needle_biopsy_fi",
@@ -181,7 +181,7 @@
     "title": "Mikä on neulanäyte?",
     "text": "Neulanäytteessä otetaan ihon läpi ohuella neulalla pieni kudosnäyte. Se tehdään, kun tutkittavaan kohtaan ei päästä bronkoskopialla. Alue puudutetaan, ja neulan ohjaamiseen käytetään kuvantamista, esimerkiksi TT-kuvausta. Toimenpiteen jälkeen sinua tarkkaillaan jonkin aikaa, koska keuhko voi joskus ärtyä. Näyte tutkitaan laboratoriossa.",
     "source_label": "Syöpätalo (Cancer Hub), Terveyskylä.fi",
-    "url": "https://hus.fi/en/treatments-and-examinations/support-cancer-treatment"
+    "url": "https://www.terveyskyla.fi/syopatalo"
   },
   {
     "id": "needle_biopsy_sv",
@@ -189,6 +189,6 @@
     "title": "Vad är ett nålprov?",
     "text": "Vid ett nålprov tas ett litet vävnadsprov genom huden med en tunn nål. Det används när området inte kan nås med bronkoskopi. Du får lokalbedövning och en bildundersökning, till exempel datortomografi, används för att styra nålen. Efteråt observeras du en stund eftersom lungan ibland kan bli irriterad. Provet undersöks på ett laboratorium.",
     "source_label": "Syöpätalo (Cancer Hub), Terveyskylä.fi",
-    "url": "https://hus.fi/en/treatments-and-examinations/support-cancer-treatment"
+    "url": "https://www.terveyskyla.fi/syopatalo"
   }
 ]

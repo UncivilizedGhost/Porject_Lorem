@@ -11,7 +11,7 @@ import asyncio
 import pytest
 
 from app.services import nemotron
-from app.services.learn import pregenerated, red_flags, retrieval
+from app.services.learn import corpus, pregenerated, red_flags, retrieval
 
 
 @pytest.fixture
@@ -180,3 +180,27 @@ def test_core_topics_retrieve_their_passage_first(question, language, passage_id
 def test_retrieval_stays_in_the_questions_language():
     hits = retrieval.search("Mikä on bronkoskopia?", "fi")
     assert hits and all(h["language"] == "fi" for h in hits)
+
+
+# --- Credible sources: data/credible_sources.txt is the only allowed origin for Learn content ---
+
+
+def test_every_corpus_passage_comes_from_a_credible_source():
+    allowed = corpus.credible_domains()
+    off_list = [p["id"] for p in corpus.load_all() if not corpus.is_credible(p["url"], allowed)]
+    assert off_list == []
+
+
+def test_passages_from_other_sites_are_never_served(monkeypatch):
+    monkeypatch.setattr(corpus, "load_all", lambda: (
+        {"id": "ok", "language": "en", "url": "https://www.kela.fi/x", "title": "t", "text": "t"},
+        {"id": "sub", "language": "en", "url": "https://site.fingenious.fi/y", "title": "t", "text": "t"},
+        {"id": "blog", "language": "en", "url": "https://kela.fi.example.com/z", "title": "t", "text": "t"},
+        {"id": "other", "language": "en", "url": "https://hus.fi/z", "title": "t", "text": "t"},
+    ))
+    assert [p["id"] for p in corpus.passages("en")] == ["ok", "sub"]
+
+
+def test_missing_source_list_serves_nothing(monkeypatch, tmp_path):
+    monkeypatch.setattr("app.config.CREDIBLE_SOURCES_PATH", tmp_path / "missing.txt")
+    assert corpus.passages("en") == []
