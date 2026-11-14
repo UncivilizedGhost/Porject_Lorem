@@ -122,5 +122,40 @@ async def test_summary_falls_back_to_cached_when_no_sentence_survives_the_filter
     assert body["source"] == "cached"
 
 
+def decision(**over):
+    body = {
+        "card_id": CARD,
+        "action_ids": ["reminders_nurse_call"],
+        "verdict": "approve",
+        "reason": "Cheapest lever with a published effect",
+        "owner": "County coordinator team",
+        "due": "2026-12-15",
+        "decided_by": "county-viewer",
+        "snapshot": {"facts": [{"id": "group_pct"}], "simulation": {}, "badges": {"reminders_nurse_call": "single_site"}},
+    }
+    return {**body, **over}
+
+
+@pytest.mark.parametrize("over", [{"reason": ""}, {"reason": "   "}, {"verdict": "maybe"}])
+async def test_decision_with_blank_reason_or_unknown_verdict_is_422(client, over):
+    assert (await client.post("/dashboard/decisions", json=decision(**over))).status_code == 422
+
+
+async def test_a_recorded_decision_is_listed_first_with_the_demo_day(client):
+    await client.post("/dashboard/decisions", json=decision(reason="first decision"))
+    created = await client.post("/dashboard/decisions", json=decision(verdict="adapt", reason="second decision"))
+    assert created.status_code == 201
+    assert isinstance(created.json()["demo_day"], int)
+    listed = (await client.get("/dashboard/decisions", params={"card_id": CARD})).json()
+    assert listed[0]["reason"] == "second decision"
+    assert listed[0]["snapshot"]["badges"] == {"reminders_nurse_call": "single_site"}
+
+
+async def test_decision_log_is_append_only(client):
+    for method in ("put", "patch", "delete"):
+        r = await client.request(method.upper(), "/dashboard/decisions/anything")
+        assert r.status_code in (404, 405)
+
+
 async def test_unknown_county_is_404(client):
     assert (await client.get("/dashboard/counties/Atlantis")).status_code == 404

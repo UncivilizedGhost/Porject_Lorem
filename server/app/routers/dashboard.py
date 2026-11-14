@@ -4,9 +4,11 @@ Pure logic in `app/services/simulation.py` and `app/services/summary_filter.py`.
 Reads fixtures only; the only write is the append-only Decision Log.
 """
 
-from fastapi import APIRouter, HTTPException
+from datetime import date
+from typing import Any, Literal
 
-from pydantic import BaseModel
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel, field_validator
 
 from app import db
 from app.fixtures.seed import county_id
@@ -112,13 +114,35 @@ async def summary(body: SummaryBody):
     return {"sentences": cached, "facts": facts, "source": "cached"}
 
 
-@router.post("/decisions")
-async def create_decision():
+class DecisionBody(BaseModel):
+    card_id: str
+    action_ids: list[str]
+    verdict: Literal["approve", "adapt", "reject"]
+    reason: str
+    owner: str
+    due: date
+    decided_by: str
+    snapshot: dict[str, Any]
+
+    @field_validator("reason")
+    @classmethod
+    def _reason_required(cls, v: str) -> str:
+        if not v.strip():
+            raise ValueError("a reason is required")
+        return v.strip()
+
+
+@router.post("/decisions", status_code=201)
+async def create_decision(body: DecisionBody):
     """Append a Decision Log row. 422 if reason blank or verdict invalid. Insert only."""
-    raise HTTPException(status_code=501, detail="not implemented")
+    clock = await db.get("clock_state", "demo")
+    doc = body.model_dump(mode="json")
+    doc["demo_day"] = clock["current_demo_day"] if clock else 0
+    doc["_id"] = await db.insert("decisions", doc)
+    return doc
 
 
 @router.get("/decisions")
-async def list_decisions():
+async def list_decisions(card_id: str):
     """?card_id=… newest first."""
-    raise HTTPException(status_code=501, detail="not implemented")
+    return await db.find("decisions", {"card_id": card_id}, newest_first=True)
