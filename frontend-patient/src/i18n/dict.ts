@@ -529,6 +529,15 @@ export const MESSAGES = {
     "Endast demo · dag {day}",
   ],
   "demo.advance": ["Advance one day", "Siirry päivä eteenpäin", "Gå fram en dag"],
+  "demo.patient": ["patient", "potilas", "patient"],
+  "demo.caretaker": ["caretaker", "omainen", "anhörig"],
+  "demo.alarm": ["Trigger alarm", "Laukaise hälytys", "Utlös larm"],
+
+  "demo.alarmFailed": [
+    "The alarm was not sent to the nurse.",
+    "Hälytystä ei lähetetty hoitajalle.",
+    "Larmet skickades inte till sjuksköterskan.",
+  ],
   "card.title": ["My care plan card", "Hoitosuunnitelmani kortti", "Mitt vårdplanskort"],
   "card.nextStep": ["Next step", "Seuraava vaihe", "Nästa steg"],
   "card.bring": ["Bring with you", "Ota mukaan", "Ta med dig"],

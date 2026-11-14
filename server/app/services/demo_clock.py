@@ -122,6 +122,7 @@ async def identities() -> dict[str, Any]:
         "coordinator_id": COORDINATOR_ID,
         "contact_id": contacts[0]["_id"] if contacts else None,
         "patient_id": patient["_id"] if patient else None,
+        "patient_name": patient.get("display_name") if patient else None,
         "trusted_person": people[0] if people else None,
         "current_demo_day": await current_day(),
     }

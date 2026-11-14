@@ -166,17 +166,22 @@ p { margin: 0; }
 
 /* --------------------------------------------------------------- demo */
 .demo-bar {
-  display: flex; align-items: center; justify-content: space-between; gap: 8px;
-  padding: 2px 12px;
+  display: flex; flex-direction: column; gap: 1px;
+  padding: 2px 12px 3px;
   background: var(--ink); color: var(--ground);
   font-size: 13px;
 }
+.demo-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.demo-names { font-size: 11px; line-height: 1.25; color: var(--ground); opacity: 0.8; }
+.demo-actions { display: flex; align-items: center; gap: 6px; }
+.demo-error { color: #ffd7d2; opacity: 1; }
 .demo-bar button {
   min-height: 32px; margin: 2px 0; padding: 2px 10px;
   border: 1px solid rgba(255, 255, 255, 0.45);
   border-radius: var(--radius-pill);
   background: transparent; color: inherit; font-size: 13px;
 }
+.demo-bar .demo-alarm { border-color: #f0a8a0; color: #ffd7d2; }
 
 /* ------------------------------------------------------------ controls */
 /* Every control: >= 48 px, primary 56 px, visible label. */
@@ -899,6 +904,18 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .help-call-sub { font-size: 1em; line-height: 1.3; }
 .help-call.nurse .help-call-sub { font-size: 0.94em; color: var(--secondary); }
 
+/* ------------------------------------------------------------ alarm */
+/* The demo alarm is the confirm.html page itself; a red shade deepens around it (light → dark)
+   while the confirmation screen ramps up the tone. */
+@keyframes alarm-glow {
+  from { box-shadow: inset 0 0 0 0 rgba(176, 42, 32, 0); }
+  to { box-shadow: inset 0 0 160px 36px rgba(176, 42, 32, 0.55); }
+}
+.alarm-page { flex: 1; animation: alarm-glow 12s ease-in forwards; }
+@media (prefers-reduced-motion: reduce) {
+  .alarm-page { animation: none; box-shadow: inset 0 0 120px 28px rgba(176, 42, 32, 0.4); }
+}
+
 /* ------------------------------------------------------------ call now */
 .alert-page { display: flex; flex-direction: column; gap: 18px; }
 .alert-icon { color: var(--red); display: flex; }
@@ -917,7 +934,7 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .alert-button.urgent { background: var(--ink); }
 .alert-note {
   margin-top: auto; padding: 16px 18px;
-  border-radius: var(--radius-tile); background: var(--card);
+  border-radius: var(--radius-tile); background: var(--card); color: var(--ink);
   font-size: 1.12em; line-height: 1.4;
 }
 
@@ -1028,9 +1045,11 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
   display: flex; align-items: center; justify-content: center;
   min-height: 56px; padding: 0 10px;
   border: 1px solid #577075; border-radius: var(--radius-button);
+  background: transparent;
   color: var(--on-action); font-size: 0.94em; font-weight: 600; text-align: center; text-decoration: none;
 }
 .confirm-secondary:hover { color: var(--on-action); border-color: #ffffff; }
+.confirm-secondary:disabled { opacity: 0.6; }
 .app-frame[data-tone="dark"] .slide-track { background: #2a3a3f; border-color: #3f5359; }
 .app-frame[data-tone="dark"] .slide-thumb { background: #56b4e9; color: var(--ink); }
 .app-frame[data-tone="dark"] .slide-hint { color: #e1e7e8; }

@@ -40,7 +40,7 @@ export function formatDecimal(value: number, digits = 1): string {
 
 // Finnish style: a space before the percent sign, non-breaking so "64" and "%" never wrap apart.
 export function formatPercent(value: number, digits = 0): string {
-  return `${formatDecimal(value, digits)} %`;
+  return `${formatDecimal(value, digits)}\u00A0%`;
 }
 
 // A range of fractions as percent: 0.215, 0.43 → "21,5–43 %". Whole numbers stay whole.
@@ -49,9 +49,9 @@ export function formatFractionRange(low: number, high: number): string {
     const p = Math.round(f * 1000) / 10;
     return Number.isInteger(p) ? String(p) : formatDecimal(p, 1);
   };
-  return `${part(low)}–${part(high)} %`;
+  return `${part(low)}–${part(high)}\u00A0%`;
 }
 
 export function formatTemperature(celsius: number): string {
-  return `${formatDecimal(celsius)} °C`;
+  return `${formatDecimal(celsius)}\u00A0°C`;
 }

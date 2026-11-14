@@ -12,6 +12,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 from app import db
+from app.fixtures.seed import DEMO_PATIENT_NAME, DEMO_TRUSTED_PERSON
 from app.services import accessibility, promotion, reporting, worklist
 from app.services.risk_check import risk_group
 
@@ -59,13 +60,13 @@ async def create_contact(body: dict[str, Any]):
         )
     doc = {
         "county": body["county"],
-        "display_name": body.get("display_name"),
+        "display_name": body.get("display_name") or DEMO_PATIENT_NAME,
         "phone": body.get("phone"),
         "language": body.get("language", "en"),
         "consent": {**(body.get("consent") or {}), "at": now},
         "risk_check": {"taken": bool(check.get("taken")), "risk_group": group, "at": now if group else None},
         "warning_sign_tap": None,
-        "trusted_people": body.get("trusted_people") or [],
+        "trusted_people": body.get("trusted_people") or [dict(DEMO_TRUSTED_PERSON)],
         "accessibility": {**DEFAULT_ACCESSIBILITY, **(body.get("accessibility") or {})},
         "promoted_patient_id": None,
         "callback": None,
