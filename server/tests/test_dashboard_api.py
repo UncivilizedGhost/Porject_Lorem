@@ -112,7 +112,8 @@ async def test_summary_falls_back_to_the_cached_text_when_the_model_times_out(cl
     body = (await client.post("/dashboard/summary", json={"card_id": CARD})).json()
     assert body["source"] == "cached"
     fact_ids = {f["id"] for f in body["facts"]}
-    assert body["sentences"] and all(set(s["fact_ids"]) <= fact_ids for s in body["sentences"])
+    assert len(body["sentences"]) == 4  # the fixture's cached text, none dropped for a stale id
+    assert all(set(s["fact_ids"]) <= fact_ids for s in body["sentences"])
 
 
 async def test_summary_falls_back_to_cached_when_no_sentence_survives_the_filter(client, model):

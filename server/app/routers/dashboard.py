@@ -10,7 +10,8 @@ from pydantic import BaseModel
 
 from app import db
 from app.fixtures.seed import county_id
-from app.services import simulation
+from app.services import nemotron, simulation, summary_facts
+from app.services.summary_filter import filter_sentences
 
 router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 
@@ -88,10 +89,27 @@ async def simulate(body: SimulateBody):
     return simulation.simulate(card, matched, body.dials)
 
 
+class SummaryBody(BaseModel):
+    card_id: str
+
+
 @router.post("/summary")
-async def summary():
+async def summary(body: SummaryBody):
     """Body { card_id }. Facts with ids (suppressed cells skipped) → Nemotron → sentences without a valid id dropped. Timeout/error → cached summary."""
-    raise HTTPException(status_code=501, detail="not implemented")
+    card, matched = await _card_with_matches(body.card_id)
+    county = await db.get("counties", county_id(card["where"]))
+    facts = summary_facts.build_facts(card, county, matched)
+    valid = {f["id"] for f in facts}
+    sentences: list[dict] = []
+    try:
+        reply = await nemotron.complete(summary_facts.SYSTEM_PROMPT, summary_facts.build_prompt(facts))
+        sentences = filter_sentences(reply, valid)
+    except Exception:  # noqa: BLE001 - timeout, HTTP error or missing key: the card must still work
+        sentences = []
+    if sentences:
+        return {"sentences": sentences, "facts": facts, "source": "live"}
+    cached = [s for s in card["cached_summary"] if set(s["fact_ids"]) <= valid]
+    return {"sentences": cached, "facts": facts, "source": "cached"}
 
 
 @router.post("/decisions")
