@@ -12,12 +12,14 @@ import type {
 
 import type { AlertCard, Availability, Clinician, WorklistResponse } from "./types";
 
+import { clientId } from "./clientId";
+
 const BASE = "/api";
 
 async function request<T>(method: string, path: string, body?: unknown): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
     method,
-    headers: body ? { "Content-Type": "application/json" } : undefined,
+    headers: body ? { "Content-Type": "application/json", "X-Client-Id": clientId() } : { "X-Client-Id": clientId() },
     body: body ? JSON.stringify(body) : undefined,
   });
   if (!res.ok) throw new Error(`${method} ${path} → ${res.status}`);

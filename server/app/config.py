@@ -19,6 +19,12 @@ load_dotenv(REPO_ROOT / ".env")
 DATABASE_URL: str = os.getenv("DATABASE_URL", "postgresql://pathway:pathway@localhost:5432/pathway")
 # Tests point this at a throwaway schema; everything else uses "public".
 DB_SCHEMA: str = os.getenv("PATHWAY_DB_SCHEMA", "public")
+# Aiven CA certificate (PEM). Set it to verify the server identity (verify-full); unset keeps
+# sslmode=require from the URI (encrypted, identity not checked).
+DB_SSL_CA: str | None = os.getenv("DB_SSL_CA") or None
+# Demo admission (app/services/client_slots.py): 0 = unlimited.
+MAX_CLIENTS: int = int(os.getenv("MAX_CLIENTS", "0"))
+CLIENT_IDLE_S: float = float(os.getenv("CLIENT_IDLE_S", "120"))
 CORS_ORIGINS: list[str] = os.getenv(
     "CORS_ORIGINS", "http://localhost:5173,http://localhost:5174"
 ).split(",")

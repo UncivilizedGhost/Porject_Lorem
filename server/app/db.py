@@ -13,6 +13,7 @@ as `due_demo_day <= $1`, joins) is plain SQL through `fetch()` on `doc->>'field'
 from __future__ import annotations
 
 import json
+import ssl
 import uuid
 from datetime import date, datetime
 from typing import Any
@@ -54,6 +55,7 @@ async def get_pool() -> asyncpg.Pool:
     if _pool is None:
         _pool = await asyncpg.create_pool(
             config.DATABASE_URL,
+            **({"ssl": ssl.create_default_context(cafile=config.DB_SSL_CA)} if config.DB_SSL_CA else {}),
             min_size=1,
             max_size=10,
             timeout=5,

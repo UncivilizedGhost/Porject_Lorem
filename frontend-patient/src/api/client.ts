@@ -12,12 +12,14 @@ import type {
   TrustedView,
 } from "./types";
 
+import { clientId } from "./clientId";
+
 const BASE = "/api";
 
 async function request<T>(method: string, path: string, body?: unknown): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
     method,
-    headers: body ? { "Content-Type": "application/json" } : undefined,
+    headers: body ? { "Content-Type": "application/json", "X-Client-Id": clientId() } : { "X-Client-Id": clientId() },
     body: body ? JSON.stringify(body) : undefined,
   });
   if (!res.ok) throw new Error(`${method} ${path} → ${res.status}`);
@@ -59,6 +61,6 @@ export const api = {
   kantaMedicines: (id: string) => request<unknown>("GET", `/patients/${id}/kanta-medicines`),
   learnAsk: (body: { question: string; language: string }) => request<unknown>("POST", "/learn/ask", body),
   tts: (body: { text: string; language: string; speed: "normal" | "slow" }) =>
-    fetch(`${BASE}/voice/tts`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }),
-  stt: (form: FormData) => fetch(`${BASE}/voice/stt`, { method: "POST", body: form }),
+    fetch(`${BASE}/voice/tts`, { method: "POST", headers: { "Content-Type": "application/json", "X-Client-Id": clientId() }, body: JSON.stringify(body) }),
+  stt: (form: FormData) => fetch(`${BASE}/voice/stt`, { method: "POST", headers: { "X-Client-Id": clientId() }, body: form }),
 };

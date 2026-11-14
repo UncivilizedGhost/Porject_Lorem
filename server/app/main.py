@@ -8,7 +8,8 @@ from __future__ import annotations
 
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from app import config, db
@@ -28,6 +29,7 @@ from app.routers import (
     voice,
     worklist,
 )
+from app.services import client_slots
 from app.services import voice as voice_service
 from app.services.learn import corpus, pregenerated
 
@@ -50,6 +52,16 @@ async def lifespan(_: FastAPI):
 
 
 app = FastAPI(title="Cancer Pathway Companion API", version="0.1.0", lifespan=lifespan)
+
+@app.middleware("http")
+async def admit_demo_clients(request: Request, call_next):
+    # /health stays open for uptime checks; preflights carry no custom headers.
+    if request.method == "OPTIONS" or request.url.path == "/health":
+        return await call_next(request)
+    if not client_slots.admit(request.headers.get("x-client-id")):
+        return JSONResponse({"detail": "demo full, try again in a few minutes"}, status_code=503)
+    return await call_next(request)
+
 
 app.add_middleware(
     CORSMiddleware,
