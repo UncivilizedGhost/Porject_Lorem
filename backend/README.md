@@ -20,24 +20,7 @@ This installs the `medml` package plus all dependencies
 (`numpy`, `pandas`, `scikit-learn`, `pyyaml`, `joblib`, `elevenlabs`,
 `python-dotenv`) and the dev tools (`pytest`, `ruff`, `matplotlib`).
 
-### Alternative: Nix + direnv
 
-Requires [nix](https://nixos.org/) and [direnv](https://direnv.net/):
-
-```bash
-cd backend
-direnv allow .envrc
-```
-
-`direnv` loads `use flake` (Python, git, ruff, pytest from nixpkgs) and adds
-the venv's `site-packages` to `PYTHONPATH` for third-party deps not in nixpkgs
-(elevenlabs, python-dotenv). Create the venv once:
-
-```bash
-python3 -m venv .venv
-```
-
-Then run any `make` target; direnv handles the environment automatically.
 
 ### 2. Generate data and train
 
