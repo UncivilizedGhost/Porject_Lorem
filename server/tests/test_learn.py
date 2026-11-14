@@ -11,7 +11,7 @@ import asyncio
 import pytest
 
 from app.services import nemotron
-from app.services.learn import red_flags, retrieval
+from app.services.learn import pregenerated, red_flags, retrieval
 
 
 @pytest.fixture
@@ -78,6 +78,42 @@ async def test_red_flag_question_gets_fixed_safety_message_and_never_the_model(c
     assert body["text"] == red_flags.SAFETY_MESSAGE["en"]
     assert body["sources"] == []
     assert model == []
+
+
+@pytest.fixture
+def pregenerated_answers(monkeypatch):
+    """Replace the committed learn_answers.json with one known entry."""
+    entries = [
+        {
+            "question": "What is a bronchoscopy?",
+            "language": "en",
+            "passage_ids": [p["id"] for p in retrieval.search("What is a bronchoscopy?", "en")],
+            "text": "Pregenerated: a doctor looks into your airways with a thin tube.",
+        }
+    ]
+    monkeypatch.setattr(pregenerated, "load", lambda: entries)
+    return entries
+
+
+async def test_pregenerated_answer_is_served_without_calling_the_model(client, model, pregenerated_answers):
+    r = await client.post("/learn/ask", json={"question": "what is a bronchoscopy", "language": "en"})
+    body = r.json()
+    assert body["kind"] == "answer"
+    assert body["text"] == "Pregenerated: a doctor looks into your airways with a thin tube."
+    assert body["sources"][0]["passage_id"] == "bronchoscopy_en"
+    assert model == []
+
+
+async def test_pregenerated_answer_is_ignored_when_the_corpus_has_changed(client, model, pregenerated_answers):
+    pregenerated_answers[0]["passage_ids"] = ["some_older_passage"]
+    r = await client.post("/learn/ask", json={"question": "What is a bronchoscopy?", "language": "en"})
+    assert r.json()["text"] == "A bronchoscopy looks at your airways with a thin camera."
+    assert len(model) == 1
+
+
+async def test_pregenerated_answer_is_only_for_its_own_language(client, model, pregenerated_answers):
+    r = await client.post("/learn/ask", json={"question": "What is a bronchoscopy?", "language": "sv"})
+    assert "Pregenerated" not in r.json()["text"]
 
 
 async def test_question_without_a_source_says_ask_your_nurse_with_the_number(client, model):

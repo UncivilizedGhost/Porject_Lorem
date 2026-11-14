@@ -3,7 +3,8 @@
 ask(question, language) → { kind: safety | no_source | answer, text, sources }
 1. red_flags.contains(question) → fixed safety message
 2. retrieval.search(question, language) empty → "ask your nurse" + Nurse Aino's number
-3. nemotron rephrases only the retrieved passages; failure → best passage verbatim with source
+3. pregenerated answer for this question + passages (suggested questions) → served as is
+4. nemotron rephrases only the retrieved passages; failure → best passage verbatim with source
 """
 
 from __future__ import annotations
@@ -13,7 +14,7 @@ import logging
 
 from app import config
 from app.services import nemotron
-from app.services.learn import red_flags, retrieval
+from app.services.learn import pregenerated, red_flags, retrieval
 
 log = logging.getLogger(__name__)
 
@@ -51,7 +52,12 @@ async def ask(question: str, language: str) -> dict:
         return {"kind": "no_source", "text": text, "sources": []}
 
     best = passages[0]
-    user = "Passages:\n" + "\n\n".join(f"[{p['title']}]\n{p['text']}" for p in passages)
+    sources = [_source(p) for p in passages]
+    ready = pregenerated.lookup(question, language, [p["id"] for p in passages])
+    if ready:
+        return {"kind": "answer", "text": ready, "sources": sources}
+
+    user ="Passages:\n" + "\n\n".join(f"[{p['title']}]\n{p['text']}" for p in passages)
     user += f"\n\nQuestion: {question}"
     system = SYSTEM_PROMPT.format(language=LANGUAGE_NAMES[language])
     try:
@@ -62,7 +68,6 @@ async def ask(question: str, language: str) -> dict:
         text = text.strip()
         if not text:
             raise ValueError("empty model answer")
-        sources = [_source(p) for p in passages]
     except Exception as exc:  # noqa: BLE001 - any model failure degrades to the sourced passage
         log.warning("learn: model unavailable (%s); returning passage verbatim", type(exc).__name__)
         text, sources = best["text"], [_source(best)]

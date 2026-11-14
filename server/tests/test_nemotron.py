@@ -31,6 +31,8 @@ async def test_complete_posts_a_chat_completion_and_returns_the_text(configured,
     assert seen["auth"] == "Bearer test-key-not-real"
     assert seen["json"]["model"] == "nemotron-test"
     assert [m["role"] for m in seen["json"]["messages"]] == ["system", "user"]
+    # Reasoning adds output tokens and leaks thinking text into answers; plain answers only.
+    assert seen["json"]["chat_template_kwargs"] == {"enable_thinking": False}
 
 
 async def test_complete_raises_when_not_configured(monkeypatch):
