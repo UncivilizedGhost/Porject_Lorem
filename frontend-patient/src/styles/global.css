@@ -799,6 +799,19 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 /* -------------------------------------------------------------- pathway */
 .pathway { display: flex; flex-direction: column; gap: 18px; }
 .pathway > h1 { font-size: 2.1em; }
+/* Sits right under the heading, kept small but still a 44 px tap target. */
+.jump-next {
+  align-self: flex-start;
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 44px; margin: -8px 0 0; padding: 0 12px;
+  border: 1px solid var(--border-strong); border-radius: var(--radius-pill);
+  background: var(--card); color: var(--teal);
+  font-size: 0.88em; font-weight: 600;
+}
+.jump-next:hover { color: var(--teal-dark); border-color: var(--teal); }
+.jump-next svg { flex: none; }
+/* The card only takes focus because the button sent you there; no ring needed on arrival. */
+.path-card:focus { outline: none; }
 .goal-card {
   display: flex; flex-direction: column; gap: 14px; padding: 20px;
   background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-tile);
