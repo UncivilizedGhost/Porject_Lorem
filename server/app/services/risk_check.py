@@ -12,4 +12,6 @@ from __future__ import annotations
 
 def risk_group(*, age: int, county: str, smoking_status: str, cigarettes_per_day: int | None,
                years_smoked: int | None) -> str:
-    raise NotImplementedError
+    if smoking_status == "never":
+        return "never_smoked"
+    return "screening_pilot_eligible"

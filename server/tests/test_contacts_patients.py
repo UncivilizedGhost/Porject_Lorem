@@ -7,3 +7,32 @@
 - trusted-view never contains Check-in or Symptom Report answers
 - the accessibility PATCH is partial
 """
+
+ELIGIBLE = {
+    "age": 60,
+    "smoking_status": "daily",
+    "cigarettes_per_day": 20,
+    "years_smoked": 30,
+}
+
+
+def contact_body(county="Western Uusimaa", **answers):
+    return {
+        "county": county,
+        "language": "en",
+        "consent": {"warning_sign_contact": True},
+        "risk_check": {"taken": True, "answers": {**ELIGIBLE, **answers}},
+    }
+
+
+async def test_create_contact_returns_risk_group_and_can_be_read_back(client):
+    res = await client.post("/contacts", json=contact_body())
+    assert res.status_code == 201
+    created = res.json()
+    assert created["risk_group"] == "screening_pilot_eligible"
+    assert created["risk_check"]["risk_group"] == "screening_pilot_eligible"
+
+    got = await client.get(f"/contacts/{created['_id']}")
+    assert got.status_code == 200
+    assert got.json()["county"] == "Western Uusimaa"
+    assert got.json()["promoted_patient_id"] is None
