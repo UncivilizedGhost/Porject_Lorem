@@ -23,6 +23,15 @@ def test_sentence_without_a_fact_id_is_dropped():
     ]
 
 
+def test_ids_written_after_the_full_stop_belong_to_that_sentence():
+    # Nemotron's real output: "Sentence. [ids] Next sentence. [ids]"
+    reply = "Over-75s start late. [f1] Even with no misses, only 58%. [f2]"
+    assert filter_sentences(reply, {"f1", "f2"}) == [
+        {"text": "Over-75s start late", "fact_ids": ["f1"]},
+        {"text": "Even with no misses, only 58%", "fact_ids": ["f2"]},
+    ]
+
+
 def test_sentence_with_only_unknown_ids_is_dropped_and_unknown_ids_are_not_kept():
     kept = filter_sentences("Invented claim [zz9]. Half real [f1, zz9].", {"f1"})
     assert kept == [{"text": "Half real", "fact_ids": ["f1"]}]

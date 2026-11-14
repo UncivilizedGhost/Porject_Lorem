@@ -11,6 +11,8 @@ from pathlib import Path
 from app import db
 
 HERE = Path(__file__).parent
+# AI summaries written ahead of time by scripts/pregenerate_answers.py, if any.
+PREGENERATED_SUMMARIES = HERE / "pregenerated_summaries.json"
 
 
 def load(name: str) -> list[dict]:
@@ -37,8 +39,9 @@ async def ensure_fixtures() -> None:
         await db.upsert("counties", county_id(doc["name"]), doc)
     for doc in load("actions.json"):
         await db.upsert("actions", doc["_id"], doc)
-    # AI summaries written ahead of time by scripts/pregenerate_answers.py, if any.
-    summaries = load("pregenerated_summaries.json") if (HERE / "pregenerated_summaries.json").is_file() else {}
+    summaries = (
+        json.loads(PREGENERATED_SUMMARIES.read_text(encoding="utf-8")) if PREGENERATED_SUMMARIES.is_file() else {}
+    )
     for doc in load("insight_cards.json"):
         if doc["_id"] in summaries:
             doc = {**doc, "pregenerated_summary": summaries[doc["_id"]]}

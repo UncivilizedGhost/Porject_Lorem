@@ -11,10 +11,13 @@ import re
 
 _IDS = re.compile(r"\[([^\]]*)\]")
 _SPLIT = re.compile(r"(?<=[.!?])\s+")
+# "Sentence. [ids]" → "Sentence [ids]." so the ids stay with the sentence they follow.
+_IDS_AFTER_STOP = re.compile(r"([.!?])\s*((?:\[[^\]]*\]\s*)+)")
 
 
 def filter_sentences(reply: str, valid_fact_ids: set[str]) -> list[dict]:
     kept = []
+    reply = _IDS_AFTER_STOP.sub(lambda m: " " + m.group(2).strip() + m.group(1) + " ", reply.strip())
     for raw in _SPLIT.split(reply.strip()):
         ids = [i.strip() for group in _IDS.findall(raw) for i in group.split(",") if i.strip() in valid_fact_ids]
         if not ids:

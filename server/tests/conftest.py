@@ -31,6 +31,26 @@ async def _throwaway_schema():
         await db.close_pool()
 
 
+@pytest.fixture(scope="session", autouse=True)
+def _no_pregenerated_summaries():
+    """Tests exercise the live path; a test that wants a pregenerated summary writes its own."""
+    from pathlib import Path
+
+    from app.fixtures import seed
+
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(seed, "PREGENERATED_SUMMARIES", Path("does-not-exist.json"))
+        yield
+
+
+@pytest.fixture(autouse=True)
+def _no_pregenerated_answers(monkeypatch):
+    """Same for Learn: tests opt in by patching pregenerated.load themselves."""
+    from app.services.learn import pregenerated
+
+    monkeypatch.setattr(pregenerated, "load", lambda: [])
+
+
 @pytest.fixture
 async def client():
     from httpx import ASGITransport, AsyncClient
