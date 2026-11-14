@@ -1,31 +1,21 @@
 // Owner: person 1 — .scratch/equity-dashboard/spec.md (artboard "0 · Demo login")
-// Fake login: accepts any username and password. Coordinator → GET /demo/identities → /worklist;
-// County viewer → /dashboard. No real credentials are checked.
+// Demo entry: no credentials. Coordinator → GET /demo/identities → /worklist;
+// Equity analyst → /dashboard.
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { api } from "../api/client";
-import { type Role, setSession } from "../lib/session";
+import { setSession } from "../lib/session";
 
 export function LoginScreen() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState<Role>("coordinator");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const signInAsCoordinator = async () => {
     setError(null);
     setSubmitting(true);
     try {
-      // Fake authentication: accept any username/password combination.
-      if (role === "county_viewer") {
-        setSession({ role: "county_viewer" });
-        navigate("/dashboard");
-        return;
-      }
       const { coordinator_id } = await api.identities();
       setSession({ role: "coordinator", coordinatorId: coordinator_id });
       navigate("/worklist");
@@ -36,38 +26,24 @@ export function LoginScreen() {
     }
   };
 
+  const signInAsAnalyst = () => {
+    setSession({ role: "county_viewer" });
+    navigate("/dashboard");
+  };
+
   return (
     <section className="login card">
       <h1>Cancer Pathway Companion</h1>
-      <form onSubmit={handleSubmit} className="login-form">
-        <label htmlFor="username">Username</label>
-        <input
-          id="username"
-          name="username"
-          type="text"
-          autoComplete="username"
-          value={username}
-          onChange={(event) => setUsername(event.target.value)}
-        />
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-        />
-        <label htmlFor="role">Sign in as</label>
-        <select id="role" name="role" value={role} onChange={(event) => setRole(event.target.value as Role)}>
-          <option value="coordinator">Coordinator</option>
-          <option value="county_viewer">County viewer</option>
-        </select>
-        <button type="submit" disabled={submitting}>
-          {submitting ? "Signing in…" : "Sign in"}
+      <p>Choose how you'd like to sign in.</p>
+      <div className="login-form">
+        <button type="button" onClick={signInAsCoordinator} disabled={submitting}>
+          {submitting ? "Signing in…" : "Sign in as Coordinator"}
+        </button>
+        <button type="button" onClick={signInAsAnalyst} disabled={submitting}>
+          Sign in as Equity analyst
         </button>
         {error && <p role="alert">{error}</p>}
-      </form>
+      </div>
     </section>
   );
 }

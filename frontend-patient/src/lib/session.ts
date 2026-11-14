@@ -29,6 +29,14 @@ export function setSession(s: Session): void {
   }
 }
 
+export function clearSession(): void {
+  try {
+    sessionStorage.removeItem(KEY);
+  } catch {
+    /* private window etc. */
+  }
+}
+
 export function actorFields(): { actor: "self" | "trusted_person"; trusted_person_name?: string } {
   const s = getSession();
   return s?.role === "trusted_person"

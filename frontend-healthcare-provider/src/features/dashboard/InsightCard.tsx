@@ -32,24 +32,35 @@ export function InsightCard() {
   }, [name, dimension, group]);
 
   const back = <Link className="back-link" to={`/dashboard/county/${encodeURIComponent(name)}`}>← {name}</Link>;
-  if (failed) return <p role="alert">Could not load this Insight Card. {back}</p>;
+  if (failed) return <p role="alert">Could not load these Insights and Recommended Actions. {back}</p>;
   if (!card) return <p role="status" className="loading">Loading…</p>;
 
   return (
-    <div className="dashboard">
+    <div className="dashboard insight">
       {back}
-      <h1>{card.what}</h1>
-      <div role="group" aria-label="Gap" className="card card-facts">
-        <p>Where: {card.where}</p>
-        <p>Who: {card.who}</p>
-        <p>
-          Within target: <strong>{formatPercent(card.baseline.pct_within_target)}</strong> (n={card.baseline.n}), county{" "}
-          {formatPercent(card.county_pct_within_target)}
-          {card.baseline.small_sample && <span className="warn"><span aria-hidden="true"> △ </span>small sample</span>}
-        </p>
-        <SyntheticBadge />
+      <header className="insight-head">
+        <p className="insight-eyebrow">Insights and Recommended Actions</p>
+        <h1>{card.what}</h1>
+        <p className="insight-who">{card.who}</p>
+      </header>
+      <div className="insight-top">
+        <div role="group" aria-label="Gap" className="card card-facts">
+          <div className="key-number-head">
+            <p className="gap-label">Within target</p>
+            <SyntheticBadge />
+          </div>
+          <p className="gap-stat">
+            <strong className="gap-big">{formatPercent(card.baseline.pct_within_target)}</strong>
+            <span className="gap-meta">
+              (n={card.baseline.n}), county {formatPercent(card.county_pct_within_target)}
+            </span>
+            {card.baseline.small_sample && <span className="warn"><span aria-hidden="true"> △ </span>small sample</span>}
+          </p>
+          <p className="gap-line"><span className="gap-key">Where:</span> {card.where}</p>
+          <p className="gap-line"><span className="gap-key">Who:</span> {card.who}</p>
+        </div>
+        <CauseCodes shares={card.cause_shares} />
       </div>
-      <CauseCodes shares={card.cause_shares} />
       <AiSummary summary={summary} />
       <RecommendedActions actions={card.recommended_actions} />
     </div>

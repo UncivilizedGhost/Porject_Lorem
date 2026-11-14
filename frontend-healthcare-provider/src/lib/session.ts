@@ -14,6 +14,14 @@ export function getSession(): Session | null {
   }
 }
 
+export function clearSession(): void {
+  try {
+    sessionStorage.removeItem(KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
 export function setSession(s: Session): void {
   try {
     sessionStorage.setItem(KEY, JSON.stringify(s));

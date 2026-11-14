@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../../api/client";
 import { Icon } from "../../components/Icon";
 import { useI18n } from "../../i18n/LanguageProvider";
+import { PROVIDER_URL } from "../../lib/providerUrl";
 import { setSession } from "../../lib/session";
 import { Header } from "../../shell/Header";
 import { useReadable } from "../../voice/useReadable";
@@ -69,6 +70,11 @@ export function LoginScreen() {
             <Icon name="chevron-right" size={28} />
           </button>
         </div>
+
+        <a className="role-tile" href={PROVIDER_URL}>
+          {t("demo.providerApp")}
+          <Icon name="chevron-right" size={28} />
+        </a>
 
         {error && <p role="alert">{t("login.error")}</p>}
       </main>

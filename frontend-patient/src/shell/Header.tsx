@@ -1,8 +1,9 @@
 // Owner: person 2 — header on every companion screen: Aa (settings, incl. language)
 // · Help ("Who to call", one tap from everywhere). Back on flow screens only.
 // Voice assistant toggle: click anywhere on screen to have it read out loud.
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
+import { clearSession, getSession } from "../lib/session";
 import { useVoice } from "../voice/VoiceProvider";
 import { useI18n } from "../i18n/LanguageProvider";
 import { BackButton } from "./BackButton";
@@ -31,6 +32,12 @@ export function Header() {
   const { toggleVoiceAssistant, settings } = useVoice();
   const { t } = useI18n();
   const voiceAssistant = settings.voice_assistant;
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const logout = () => {
+    clearSession();
+    navigate("/");
+  };
   return (
     <header className="app-header">
       <BackButton />
@@ -52,6 +59,11 @@ export function Header() {
           <Icon name="help-pill" size={18} />
           {t("common.help")}
         </Link>
+        {getSession() && pathname !== "/" && (
+          <button type="button" className="help-pill" onClick={logout}>
+            {t("demo.logout")}
+          </button>
+        )}
       </div>
     </header>
   );

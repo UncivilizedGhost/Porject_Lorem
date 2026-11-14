@@ -537,6 +537,12 @@ export const MESSAGES = {
   "demo.patient": ["patient", "potilas", "patient"],
   "demo.caretaker": ["caretaker", "omainen", "anhörig"],
   "demo.alarm": ["Trigger alarm", "Laukaise hälytys", "Utlös larm"],
+  "demo.logout": ["Log out", "Kirjaudu ulos", "Logga ut"],
+  "demo.providerApp": [
+    "Open healthcare provider app",
+    "Avaa hoitajan sovellus",
+    "Öppna vårdpersonalens app",
+  ],
 
   "demo.alarmFailed": [
     "The alarm was not sent to the nurse.",

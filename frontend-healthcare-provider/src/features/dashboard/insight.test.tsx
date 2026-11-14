@@ -195,7 +195,7 @@ describe("insight card", () => {
         </Routes>
       </MemoryRouter>,
     );
-    expect(await screen.findByRole("alert")).toHaveTextContent(/Could not load this Insight Card/);
+    expect(await screen.findByRole("alert")).toHaveTextContent(/Could not load these Insights and Recommended Actions/);
     expect(screen.getByRole("link", { name: /Western Uusimaa/ })).toBeInTheDocument();
   });
 });

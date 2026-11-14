@@ -154,13 +154,13 @@ describe("county pathway view", () => {
     }
   });
 
-  test("ranks the vulnerable groups, and each one opens its own Insight Card", async () => {
+  test("ranks the vulnerable groups, and each one opens its own Insights and Recommended Actions", async () => {
     renderCounty();
     const ranking = await screen.findByRole("group", { name: /vulnerability ranking/i });
     const links = within(ranking).getAllByRole("link");
     expect(links).toHaveLength(4); // the suppressed cell is not ranked
     expect(links[0]).toHaveTextContent("75+"); // lowest share of a large group ranks first
-    expect(links.every((l) => /Insight Card/.test(l.textContent ?? ""))).toBe(true);
+    expect(links.every((l) => /Insights and Recommended Actions/.test(l.textContent ?? ""))).toBe(true);
     expect(within(ranking).queryByRole("button")).not.toBeInTheDocument();
     await userEvent.click(links[0]);
     expect(await screen.findByText("card page ?dimension=age&group=75%2B")).toBeInTheDocument();

@@ -59,6 +59,10 @@ export function NationalOverview() {
           <h2>Wellbeing services counties</h2>
           <SyntheticBadge />
         </div>
+        <p className="muted">
+          Demo tip: click <strong>Western Uusimaa</strong> (the outlined county) to open its pathway view,
+          then explore the insight and recommended actions.
+        </p>
         <TileMap counties={counties} />
       </div>
       <footer className="caveat muted">

@@ -31,7 +31,7 @@ export function RecommendedActions({ actions }: { actions: RecommendedAction[] }
                 <span className="evidence-badge" data-badge={a.badge}>{BADGE_LABEL[a.badge]}</span>
               </p>
               <p className="action-because">Why this is recommended: {a.recommended_because}</p>
-              {a.roadmap_action && <p>Strategy / roadmap: {a.roadmap_action}</p>}
+              {a.roadmap_action && <p className="action-roadmap">Strategy / roadmap: {a.roadmap_action}</p>}
               <ul className="evidence-links">
                 {a.evidence.map((e) => (
                   <li key={e.ref}>
@@ -40,7 +40,7 @@ export function RecommendedActions({ actions }: { actions: RecommendedAction[] }
                 ))}
               </ul>
               {a.effect ? (
-                <p>
+                <p className="action-effect">
                   Evidence shows <strong>{formatFractionRange(a.effect.low, a.effect.high)} fewer missed visits</strong>{" "}
                   <span className="muted">
                     ({a.effect.range_rule === "ci" ? "study confidence interval" : "half to full published effect"})

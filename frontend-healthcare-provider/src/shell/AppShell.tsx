@@ -3,11 +3,13 @@
 import { Outlet } from "react-router-dom";
 
 import { DemoBar } from "./DemoBar";
+import { LogoutButton } from "./LogoutButton";
 
 export function AppShell() {
   return (
     <>
       <DemoBar />
+      <LogoutButton />
       <main>
         <Outlet />
       </main>
