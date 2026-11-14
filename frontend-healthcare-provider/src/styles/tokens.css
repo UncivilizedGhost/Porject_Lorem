@@ -23,6 +23,10 @@
   --yellow-ink: #7a5300;
   --red-tint: #fbe6d9;
   --yellow-tint: #fdf1d8;
+  /* Vulnerability rank: one warm scale, darkest = most vulnerable */
+  --vuln-1: #a63f00;
+  --vuln-2: #d55e00;
+  --vuln-3: #f0b48a;
   --focus: #0072b2;
   /* Spacing and type scale */
   --space-1: 4px;
