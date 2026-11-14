@@ -8,6 +8,8 @@
 - the accessibility PATCH is partial
 """
 
+import pytest
+
 ELIGIBLE = {
     "age": 60,
     "smoking_status": "daily",
@@ -36,3 +38,29 @@ async def test_create_contact_returns_risk_group_and_can_be_read_back(client):
     assert got.status_code == 200
     assert got.json()["county"] == "Western Uusimaa"
     assert got.json()["promoted_patient_id"] is None
+
+
+@pytest.mark.parametrize(
+    ("answers", "county", "expected"),
+    [
+        ({"age": 49}, "Western Uusimaa", "not_eligible"),
+        ({"age": 50}, "Western Uusimaa", "screening_pilot_eligible"),
+        ({"age": 74}, "Western Uusimaa", "screening_pilot_eligible"),
+        ({"age": 75}, "Western Uusimaa", "not_eligible"),
+        ({"cigarettes_per_day": 15, "years_smoked": 26}, "Pirkanmaa", "not_eligible"),
+        ({"cigarettes_per_day": 16, "years_smoked": 26}, "Pirkanmaa", "screening_pilot_eligible"),
+        ({"cigarettes_per_day": 16, "years_smoked": 25}, "Pirkanmaa", "not_eligible"),
+        ({"cigarettes_per_day": 10, "years_smoked": 31}, "Ostrobothnia", "not_eligible"),
+        ({"cigarettes_per_day": 11, "years_smoked": 30}, "Ostrobothnia", "not_eligible"),
+        ({"cigarettes_per_day": 11, "years_smoked": 31}, "Ostrobothnia", "screening_pilot_eligible"),
+        ({"smoking_status": "former", "cigarettes_per_day": None, "years_smoked": None}, "Western Uusimaa", "not_eligible"),
+        ({"smoking_status": "never", "cigarettes_per_day": None, "years_smoked": None}, "Western Uusimaa", "never_smoked"),
+        ({}, "Kymenlaakso", "not_eligible"),
+        ({}, "North Ostrobothnia", "screening_pilot_eligible"),
+        ({}, "Southwest Finland", "screening_pilot_eligible"),
+    ],
+)
+async def test_risk_group_follows_the_pilot_criteria(client, answers, county, expected):
+    res = await client.post("/contacts", json=contact_body(county=county, **answers))
+    assert res.status_code == 201
+    assert res.json()["risk_group"] == expected
