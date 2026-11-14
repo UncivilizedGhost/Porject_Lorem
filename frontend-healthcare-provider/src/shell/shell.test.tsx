@@ -37,25 +37,28 @@ beforeEach(() => {
 });
 
 describe("login", () => {
-  test("is labelled as a mocked strong identification, not a real one", () => {
+  test("renders a demo login form that accepts any username and password", () => {
     renderLogin();
-    expect(screen.getByText(/strong identification \(mocked\)/i)).toBeInTheDocument();
+    expect(screen.getByLabelText("Username")).toBeInTheDocument();
+    expect(screen.getByLabelText("Password")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Sign in" })).toBeInTheDocument();
   });
 
-  test("Coordinator fetches the demo identity, keeps the role and opens the Worklist", async () => {
-    mocked.identities.mockResolvedValue({ coordinator_id: "coord-1" });
+  test("accepts any credentials, sets a coordinator session and opens the worklist", async () => {
     renderLogin();
-    await userEvent.click(screen.getByRole("button", { name: "Coordinator" }));
+    await userEvent.type(screen.getByLabelText("Username"), "any-user");
+    await userEvent.type(screen.getByLabelText("Password"), "any-password");
+    await userEvent.click(screen.getByRole("button", { name: "Sign in" }));
     expect(await screen.findByText("worklist page")).toBeInTheDocument();
-    expect(getSession()).toEqual({ role: "coordinator", coordinatorId: "coord-1" });
+    expect(getSession()).toEqual({ role: "coordinator", coordinatorId: "any-user" });
   });
 
-  test("County viewer opens the Dashboard without any backend call", async () => {
+  test("signs in with an empty username using a demo id", async () => {
     renderLogin();
-    await userEvent.click(screen.getByRole("button", { name: "County viewer" }));
-    expect(await screen.findByText("dashboard page")).toBeInTheDocument();
-    expect(mocked.identities).not.toHaveBeenCalled();
-    expect(getSession()).toEqual({ role: "county_viewer" });
+    await userEvent.type(screen.getByLabelText("Password"), "any-password");
+    await userEvent.click(screen.getByRole("button", { name: "Sign in" }));
+    expect(await screen.findByText("worklist page")).toBeInTheDocument();
+    expect(getSession()).toEqual({ role: "coordinator", coordinatorId: "demo-user" });
   });
 });
 
