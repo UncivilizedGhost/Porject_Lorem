@@ -21,7 +21,7 @@ export function LoginScreen() {
           role,
           patientId: ids.patient_id ?? undefined,
           contactId: ids.contact_id ?? undefined,
-          trustedPersonName: ids.trusted_person_name ?? "Liisa Virtanen",
+          trustedPersonName: ids.trusted_person?.name ?? "Liisa Virtanen",
         });
         navigate("/trusted");
         return;

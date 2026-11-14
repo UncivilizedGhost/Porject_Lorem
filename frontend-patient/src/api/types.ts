@@ -129,5 +129,6 @@ export interface Identities {
   coordinator_id?: string;
   contact_id?: string | null;
   patient_id?: string | null;
-  trusted_person_name?: string | null;
+  trusted_person?: { name: string; relationship?: string; contact_method?: string } | null;
+  current_demo_day?: number;
 }
