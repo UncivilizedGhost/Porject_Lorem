@@ -460,6 +460,9 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .number-pad-value { display: block; font-size: 2.2em; font-weight: 700; text-align: center; padding: 8px; }
 .number-pad-keys { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .number-pad-keys button { min-height: var(--target-primary); font-size: 1.4em; }
+/* Weekly check-in: the temperature keys are circles instead of the standard tiles. */
+.checkin .number-pad-keys { grid-template-columns: repeat(3, 76px); justify-content: center; }
+.checkin .number-pad-keys button { width: 76px; min-height: 0; aspect-ratio: 1; border-radius: 50%; }
 
 .slide-track {
   position: relative; height: var(--target-primary);
