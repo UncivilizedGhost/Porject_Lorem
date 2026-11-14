@@ -1,6 +1,7 @@
 // Owner: person 1 — .scratch/equity-dashboard/spec.md (artboard "Equity dashboard · 2 Pathway view (Western Uusimaa)")
-// PathwayBar (days per phase, coloured where exceeded), EquityBreakdown (suppressed / small-sample cells),
-// share outside the fast-track, link to the Insight Card, back to overview. GET /dashboard/counties/{name}.
+// PathwayBar (days per phase, coloured where exceeded), EquityBreakdown (one dimension at a time:
+// column chart + table), VulnerabilityPanel (compact ranking + AI options), share outside the
+// fast-track, link to the Insight Card, back to overview. GET /dashboard/counties/{name}.
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
@@ -10,6 +11,7 @@ import { formatPercent } from "../../lib/format";
 import { EquityBreakdown } from "./components/EquityBreakdown";
 import { PathwayBar } from "./components/PathwayBar";
 import { SyntheticBadge } from "./components/SyntheticBadge";
+import { VulnerabilityPanel } from "./components/VulnerabilityPanel";
 
 export function CountyView() {
   const { name = "" } = useParams();
@@ -18,6 +20,7 @@ export function CountyView() {
 
   useEffect(() => {
     setCounty(null);
+    setFailed(false);
     api.county(name).then(setCounty).catch(() => setFailed(true));
   }, [name]);
 
@@ -39,7 +42,12 @@ export function CountyView() {
         <p className="key-number-value">{formatPercent(county.pct_outside_fast_track)}</p>
         <p className="muted">These pathways never had a clock running.</p>
       </div>
-      <EquityBreakdown breakdown={county.breakdown} />
+      <EquityBreakdown breakdown={county.breakdown} average={county.pct_within_target} />
+      <VulnerabilityPanel
+        county={county.name}
+        breakdown={county.breakdown}
+        average={county.pct_within_target}
+      />
       {cardSlug && (
         <p>
           <Link className="button-link" to={`/dashboard/county/${encodeURIComponent(county.name)}/insight/${cardSlug}`}>

@@ -9,8 +9,8 @@
     "cause": "unconfirmed",
     "group": "75+",
     "baseline": {
-      "pct_within_target": 46.0,
-      "n": 186,
+      "pct_within_target": 35.3,
+      "n": 273,
       "missed_visit_share": 12.0,
       "days_lost_to_missed_visits": 14.0
     },
@@ -21,10 +21,10 @@
       "treatment": 14
     },
     "cached_summary": [
-      { "text": "In Western Uusimaa only 46% of people aged 75 and over start treatment within the 6-week target, against 64% across the county", "fact_ids": ["group_pct", "county_pct"] },
+      { "text": "In Western Uusimaa, 35% of people aged 75 and over start treatment within the 6-week target (n=273), against 54% across the county", "fact_ids": ["group_pct", "county_pct"] },
+      { "text": "The gap is widest among those aged 85 and over, at 30%", "fact_ids": ["age_85+"] },
       { "text": "About 12% of this group start late because they miss the first visit, losing about 14 days each", "fact_ids": ["missed_share", "days_lost"] },
-      { "text": "Nearly half of the delayed first visits (46%) were never confirmed", "fact_ids": ["cause_unconfirmed"] },
-      { "text": "Phone reminders cut missed appointments by 43% in one Danish hospital, but even with no missed visits at all this group would reach only 58%", "fact_ids": ["action_reminders_nurse_call", "max_achievable"] }
+      { "text": "Phone reminders cut missed appointments by 43% in one Danish hospital, but even with no missed visits at all this group would reach only 47%", "fact_ids": ["action_reminders_nurse_call", "max_achievable"] }
     ]
   }
 ]

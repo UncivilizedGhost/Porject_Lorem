@@ -1,5 +1,5 @@
 // Owner: person 1 — .scratch/equity-dashboard/spec.md
-// One tile per county (22, real names) at the fixture tile { col, row }, coloured by bands.ts,
+// One tile per county (22, real names) auto-flowed four per row, coloured by bands.ts,
 // Western Uusimaa outlined, click → /dashboard/county/:name. The % is printed on each tile.
 import { Link } from "react-router-dom";
 
@@ -21,7 +21,6 @@ export function TileMap({ counties }: { counties: CountySummary[] }) {
             className="tile"
             data-band={band(c.pct_within_target)}
             data-demo-county={c.name === DEMO_COUNTY ? "true" : undefined}
-            style={{ gridColumn: c.tile.col + 1, gridRow: c.tile.row + 1 }}
           >
             <span className="tile-name">{c.name}</span>
             <span className="tile-pct">{formatPercent(c.pct_within_target)}</span>
