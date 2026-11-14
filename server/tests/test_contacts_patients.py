@@ -40,6 +40,29 @@ async def test_create_contact_returns_risk_group_and_can_be_read_back(client):
     assert got.json()["promoted_patient_id"] is None
 
 
+async def test_contact_accessibility_patch_is_partial_and_can_set_language(client):
+    created = (await client.post("/contacts", json=contact_body())).json()
+    cid = created["_id"]
+
+    res = await client.patch(f"/contacts/{cid}/accessibility", json={"text_size": "xl"})
+    assert res.status_code == 200
+    got = (await client.get(f"/contacts/{cid}")).json()
+    assert got["accessibility"] == {
+        "read_aloud": False, "voice_mode": False, "text_size": "xl", "high_contrast": False
+    }
+
+    await client.patch(f"/contacts/{cid}/accessibility", json={"high_contrast": True, "language": "sv"})
+    got = (await client.get(f"/contacts/{cid}")).json()
+    assert got["accessibility"]["text_size"] == "xl"
+    assert got["accessibility"]["high_contrast"] is True
+    assert got["language"] == "sv"
+
+
+async def test_accessibility_patch_for_unknown_contact_is_404(client):
+    res = await client.patch("/contacts/nope/accessibility", json={"text_size": "l"})
+    assert res.status_code == 404
+
+
 @pytest.mark.parametrize(
     ("answers", "county", "expected"),
     [

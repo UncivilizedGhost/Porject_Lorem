@@ -11,6 +11,7 @@ from typing import Any
 from fastapi import APIRouter, HTTPException
 
 from app import db
+from app.services import accessibility
 from app.services.risk_check import risk_group
 
 router = APIRouter(prefix="/contacts", tags=["contacts"])
@@ -68,9 +69,9 @@ async def get_contact(contact_id: str):
 
 
 @router.patch("/{contact_id}/accessibility")
-async def patch_accessibility():
+async def patch_accessibility(contact_id: str, body: dict[str, Any]):
     """person 2: partial update of read_aloud / voice_mode / text_size / high_contrast (+ top-level language)."""
-    raise HTTPException(status_code=501, detail="not implemented")
+    return await accessibility.patch_accessibility("contacts", contact_id, body)
 
 
 @router.post("/{contact_id}/warning-sign-tap")
