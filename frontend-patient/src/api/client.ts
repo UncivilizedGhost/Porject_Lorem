@@ -40,6 +40,7 @@ export const api = {
   // person 2 endpoints
   createContact: (body: object) => request<ContactView & { risk_group: string | null }>("POST", "/contacts", body),
   getContact: (id: string) => request<ContactView>("GET", `/contacts/${id}`),
+  promoteContact: (id: string) => request<{ patient_id: string }>("POST", `/contacts/${id}/promote`),
   getPatient: (id: string) => request<PatientView>("GET", `/patients/${id}`),
   trustedView: (id: string) => request<TrustedView>("GET", `/patients/${id}/trusted-view`),
   patchAccessibility: (kind: "contacts" | "patients", id: string, body: object) =>

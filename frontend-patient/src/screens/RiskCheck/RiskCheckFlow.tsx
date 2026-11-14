@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../../api/client";
 import { ChoiceList } from "../../components/ChoiceList";
 import { NumberPad, parseNumber } from "../../components/NumberPad";
-import { ProgressBar } from "../../components/ProgressBar";
 import { useI18n } from "../../i18n/LanguageProvider";
 import { setSession } from "../../lib/session";
 import { useReadable } from "../../voice/useReadable";
@@ -128,7 +127,6 @@ export function RiskCheckFlow() {
         </div>
       </div>
 
-      <ProgressBar step={index + 1} total={questions.length} />
       <fieldset className="q-field">
         <legend className="q-prompt">{question.prompt}</legend>
         {question.kind === "choice" ? (

@@ -28,9 +28,9 @@ export const MESSAGES = {
   "common.home": ["Home", "Etusivu", "Hem"],
 
   "login.title": [
-    "Lung cancer pathway support for Western Uusimaa",
-    "Keuhkosyövän hoitopolun tuki Länsi-Uudellamaalla",
-    "Stöd för lungcancervårdförloppet i Västra Nyland",
+    "Who is using the app?",
+    "Kuka käyttää sovellusta?",
+    "Vem använder appen?",
   ],
   "login.patient": ["Patient", "Potilas", "Patient"],
   "login.support": ["Support person", "Läheinen", "Närstående"],

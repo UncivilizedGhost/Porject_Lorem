@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 import { api } from "../api/client";
 import { useI18n } from "../i18n/LanguageProvider";
-import { actorFields, getSession } from "../lib/session";
+import { actorFields, getSession, setSession } from "../lib/session";
 
 type Names = { patient: string | null; caretaker: string | null };
 
@@ -19,6 +19,7 @@ export function DemoBar() {
   const [day, setDay] = useState<number | null>(null);
   const [names, setNames] = useState<Names>({ patient: null, caretaker: null });
   const [alarmFailed, setAlarmFailed] = useState(false);
+  const [advancing, setAdvancing] = useState(false);
   useEffect(() => {
     api.health().then((h) => setDay(h.current_demo_day)).catch(() => undefined);
     api.identities()
@@ -29,9 +30,24 @@ export function DemoBar() {
       .catch(() => undefined);
   }, []);
   const advance = async () => {
-    const r = await api.advanceDay();
-    setDay(r.current_demo_day);
-    window.dispatchEvent(new Event("demo-day-advanced"));
+    if (advancing) return;
+    setAdvancing(true);
+    try {
+      const r = await api.advanceDay();
+      setDay(r.current_demo_day);
+      // Demo shim: advancing a day is when the nurse's call is assumed to have happened for a
+      // Contact who is not a Patient yet. Screen loads never promote anyone.
+      const s = getSession();
+      if (s?.contactId && !s.patientId) {
+        const { patient_id } = await api.promoteContact(s.contactId);
+        setSession({ ...s, patientId: patient_id });
+      }
+      window.dispatchEvent(new Event("demo-day-advanced"));
+    } catch {
+      // Leave the screen as it is; the next poll or press can retry.
+    } finally {
+      setAdvancing(false);
+    }
   };
   const alarm = async () => {
     setAlarmFailed(false);
@@ -58,7 +74,7 @@ export function DemoBar() {
       <div className="demo-row">
         <span>{t("demo.badge", { day: day ?? "–" })}</span>
         <div className="demo-actions">
-          <button type="button" onClick={advance}>{t("demo.advance")}</button>
+          <button type="button" onClick={advance} disabled={advancing} aria-busy={advancing}>{t("demo.advance")}</button>
           <button type="button" className="demo-alarm" onClick={alarm}>{t("demo.alarm")}</button>
         </div>
       </div>
