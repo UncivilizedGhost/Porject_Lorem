@@ -4,11 +4,13 @@
 import { NURSE_PHONE } from "../../components/HelpNumbers";
 import { formatClock, formatDate } from "../../lib/format";
 import { usePatient } from "../../lib/usePatient";
+import { NoPathwayYet } from "../../components/NoPathwayYet";
 import "../../styles/print.css";
 
 export function CarePlanCardPrint() {
   const patient = usePatient();
   const next = patient?.next_step ?? null;
+  if (patient === null) return <NoPathwayYet />;
   if (!patient) return <p>Loading…</p>;
   return (
     <main className="care-plan-card">

@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { NURSE_PHONE } from "../../components/HelpNumbers";
 import { formatClock, formatDate } from "../../lib/format";
 import { usePatient } from "../../lib/usePatient";
+import { NoPathwayYet } from "../../components/NoPathwayYet";
 import { useReadable } from "../../voice/useReadable";
 import { useVoiceActions } from "../../voice/useVoiceActions";
 
@@ -49,6 +50,7 @@ export function HomeScreen() {
   );
   useVoiceActions(actions);
 
+  if (patient === null) return <NoPathwayYet />;
   if (!patient) return <p>Loading…</p>;
   return (
     <section>

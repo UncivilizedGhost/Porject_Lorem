@@ -3,11 +3,11 @@ import { render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, vi } from "vitest";
 
-import { setSession } from "../../lib/session";
+import { getSession, setSession } from "../../lib/session";
 import { patient } from "../../test/fixtures";
 import { PathwayScreen } from "./PathwayScreen";
 
-vi.mock("../../api/client", () => ({ api: { getPatient: vi.fn() } }));
+vi.mock("../../api/client", () => ({ api: { getPatient: vi.fn(), getContact: vi.fn() } }));
 import { api } from "../../api/client";
 
 const mockApi = vi.mocked(api, true);
@@ -49,4 +49,22 @@ test("future dates are marked as estimates, done dates are not", async () => {
   expect(within(items[0]).getByText("14.11.")).toBeInTheDocument();
   expect(within(items[1]).getByText(/about 18\.11\./i)).toBeInTheDocument();
   expect(within(items[2]).getByText(/about 25\.11\./i)).toBeInTheDocument();
+});
+
+test("a Contact the nurse has not called yet sees that, not an endless loading screen", async () => {
+  setSession({ role: "patient", contactId: "c1" });
+  mockApi.getContact.mockResolvedValue({ _id: "c1", promoted_patient_id: null } as never);
+  renderPathway();
+  expect(await screen.findByText(/nurse will call you/i)).toBeInTheDocument();
+  expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
+  expect(mockApi.getPatient).not.toHaveBeenCalled();
+});
+
+test("once the nurse's call has made the Contact a Patient, the pathway appears", async () => {
+  setSession({ role: "patient", contactId: "c1" });
+  mockApi.getContact.mockResolvedValue({ _id: "c1", promoted_patient_id: "p1" } as never);
+  renderPathway();
+  expect(await screen.findAllByRole("listitem")).toHaveLength(3);
+  expect(mockApi.getPatient).toHaveBeenCalledWith("p1");
+  expect(getSession()?.patientId).toBe("p1");
 });

@@ -5,6 +5,7 @@ import { useMemo } from "react";
 
 import { formatDate } from "../../lib/format";
 import { usePatient } from "../../lib/usePatient";
+import { NoPathwayYet } from "../../components/NoPathwayYet";
 import { useReadable } from "../../voice/useReadable";
 
 const GOAL = "If you need treatment, it starts within 6 weeks of your referral.";
@@ -14,6 +15,7 @@ export function PathwayScreen() {
   const patient = usePatient();
   const readable = useMemo(() => ({ heading: "Your pathway", body: GOAL }), []);
   useReadable(readable);
+  if (patient === null) return <NoPathwayYet />;
   if (!patient) return <p>Loading…</p>;
   return (
     <section>

@@ -8,6 +8,7 @@ import type { Medicine } from "../../api/types";
 import { SlideToConfirm } from "../../components/SlideToConfirm";
 import { actorFields, getSession } from "../../lib/session";
 import { usePatient } from "../../lib/usePatient";
+import { NoPathwayYet } from "../../components/NoPathwayYet";
 import { useReadable } from "../../voice/useReadable";
 import { useVoiceActions } from "../../voice/useVoiceActions";
 
@@ -66,6 +67,7 @@ export function MedicinesScreen() {
   );
   useVoiceActions(actions);
 
+  if (patient === null) return <NoPathwayYet />;
   if (!patient) return <p>Loading…</p>;
   return (
     <section>
