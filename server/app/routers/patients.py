@@ -7,6 +7,8 @@ person 4 for kanta-medicines (`app/services/messaging.py`).
 
 from fastapi import APIRouter, HTTPException
 
+from app.services import messaging
+
 router = APIRouter(prefix="/patients", tags=["patients"])
 
 
@@ -47,6 +49,6 @@ async def medication_log():
 
 
 @router.get("/{patient_id}/kanta-medicines")
-async def kanta_medicines():
+async def kanta_medicines(patient_id: str):
     """person 4: fixture medicine list wrapped as a FHIR mock-up (labelled)."""
-    raise HTTPException(status_code=501, detail="not implemented")
+    return messaging.kanta_medicines()

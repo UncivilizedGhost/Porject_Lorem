@@ -94,6 +94,23 @@ async def log_fhir_sync(subject_type: str, subject_id: str, resource_summary: di
     return await _write_event(subject_type, subject_id, "fhir_sync", {"mock": True, "bundle": bundle})
 
 
+def kanta_medicines() -> dict[str, Any]:
+    """The fixture medicine list wrapped as a FHIR mock-up (the demo's stand-in for Kanta)."""
+    from app.fixtures.seed import load
+
+    medicines = load("medicines.json")
+    entries = [
+        {"resource": _fhir_resource({"resource_type": "MedicationStatement", "display": m["label"]})}
+        for m in medicines
+    ]
+    return {
+        "label": "(FHIR mock-up)",
+        "mock": True,
+        "bundle": {"resourceType": "Bundle", "type": "collection", "entry": entries},
+        "medicines": medicines,
+    }
+
+
 async def reply_to_sms(event_id: str, text: str) -> dict[str, Any] | None:
     """Simulate a reply to a sent message. Writes a linked `sms_sent` row with status "replied".
     A YES reply confirms the subject's fired Escalation Step. None if the message is unknown."""
