@@ -12,16 +12,35 @@ import json
 from functools import lru_cache
 from pathlib import Path
 
+from app import db
 from app.services.learn.text import normalize
 
 ANSWERS_PATH = Path(__file__).resolve().parents[2] / "fixtures" / "learn_answers.json"
 
 
+_db_answers: list[dict] | None = None
+
+
 @lru_cache(maxsize=1)
-def load() -> list[dict]:
+def _load_file() -> list[dict]:
     if not ANSWERS_PATH.is_file():
         return []
     return json.loads(ANSWERS_PATH.read_text(encoding="utf-8"))
+
+
+def load() -> list[dict]:
+    return _db_answers if _db_answers is not None else _load_file()
+
+
+async def refresh() -> None:
+    """Load the answers from the database; an empty table or a failed read keeps the file."""
+    global _db_answers
+    try:
+        rows = await db.find("learn_answers")
+    except Exception as exc:  # noqa: BLE001 - fall back to the file
+        print(f"[learn] answers read failed, serving fixture file: {exc}")
+        rows = []
+    _db_answers = [{k: v for k, v in r.items() if k not in ("_id", "created_at")} for r in rows] or None
 
 
 def lookup(question: str, language: str, passage_ids: list[str]) -> str | None:

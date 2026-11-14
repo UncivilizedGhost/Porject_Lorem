@@ -50,9 +50,28 @@ async def ensure_fixtures() -> None:
         await db.upsert("clinicians", clinician["_id"], clinician)
 
 
+async def ensure_learn_reference() -> None:
+    """Learn passages, credible sources and pregenerated answers. The files win: every start
+    overwrites the rows, so the tables never drift from what is in git."""
+    from app import config
+    from app.services.learn.corpus import _host
+
+    for doc in load("learn_corpus.json"):
+        await db.upsert("learn_passages", doc["id"], doc)
+    sources = Path(config.CREDIBLE_SOURCES_PATH)
+    for line in sources.read_text(encoding="utf-8").splitlines() if sources.is_file() else []:
+        if line.strip():
+            domain = _host(line)
+            await db.upsert("credible_sources", domain, {"domain": domain})
+    answers = HERE / "learn_answers.json"
+    for n, doc in enumerate(json.loads(answers.read_text(encoding="utf-8")) if answers.is_file() else []):
+        await db.upsert("learn_answers", f"answer-{n}", doc)
+
+
 async def ensure_seeded() -> None:
     await ensure_clock_and_coordinator()
     await ensure_fixtures()
+    await ensure_learn_reference()
 
 
 async def _main() -> None:

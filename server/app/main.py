@@ -29,6 +29,7 @@ from app.routers import (
     worklist,
 )
 from app.services import voice as voice_service
+from app.services.learn import corpus, pregenerated
 
 
 @asynccontextmanager
@@ -38,6 +39,8 @@ async def lifespan(_: FastAPI):
     try:
         await db.init_schema()
         await ensure_seeded()
+        await corpus.refresh()
+        await pregenerated.refresh()
     except Exception as exc:  # noqa: BLE001 - the server still starts; /health reports db: false
         print(f"[startup] database not reachable, skipping schema + seed: {exc}")
     if warning := voice_service.startup_warning():

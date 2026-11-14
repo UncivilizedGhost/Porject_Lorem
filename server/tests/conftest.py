@@ -51,6 +51,15 @@ def _no_pregenerated_answers(monkeypatch):
     monkeypatch.setattr(pregenerated, "load", lambda: [])
 
 
+@pytest.fixture(autouse=True)
+def _learn_serves_fixture_files(monkeypatch):
+    """Learn tests default to the fixture files; a test that wants database content calls refresh()."""
+    from app.services.learn import corpus
+
+    monkeypatch.setattr(corpus, "_db_passages", None)
+    monkeypatch.setattr(corpus, "_db_domains", None)
+
+
 @pytest.fixture
 async def client():
     from httpx import ASGITransport, AsyncClient

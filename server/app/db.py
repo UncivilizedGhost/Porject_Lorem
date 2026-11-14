@@ -27,7 +27,9 @@ RUNTIME_TABLES = ["contacts", "patients", "events", "alerts", "escalation_steps"
 SEEDED_TABLES = ["coordinators", "clock_state"]
 # Fixtures: seeded once, never written at runtime
 FIXTURE_TABLES = ["counties", "actions", "insight_cards", "clinicians"]
-TABLES = RUNTIME_TABLES + SEEDED_TABLES + FIXTURE_TABLES
+# Learn reference content: seeded from fixtures/, served from here, never cleared by reset
+REFERENCE_TABLES = ["learn_passages", "learn_answers", "credible_sources"]
+TABLES = RUNTIME_TABLES + SEEDED_TABLES + FIXTURE_TABLES + REFERENCE_TABLES
 
 _pool: asyncpg.Pool | None = None
 
