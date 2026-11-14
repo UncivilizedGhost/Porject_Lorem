@@ -8,44 +8,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { api } from "../../api/client";
 import { NURSE_PHONE } from "../../components/HelpNumbers";
 import { NoPathwayYet } from "../../components/NoPathwayYet";
+import { Icon } from "../../components/Icon";
 import { useI18n } from "../../i18n/LanguageProvider";
 import { formatClock, formatDate, formatWeekday } from "../../lib/format";
 import { usePatient } from "../../lib/usePatient";
 import { useReadable } from "../../voice/useReadable";
 import { useVoiceActions } from "../../voice/useVoiceActions";
-
-function ChevronIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-      <path
-        d="M7 4l6 6-6 6"
-        fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function ReportIcon() {
-  return (
-    <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true" focusable="false">
-      <path
-        d="M6 6h18v18H6zM15 11v8M11 15h8"
-        fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function PhoneIcon() {
-  return (
-    <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true" focusable="false">
-      <path
-        d="M7 4h4l2 5-3 2a13 13 0 006 6l2-3 5 2v4a2 2 0 01-2 2A19 19 0 015 6a2 2 0 012-2z"
-        fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
 
 export function HomeScreen() {
   const patient = usePatient();
@@ -132,7 +100,7 @@ export function HomeScreen() {
           </div>
           <Link className="text-link" to="/pathway">
             {t("home.howToGetThere")}
-            <ChevronIcon />
+            <Icon name="chevron-right" size={20} />
           </Link>
           {pending && (
             <div className="confirm-block">
@@ -145,14 +113,14 @@ export function HomeScreen() {
 
       <div className="tile-grid">
         <Link className="tile" to="/report">
-          <ReportIcon />
+          <Icon name="report" size={30} />
           <span className="tile-text">
             <span className="tile-title">{t("home.reportTitle")}</span>
             <span className="tile-sub">{t("home.reportSub")}</span>
           </span>
         </Link>
         <a className="tile tile-apricot" href={`tel:${NURSE_PHONE}`}>
-          <PhoneIcon />
+          <Icon name="phone" size={30} />
           <span className="tile-text">
             <span className="tile-title">{t("home.callTitle")}</span>
             <span className="tile-sub">{t("home.callSub")}</span>
@@ -167,7 +135,7 @@ export function HomeScreen() {
             {checkinTotal ? t("home.checkinSubCount", { n: checkinTotal }) : t("home.checkinSub")}
           </span>
         </span>
-        <ChevronIcon />
+        <Icon name="chevron-right" size={20} />
       </Link>
     </section>
   );

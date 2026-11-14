@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import { Link } from "react-router-dom";
 
 import type { AdviceShown } from "../../api/types";
+import { Icon } from "../../components/Icon";
 import { useI18n } from "../../i18n/LanguageProvider";
 import type { MessageKey } from "../../i18n/dict";
 import { getSession } from "../../lib/session";
@@ -25,14 +26,6 @@ interface Props {
   labels: Record<string, string>;
 }
 
-function CheckIcon() {
-  return (
-    <svg width="38" height="38" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
-      <path d="M3.5 9.5l3.5 3.5 7.5-8" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
 export function R6Sent({ advice, symptoms, labels }: Props) {
   const { t } = useI18n();
   const readable = useMemo(
@@ -44,7 +37,7 @@ export function R6Sent({ advice, symptoms, labels }: Props) {
 
   return (
     <section className="sent">
-      <span className="sent-check"><CheckIcon /></span>
+      <span className="sent-check"><Icon name="check" size={38} /></span>
       <h1>{t("report.sentTitle")}</h1>
 
       <div className="sent-card">

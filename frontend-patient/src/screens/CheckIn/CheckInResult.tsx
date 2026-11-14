@@ -5,17 +5,10 @@ import { useMemo } from "react";
 import { Link } from "react-router-dom";
 
 import type { AdviceShown } from "../../api/types";
+import { Icon } from "../../components/Icon";
 import { useI18n } from "../../i18n/LanguageProvider";
 import { useReadable } from "../../voice/useReadable";
 import { R2CallNow } from "../SymptomReport/R2CallNow";
-
-function CheckIcon() {
-  return (
-    <svg width="38" height="38" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
-      <path d="M3.5 9.5l3.5 3.5 7.5-8" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
 
 function Thanks() {
   const { t } = useI18n();
@@ -27,7 +20,7 @@ function Thanks() {
 
   return (
     <section className="help-screen">
-      <span className="sent-check"><CheckIcon /></span>
+      <span className="sent-check"><Icon name="check" size={38} /></span>
 
       <div className="help-heading">
         <h1 className="help-title">{t("checkin.thanksTitle")}</h1>

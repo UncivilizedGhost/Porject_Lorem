@@ -5,27 +5,11 @@ import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { api } from "../../api/client";
+import { Icon } from "../../components/Icon";
 import { useI18n } from "../../i18n/LanguageProvider";
 import { setSession } from "../../lib/session";
 import { Header } from "../../shell/Header";
 import { useReadable } from "../../voice/useReadable";
-
-function BrandMark() {
-  return (
-    <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-      <circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" strokeWidth="2.5" />
-      <path d="M16 8v8l5 3" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function Chevron() {
-  return (
-    <svg width="28" height="28" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-      <path d="M7 4l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
 
 export function LoginScreen() {
   const navigate = useNavigate();
@@ -69,7 +53,7 @@ export function LoginScreen() {
       <main className="login-page">
         <div className="login-head">
           <span className="brand">
-            <BrandMark />
+            <Icon name="brand-mark" size={32} />
             Pathway Companion
           </span>
           <h1 className="login-title">{t("login.title")}</h1>
@@ -78,11 +62,11 @@ export function LoginScreen() {
         <div className="role-tiles">
           <button type="button" className="role-tile" disabled={busy} onClick={() => enter("patient")}>
             {t("login.patient")}
-            <Chevron />
+            <Icon name="chevron-right" size={28} />
           </button>
           <button type="button" className="role-tile" disabled={busy} onClick={() => enter("trusted_person")}>
             {t("login.support")}
-            <Chevron />
+            <Icon name="chevron-right" size={28} />
           </button>
         </div>
 

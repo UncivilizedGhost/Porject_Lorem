@@ -4,31 +4,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { api } from "../../api/client";
+import { Icon } from "../../components/Icon";
 import { useI18n } from "../../i18n/LanguageProvider";
 import { useReadable } from "../../voice/useReadable";
-
-function PencilIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-      <path
-        d="M3 17l1-4 9-9 3 3-9 9zM12 5l3 3"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.7"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function MicIcon() {
-  return (
-    <svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <rect x="9" y="3" width="6" height="11" rx="3" fill="none" stroke="currentColor" strokeWidth="1.8" />
-      <path d="M5.5 11a6.5 6.5 0 0013 0M12 17.5V21" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-    </svg>
-  );
-}
 
 interface Props {
   onDone: (ownWords: { text: string; source: "voice" | "typed" } | null) => void;
@@ -135,7 +113,7 @@ export function R5OwnWords({ onDone }: Props) {
       <label className="own-bubble">
         <span className="own-bubble-label">
           {t("report.ownBubble")}
-          <PencilIcon />
+          <Icon name="pencil" size={20} />
         </span>
         <textarea
           id="own-words"
@@ -162,7 +140,7 @@ export function R5OwnWords({ onDone }: Props) {
           aria-label={speaking ? t("report.speakStop") : t("report.speak")}
           aria-pressed={speaking}
         >
-          <MicIcon />
+          <Icon name="mic" size={30} />
         </button>
       </label>
 

@@ -6,6 +6,7 @@ import { useMemo } from "react";
 import { Link } from "react-router-dom";
 
 import { NURSE_PHONE } from "../../components/HelpNumbers";
+import { Icon } from "../../components/Icon";
 import { useI18n } from "../../i18n/LanguageProvider";
 import { formatClock, formatDate, formatTime, formatWeekday } from "../../lib/format";
 import { useTrustedView } from "../../lib/usePatient";
@@ -50,18 +51,14 @@ export function TrustedPersonView() {
 
       <div className="tile-grid">
         <Link className="tile" to="/report">
-          <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M6 6h18v18H6zM15 11v8M11 15h8" />
-          </svg>
+          <Icon name="report" size={30} />
           <span className="tile-text">
             <span className="tile-title">{t("trusted.report")}</span>
             <span className="tile-sub">{t("trusted.reportSub")}</span>
           </span>
         </Link>
         <a className="tile tile-apricot" href={`tel:${NURSE_PHONE}`}>
-          <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M7 4h4l2 5-3 2a13 13 0 006 6l2-3 5 2v4a2 2 0 01-2 2A19 19 0 015 6a2 2 0 012-2z" />
-          </svg>
+          <Icon name="phone" size={30} />
           <span className="tile-text">
             <span className="tile-title">{t("home.callTitle")}</span>
             <span className="tile-sub">{t("trusted.callSub")}</span>

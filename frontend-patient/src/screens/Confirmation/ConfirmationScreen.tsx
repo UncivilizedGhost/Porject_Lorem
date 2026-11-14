@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import { api } from "../../api/client";
+import { Icon } from "../../components/Icon";
 import { SlideToConfirm } from "../../components/SlideToConfirm";
 import { NURSE_PHONE } from "../../components/HelpNumbers";
 import { formatClock, formatDate, formatWeekday } from "../../lib/format";
@@ -14,14 +15,6 @@ import { useNextStepView } from "../../lib/usePatient";
 import { useTonePage } from "../../shell/PageTone";
 import { useReadable } from "../../voice/useReadable";
 import { useVoiceActions } from "../../voice/useVoiceActions";
-
-function CheckIcon() {
-  return (
-    <svg width="38" height="38" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
-      <path d="M3.5 9.5l3.5 3.5 7.5-8" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
 
 export function ConfirmationScreen() {
   const { stepId = "" } = useParams();
@@ -71,7 +64,7 @@ export function ConfirmationScreen() {
   if (done) {
     return (
       <section className="sent">
-        <span className="sent-check"><CheckIcon /></span>
+        <span className="sent-check"><Icon name="check" size={38} /></span>
         <h1>{t("confirm.doneTitle")}</h1>
         <div className="confirm-note">
           {t("confirm.doneBody")}

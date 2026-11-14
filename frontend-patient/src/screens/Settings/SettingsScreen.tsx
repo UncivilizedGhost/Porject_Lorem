@@ -9,6 +9,7 @@ import { api } from "../../api/client";
 import type { Accessibility, Language, TextSize } from "../../api/types";
 import { useI18n } from "../../i18n/LanguageProvider";
 import { applyAccessibility } from "../../lib/applyAccessibility";
+import { Icon } from "../../components/Icon";
 import { getSession } from "../../lib/session";
 import { useReadable } from "../../voice/useReadable";
 import { useVoice } from "../../voice/VoiceProvider";
@@ -46,7 +47,7 @@ async function refreshTarget(): Promise<Target> {
   throw new Error("no demo identity");
 }
 
-/** Small SVG flags instead of emoji: flag emoji do not render on Windows. */
+/** Country flags as SVGs (flag emoji don't render on Windows; Lucide has no country flags). */
 function FlagIcon({ code }: { code: Language }) {
   if (code === "fi") {
     return (
@@ -75,58 +76,6 @@ function FlagIcon({ code }: { code: Language }) {
       <rect x="0" y="7" width="30" height="6" fill="#ffffff" />
       <rect x="13.5" y="0" width="3" height="20" fill="#C8102E" />
       <rect x="0" y="8.5" width="30" height="3" fill="#C8102E" />
-    </svg>
-  );
-}
-
-function PlayIcon() {
-  return (
-    <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true" focusable="false">
-      <path d="M10 6l13 9-13 9z" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function SlowIcon() {
-  return (
-    <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true" focusable="false">
-      <path
-        d="M8 5h14M8 25h14M10 5c0 6 5 7 5 10s-5 4-5 10M20 5c0 6-5 7-5 10s5 4 5 10"
-        fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function MicIcon() {
-  return (
-    <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true" focusable="false">
-      <path
-        d="M15 4a4 4 0 014 4v6a4 4 0 01-8 0V8a4 4 0 014-4zM8 14a7 7 0 0014 0M15 21v5"
-        fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function ContrastIcon() {
-  return (
-    <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true" focusable="false">
-      <circle cx="15" cy="15" r="11" fill="none" stroke="currentColor" strokeWidth="2" />
-      <path d="M15 4a11 11 0 000 22z" fill="currentColor" />
-    </svg>
-  );
-}
-
-function CheckDot({ on }: { on: boolean }) {
-  return on ? (
-    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <circle cx="12" cy="12" r="11" fill="currentColor" />
-      <path d="M7 12.5l3.5 3.5 6.5-7" fill="none" stroke="#ffffff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  ) : (
-    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="2" />
     </svg>
   );
 }
@@ -264,7 +213,7 @@ export function SettingsScreen() {
               />
               <span className="opt-icons">
                 <span className="opt-icon opt-flag"><FlagIcon code={l.id} /></span>
-                <span className="opt-check"><CheckDot on={language === l.id} /></span>
+                <span className="opt-check">{language === l.id ? <Icon name="check-circle" size={24} /> : <Icon name="circle" size={24} />}</span>
               </span>
               <span className="opt-label">{l.label}</span>
             </Opt>
@@ -276,8 +225,8 @@ export function SettingsScreen() {
         <legend>{t("settings.readingSpeed")}</legend>
         <div className="opt-grid cols-2">
           {([
-            { id: "normal" as ReadingSpeed, label: t("settings.normal"), icon: <PlayIcon /> },
-            { id: "slow" as ReadingSpeed, label: t("settings.slow"), icon: <SlowIcon /> },
+            { id: "normal" as ReadingSpeed, label: t("settings.normal"), icon: <Icon name="play" size={30} /> },
+            { id: "slow" as ReadingSpeed, label: t("settings.slow"), icon: <Icon name="slow" size={30} /> },
           ]).map((s) => (
             <Opt key={s.id} selected={readingSpeed === s.id}>
               <input
@@ -288,7 +237,7 @@ export function SettingsScreen() {
               />
               <span className="opt-icons">
                 <span className="opt-icon">{s.icon}</span>
-                <span className="opt-check"><CheckDot on={readingSpeed === s.id} /></span>
+                <span className="opt-check">{readingSpeed === s.id ? <Icon name="check-circle" size={24} /> : <Icon name="circle" size={24} />}</span>
               </span>
               <span className="opt-label">{s.label}</span>
             </Opt>
@@ -309,7 +258,7 @@ export function SettingsScreen() {
                 onChange={() => save({ text_size: s.id })}
               />
               <span className="opt-icons">
-                <span className="opt-check"><CheckDot on={settings.text_size === s.id} /></span>
+                <span className="opt-check">{settings.text_size === s.id ? <Icon name="check-circle" size={24} /> : <Icon name="circle" size={24} />}</span>
               </span>
               <span className="opt-preview" aria-hidden="true">Aa</span>
             </Opt>
@@ -326,8 +275,8 @@ export function SettingsScreen() {
             onChange={(e) => save({ voice_mode: e.target.checked })}
           />
           <span className="opt-icons">
-            <span className="opt-icon"><MicIcon /></span>
-            <span className="opt-check"><CheckDot on={settings.voice_mode} /></span>
+            <span className="opt-icon"><Icon name="mic" size={30} /></span>
+            <span className="opt-check">{settings.voice_mode ? <Icon name="check-circle" size={24} /> : <Icon name="circle" size={24} />}</span>
           </span>
           <span className="opt-label">{t("settings.voiceOn")}</span>
         </Opt>
@@ -340,8 +289,8 @@ export function SettingsScreen() {
             onChange={(e) => save({ high_contrast: e.target.checked })}
           />
           <span className="opt-icons">
-            <span className="opt-icon"><ContrastIcon /></span>
-            <span className="opt-check"><CheckDot on={settings.high_contrast} /></span>
+            <span className="opt-icon"><Icon name="contrast" size={30} /></span>
+            <span className="opt-check">{settings.high_contrast ? <Icon name="check-circle" size={24} /> : <Icon name="circle" size={24} />}</span>
           </span>
           <span className="opt-label">{t("settings.contrastOn")}</span>
         </Opt>

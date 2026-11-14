@@ -3,18 +3,10 @@
 // Aino was told too. The whole frame turns pale red while this screen is up.
 import { useMemo } from "react";
 
+import { Icon } from "../../components/Icon";
 import { useI18n } from "../../i18n/LanguageProvider";
 import { useTonePage } from "../../shell/PageTone";
 import { useReadable } from "../../voice/useReadable";
-
-function WarningIcon() {
-  return (
-    <svg width="48" height="48" viewBox="0 0 22 22" aria-hidden="true" focusable="false">
-      <path d="M11 3l9 16H2z" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
-      <path d="M11 9v4.5M11 16v.5" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-    </svg>
-  );
-}
 
 export function R2CallNow({ reason }: { reason: string | null }) {
   const { t } = useI18n();
@@ -30,7 +22,7 @@ export function R2CallNow({ reason }: { reason: string | null }) {
 
   return (
     <section className="alert-page" role="alert">
-      <span className="alert-icon"><WarningIcon /></span>
+      <span className="alert-icon"><Icon name="warning" size={48} /></span>
       <h1 className="alert-title">{t("report.comeNow")}</h1>
       <p className="alert-lead">
         {reason ? t("report.callReason", { reason }) : t("report.callVeryUnwell")}

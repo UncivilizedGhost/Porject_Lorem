@@ -6,26 +6,11 @@
 import { useMemo, useRef } from "react";
 
 import { NoPathwayYet } from "../../components/NoPathwayYet";
+import { Icon } from "../../components/Icon";
 import { useI18n } from "../../i18n/LanguageProvider";
 import { formatDate, formatWeekday } from "../../lib/format";
 import { usePatient } from "../../lib/usePatient";
 import { useReadable } from "../../voice/useReadable";
-
-function ArrowDownIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-      <path d="M10 4v11M5.5 10.5L10 15l4.5-4.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function CheckIcon() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
-      <path d="M2.5 6.2l2.3 2.3 4.7-5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
 
 export function PathwayScreen() {
   const patient = usePatient();
@@ -61,7 +46,7 @@ export function PathwayScreen() {
 
       {next && (
         <button type="button" className="jump-next" onClick={jumpToCurrent}>
-          <ArrowDownIcon />
+          <Icon name="chevron-down" size={16} />
           {t("pathway.jump")}
         </button>
       )}
@@ -80,7 +65,7 @@ export function PathwayScreen() {
         {steps.map((s) => (
           <li key={s.id} className={`path-item ${s.state}`}>
             <span className="path-rail" aria-hidden="true">
-              <span className="path-marker">{s.state === "done" ? <CheckIcon /> : null}</span>
+              <span className="path-marker">{s.state === "done" ? <Icon name="check" size={12} /> : null}</span>
               <span className="path-line" />
             </span>
             <div className="path-body">

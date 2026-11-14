@@ -6,17 +6,7 @@ import { Link } from "react-router-dom";
 import { useVoice } from "../voice/VoiceProvider";
 import { useI18n } from "../i18n/LanguageProvider";
 import { BackButton } from "./BackButton";
-
-function HelpIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-      <path
-        d="M5 3h3l1.5 4-2 1.2a9 9 0 004.3 4.3l1.2-2 4 1.5v3a1.5 1.5 0 01-1.6 1.5A14 14 0 013.5 4.6 1.5 1.5 0 015 3z"
-        fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
+import { Icon } from "../components/Icon";
 
 function SpeakerOffIcon() {
   return (
@@ -55,9 +45,11 @@ export function Header() {
         >
           {voiceAssistant ? <SpeakerOffIcon /> : <SpeakerIcon />}
         </button>
-        <Link className="icon-button aa" to="/settings" aria-label={t("common.settings")}>Aa</Link>
+        <Link className="icon-button aa" to="/settings" aria-label={t("common.settings")}>
+          <Icon name="settings" size={22} />
+        </Link>
         <Link className="help-pill" to="/help">
-          <HelpIcon />
+          <Icon name="help-pill" size={18} />
           {t("common.help")}
         </Link>
       </div>

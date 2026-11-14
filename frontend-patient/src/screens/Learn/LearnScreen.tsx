@@ -10,6 +10,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../../api/client";
 import type { Language } from "../../api/types";
 import type { Readable, VoiceAction } from "../../voice/types";
+import { Icon } from "../../components/Icon";
 import { useReadable } from "../../voice/useReadable";
 import { useVoiceActions } from "../../voice/useVoiceActions";
 import { useVoice } from "../../voice/VoiceProvider";
@@ -99,16 +100,6 @@ const TEXT: Record<Language, Record<string, string>> = {
     note: "Svaren kommer bara från granskade finländska källor. Fråga din egen sjuksköterska om dina resultat.",
   },
 };
-
-/** Microphone icon matching report-words.html "Hold to speak" button. */
-function MicIcon() {
-  return (
-    <svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <rect x="9" y="3" width="6" height="11" rx="3" fill="none" stroke="currentColor" strokeWidth="1.8" />
-      <path d="M5.5 11a6.5 6.5 0 0013 0M12 17.5V21" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-    </svg>
-  );
-}
 
 export function LearnScreen() {
   const { settings, toggleVoiceAssistant, readPage } = useVoice();
@@ -214,7 +205,7 @@ export function LearnScreen() {
               aria-label={voiceAssistant ? t.listeningStop : t.listening}
               aria-pressed={voiceAssistant}
             >
-              <MicIcon />
+              <Icon name="mic" size={30} />
             </button>
             <button type="submit" className="ask-button" disabled={busy}>{t.ask}</button>
           </span>

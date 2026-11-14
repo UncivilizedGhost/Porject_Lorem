@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 import { api } from "../../api/client";
 import type { Medicine } from "../../api/types";
+import { Icon } from "../../components/Icon";
 import { useI18n } from "../../i18n/LanguageProvider";
 import type { MessageKey } from "../../i18n/dict";
 import { actorFields, getSession } from "../../lib/session";
@@ -37,29 +38,6 @@ function clockNow(): string {
   return `${d.getHours()}.${String(d.getMinutes()).padStart(2, "0")}`;
 }
 
-/** The capsule from app/medication.html — the artboard has no image files, its art is inline SVG. */
-function PillIcon() {
-  return (
-    <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true" focusable="false">
-      <path
-        d="M5 17l9-9a5 5 0 017 7l-9 9a5 5 0 01-7-7zM10 12l7 7"
-        fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function CheckIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
-      <path
-        d="M3.5 9.5l3.5 3.5 7.5-8"
-        fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 const LOGGED: Record<Status, MessageKey> = {
   taken: "medicines.taken",
   skipped: "medicines.skipped",
@@ -84,7 +62,7 @@ function MedicineCard({
   return (
     <li className="card medicine-card">
       <div className="med-head">
-        <span className="med-icon"><PillIcon /></span>
+        <span className="med-icon"><Icon name="pill" size={30} /></span>
         <span className="med-text">
           <span className="med-title">{medicine.label}</span>
           <span className="med-schedule">{t(schedule.lineKey)}</span>
@@ -94,7 +72,7 @@ function MedicineCard({
 
       {logged ? (
         <p className="med-logged" data-status={logged.status} role="status">
-          <CheckIcon />
+          <Icon name="check" size={20} />
           <span>
             {t("medicines.logged", { status: t(LOGGED[logged.status]), time: logged.at })}
           </span>
