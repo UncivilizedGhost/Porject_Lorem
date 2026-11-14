@@ -7,6 +7,7 @@ Run: `uvicorn app.main:app --reload --port 8000`
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
+from urllib.parse import urlsplit
 
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
@@ -44,7 +45,8 @@ async def lifespan(_: FastAPI):
         await corpus.refresh()
         await pregenerated.refresh()
     except Exception as exc:  # noqa: BLE001 - the server still starts; /health reports db: false
-        print(f"[startup] database not reachable, skipping schema + seed: {exc}")
+        target = urlsplit(config.DATABASE_URL)
+        print(f"[startup] database not reachable at {target.hostname}:{target.port}, skipping schema + seed: {exc}")
     if warning := voice_service.startup_warning():
         print(warning)
     yield
