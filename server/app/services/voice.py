@@ -9,7 +9,6 @@ Pick Finnish and Swedish voices early and check pronunciation of bronkoskopia an
 from __future__ import annotations
 
 import hashlib
-import os
 from pathlib import Path
 
 import httpx
@@ -20,14 +19,12 @@ API_BASE = "https://api.elevenlabs.io/v1"
 TTS_MODEL = "eleven_multilingual_v2"
 STT_MODEL = "scribe_v1"
 OUTPUT_FORMAT = "mp3_44100_128"
-DEFAULT_VOICE_ID = "EXAVITQu4vr4xnSDxMaL"  # same default as backend/src/medml/elevenlabs_tts.py
+DEFAULT_VOICE_ID = "Hh0rE70WfnSFN80K8uJC"  # same default as backend/src/medml/elevenlabs_tts.py
 SPEED = {"normal": 1.0, "slow": 0.8}
 UPSTREAM_TIMEOUT_S = 20.0
 
-# Override per language with VOICE_ID_FI / VOICE_ID_SV / VOICE_ID_EN once voices are chosen.
-VOICES: dict[str, str] = {
-    lang: os.getenv(f"VOICE_ID_{lang.upper()}", DEFAULT_VOICE_ID) for lang in ("fi", "sv", "en")
-}
+# Per-language voice IDs from config (committed defaults + VOICE_ID_<LANG> env overrides).
+VOICES: dict[str, str] = config.VOICE_IDS
 
 # Tests inject an httpx.MockTransport here; None means the real network.
 _transport: httpx.AsyncBaseTransport | None = None

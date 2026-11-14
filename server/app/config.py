@@ -41,6 +41,22 @@ CREDIBLE_SOURCES_PATH: Path = Path(os.getenv("CREDIBLE_SOURCES_PATH", REPO_ROOT 
 
 # ElevenLabs (voice proxy, ADR-0005). TTS disk cache location.
 VOICE_CACHE_DIR: Path = Path(os.getenv("VOICE_CACHE_DIR", REPO_ROOT / "server" / ".cache" / "voice"))
+# ElevenLabs voice IDs per language (ADR-0005). Committed defaults; deployments can add or
+# override any language via VOICE_ID_<LANG> environment variables (e.g. VOICE_ID_DE). Keys are
+# lower-cased language codes.
+VOICE_ID_DEFAULTS: dict[str, str] = {
+    "en": "Hh0rE70WfnSFN80K8uJC",
+    "fi": "YSabzCJMvEHDduIDMdwV",
+    "sv": "ycdKCM2Fj0Us7dTwCGoM",
+}
+
+# Committed defaults overlaid with any VOICE_ID_<LANG> env overrides.
+VOICE_IDS: dict[str, str] = dict(VOICE_ID_DEFAULTS)
+for _env_key, _env_value in os.environ.items():
+    if _env_key.startswith("VOICE_ID_") and _env_value:
+        _lang = _env_key[len("VOICE_ID_"):].lower()
+        if _lang:
+            VOICE_IDS[_lang] = _env_value
 
 SECRETS_DIR: Path = REPO_ROOT / ".secrets"
 
