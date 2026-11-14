@@ -14,6 +14,7 @@ import { BottomNav } from "./BottomNav";
 import { DemoBar } from "./DemoBar";
 import { FlowBackProvider } from "./FlowBack";
 import { Header } from "./Header";
+import { PageToneProvider, usePageTone } from "./PageTone";
 
 /** Saved text size and contrast follow the person onto every screen. A Trusted Person only
  * ever reads the trusted view. */
@@ -28,19 +29,28 @@ function useSavedAccessibility() {
   }, []);
 }
 
+function Frame() {
+  const tone = usePageTone();
+  return (
+    <div className="app-frame" data-tone={tone ?? undefined}>
+      <DemoBar />
+      <Header />
+      <main>
+        <Outlet />
+      </main>
+      <HoldToTalkButton />
+      <BottomNav />
+    </div>
+  );
+}
+
 export function AppShell() {
   useSavedAccessibility();
   return (
-    <FlowBackProvider>
-      <div className="app-frame">
-        <DemoBar />
-        <Header />
-        <main>
-          <Outlet />
-        </main>
-        <HoldToTalkButton />
-        <BottomNav />
-      </div>
-    </FlowBackProvider>
+    <PageToneProvider>
+      <FlowBackProvider>
+        <Frame />
+      </FlowBackProvider>
+    </PageToneProvider>
   );
 }

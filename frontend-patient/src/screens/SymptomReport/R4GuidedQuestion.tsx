@@ -43,7 +43,7 @@ const OPTION_ICONS: Record<string, ReactNode> = {
 };
 const FALLBACK_ICON = <path d="M15 6a9 9 0 100 18 9 9 0 000-18zM15 15v.01" />;
 
-function OptionIcon({ id }: { id: string }) {
+export function OptionIcon({ id }: { id: string }) {
   return (
     <svg
       width="30" height="30" viewBox="0 0 30 30" focusable="false" aria-hidden="true"
@@ -54,7 +54,7 @@ function OptionIcon({ id }: { id: string }) {
   );
 }
 
-function CheckRing({ on }: { on: boolean }) {
+export function CheckRing({ on }: { on: boolean }) {
   return on ? (
     <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
       <circle cx="12" cy="12" r="11" fill="currentColor" />
