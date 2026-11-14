@@ -105,7 +105,7 @@ export function EquityBreakdown({
                   <td className="num">{cell.n}</td>
                   <td>
                     <span className="breakdown-pct">{formatPercent(cell.pct_within_target)}</span>
-                    {cell.small_sample && <span className="warn"> small sample</span>}
+                    {cell.small_sample && <span className="warn"><span aria-hidden="true">△ </span>small sample</span>}
                   </td>
                 </>
               )}

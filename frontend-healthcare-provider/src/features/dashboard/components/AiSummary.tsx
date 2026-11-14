@@ -8,7 +8,7 @@ export function AiSummary({ summary }: { summary: SummaryResult | null }) {
     <section aria-label="AI summary" className="card">
       <h2>AI summary</h2>
       {!summary ? (
-        <p>Writing the summary…</p>
+        <p role="status" className="loading">Writing the summary…</p>
       ) : (
         <>
           <p className="muted">

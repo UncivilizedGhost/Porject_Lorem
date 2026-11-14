@@ -44,15 +44,15 @@ export function InsightCard() {
     return () => clearTimeout(t);
   }, [card, cardId, dials]);
 
-  const back = <Link to={`/dashboard/county/${encodeURIComponent(name)}`}>← {name}</Link>;
+  const back = <Link className="back-link" to={`/dashboard/county/${encodeURIComponent(name)}`}>← {name}</Link>;
   if (failed) return <p role="alert">Could not load this Insight Card. {back}</p>;
-  if (!card) return <p>Loading…</p>;
+  if (!card) return <p role="status" className="loading">Loading…</p>;
 
   return (
     <div className="dashboard">
       {back}
       <h1>{card.what}</h1>
-      <div className="card">
+      <div className="card card-facts">
         <p>Where: {card.where}</p>
         <p>Who: {card.who}</p>
       </div>

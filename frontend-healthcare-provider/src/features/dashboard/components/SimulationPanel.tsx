@@ -9,7 +9,7 @@ import { SyntheticBadge } from "./SyntheticBadge";
 const range = (low: number, high: number) => `${formatDecimal(low, 0)}–${formatDecimal(high, 0)}`;
 
 export function SimulationPanel({ result, actions }: { result: SimulationResult | null; actions: DashboardAction[] }) {
-  if (!result) return <section className="card"><h2>Simulation</h2><p>Calculating…</p></section>;
+  if (!result) return <section className="card"><h2>Simulation</h2><p role="status" className="loading">Calculating…</p></section>;
 
   const simulated = actions.filter((a) => result.actions[a._id]?.simulated);
   const rule = result.combined.lever_rule_applied;
@@ -41,7 +41,7 @@ export function SimulationPanel({ result, actions }: { result: SimulationResult 
       {rule && (
         <p className="muted">Two actions act on the same lever, so the larger single effect is counted, not the sum.</p>
       )}
-      <div role="group" aria-label="Target gap">
+      <div role="group" aria-label="Target gap" className="target-gap">
         <h3>Target gap</h3>
         {([[70, gap.needed_for_70, gap.reachable_70], [80, gap.needed_for_80, gap.reachable_80]] as const).map(
           ([target, needed, reachable]) => (
@@ -49,9 +49,9 @@ export function SimulationPanel({ result, actions }: { result: SimulationResult 
               Needed to reach {target} %: {formatPercent(needed * 100)} fewer missed visits.{" "}
               {effect ? <>Evidence shows {formatFractionRange(effect.low, effect.high)} fewer missed visits. </> : null}
               {reachable ? (
-                <strong>Within the evidence range.</strong>
+                <strong className="gap-outcome" data-reachable="true">Within the evidence range.</strong>
               ) : (
-                <strong>
+                <strong className="gap-outcome" data-reachable="false">
                   Cannot close the gap through this lever alone
                   {needed > 1 ? `: even with no missed first visits this group reaches ${formatPercent(gap.max_achievable_pct)}` : ""}.
                 </strong>

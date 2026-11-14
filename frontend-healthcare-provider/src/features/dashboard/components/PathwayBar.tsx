@@ -35,7 +35,8 @@ export function PathwayBar({ days, warning }: { days: Record<Phase, number>; war
               <span className="phase-label">{p.label}</span>
               <strong>{formatDecimal(days[p.key], 0)} days</strong>
               {limit !== undefined && (
-                <span className="muted">
+                <span className={exceeded ? "phase-warning" : "muted"}>
+                  {exceeded && <span className="status-icon" aria-hidden="true">▲ </span>}
                   {exceeded ? "over the " : "within the "}
                   {limit}-day warning
                 </span>

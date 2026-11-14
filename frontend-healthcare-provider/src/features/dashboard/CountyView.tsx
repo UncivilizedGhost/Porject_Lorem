@@ -24,9 +24,9 @@ export function CountyView() {
     api.county(name).then(setCounty).catch(() => setFailed(true));
   }, [name]);
 
-  const back = <Link to="/dashboard">← National overview</Link>;
+  const back = <Link className="back-link" to="/dashboard">← National overview</Link>;
   if (failed) return <p role="alert">Could not load {name}. {back}</p>;
-  if (!county) return <p>Loading…</p>;
+  if (!county) return <p role="status" className="loading">Loading…</p>;
 
   const cardSlug = county.insight_card_id?.split("/")[1];
   return (
@@ -39,13 +39,13 @@ export function CountyView() {
           <span className="muted">Lung cancers diagnosed outside the fast-track (no suspected-cancer Referral)</span>
           <SyntheticBadge />
         </div>
-        <p className="key-number-value">{formatPercent(county.pct_outside_fast_track)}</p>
+        <p className="key-number-value key-number-value--alert">{formatPercent(county.pct_outside_fast_track)}</p>
         <p className="muted">These pathways never had a clock running.</p>
       </div>
       <EquityBreakdown breakdown={county.breakdown} average={county.pct_within_target} />
       <VulnerabilityPanel county={county.name} breakdown={county.breakdown} />
       {cardSlug && (
-        <p>
+        <p className="next-step">
           <Link className="button-link" to={`/dashboard/county/${encodeURIComponent(county.name)}/insight/${cardSlug}`}>
             Open the Insight Card: missed first visits among over-75s
           </Link>
