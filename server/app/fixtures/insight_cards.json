@@ -1,28 +1,30 @@
 [
   {
+    "_id": "western-uusimaa/missed-first-visits-75",
     "card_id": "western-uusimaa/missed-first-visits-75",
-    "what": "",
+    "what": "Missed first visits",
     "where": "Western Uusimaa",
-    "who": "",
-    "stage": "",
+    "who": "People aged 75 and over",
+    "stage": "referral",
+    "cause": "unconfirmed",
+    "group": "75+",
     "baseline": {
-      "pct_within_target": 0.0,
-      "n": 0,
-      "missed_visit_share": 0.0,
-      "days_lost_to_missed_visits": 0.0
+      "pct_within_target": 46.0,
+      "n": 186,
+      "missed_visit_share": 12.0,
+      "days_lost_to_missed_visits": 14.0
     },
     "stage_warning_days": {
-      "detection": 0,
-      "referral": 0,
-      "diagnosis": 0,
-      "treatment": 0
+      "detection": 28,
+      "referral": 10,
+      "diagnosis": 21,
+      "treatment": 14
     },
     "cached_summary": [
-      {
-        "text": "",
-        "fact_ids": []
-      }
-    ],
-    "_todo": "person 1: hand-authored card definition + cached fallback summary with fact ids"
+      { "text": "In Western Uusimaa only 46% of people aged 75 and over start treatment within the 6-week target, against 64% across the county", "fact_ids": ["group_pct", "county_pct"] },
+      { "text": "About 12% of this group start late because they miss the first visit, losing about 14 days each", "fact_ids": ["missed_share", "days_lost"] },
+      { "text": "Nearly half of the delayed first visits (46%) were never confirmed", "fact_ids": ["cause_unconfirmed"] },
+      { "text": "Phone reminders cut missed appointments by 43% in one Danish hospital, but even with no missed visits at all this group would reach only 58%", "fact_ids": ["action_reminders_nurse_call", "max_achievable"] }
+    ]
   }
 ]

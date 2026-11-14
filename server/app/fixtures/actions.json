@@ -1,28 +1,64 @@
 [
   {
+    "_id": "risk_check_warning_tap",
+    "title": "Opt-in risk check and warning-sign tap with call-back, plus plain-language messages that counter negative beliefs",
+    "gap_pattern": { "phase": "detection", "cause": null, "group": "low_education" },
+    "roadmap_action": "2.5.2 standardised referral criteria",
+    "evidence": [
+      { "ref": 7, "label": "Gap: disparities in cancer stage at diagnosis across socioeconomic groups in Finland (BMJ Public Health 2025)", "url": "https://www.demogr.mpg.de/en/publications_databases_6118/publications_1904/journal_articles/disparities_in_cancer_incidence_stage_at_diagnosis_treatment_and_mortality_across_socioeconomic_groups_8291/" },
+      { "ref": 35, "label": "Gap: negative cancer beliefs and anticipated time to help-seeking (BMC Cancer 2018)", "url": "https://orca.cardiff.ac.uk/110555/1/s12885-018-4287-8%20K%20Brain.pdf" },
+      { "ref": 34, "label": "Action: cancer symptom awareness intervention in deprived communities (BMC Public Health 2018)", "url": "https://bmcpublichealth.biomedcentral.com/track/pdf/10.1186/s12889-018-5606-3" }
+    ],
+    "badge": "single_site",
+    "lever": "silent_reached",
+    "effect": null
+  },
+  {
+    "_id": "national_pathway_time_limits",
+    "title": "National pathway time limits, with waiting-time reporting as a funding condition",
+    "gap_pattern": { "phase": "pathway", "cause": null, "group": null },
+    "roadmap_action": "3.1.2 national care pathways",
+    "evidence": [
+      { "ref": 19, "label": "Sweden: standardised cancer patient pathways (RCC Syd)", "url": "https://cancercentrum.se/syd/regional-cancer-centres/knowledge-based-healthcare/cancer-patient-pathways/" }
+    ],
+    "badge": "nordic_policy",
+    "lever": "days_sooner",
+    "effect": null
+  },
+  {
+    "_id": "named_coordinator",
+    "title": "Named coordinator for every patient, recorded in the register",
+    "gap_pattern": { "phase": "referral", "cause": null, "group": null },
+    "roadmap_action": "1.2.3 named coordinator",
+    "evidence": [
+      { "ref": 22, "label": "Sweden: national assignment for the contact nurse (RCC)", "url": "https://cancercentrum.se/globalassets/patient-och-narstaende/samverkan/kssk/nationellt-uppdrag-for-kontaktsjukskoterska.pdf" }
+    ],
+    "badge": "nordic_policy",
+    "lever": "missed_visits",
+    "effect": null
+  },
+  {
     "_id": "reminders_nurse_call",
-    "title": "",
-    "gap_pattern": {
-      "phase": "",
-      "cause": null,
-      "group": null
-    },
+    "title": "Phone or SMS reminders, with a nurse call when the visit is not confirmed",
+    "gap_pattern": { "phase": "referral", "cause": "unconfirmed", "group": "75+" },
     "roadmap_action": null,
     "evidence": [
-      {
-        "ref": 0,
-        "label": "",
-        "url": ""
-      }
+      { "ref": 43, "label": "Telephone reminders cut non-attendance by 43% at Herlev Hospital, Denmark (single-site, non-randomised, historical control)", "url": "https://www.ugeskriftet.dk/dmj/A5083" }
     ],
-    "badge": "trial_review",
+    "badge": "single_site",
     "lever": "missed_visits",
-    "effect": {
-      "published": 0.0,
-      "low": 0.0,
-      "high": 0.0,
-      "range_rule": "ci"
-    },
-    "_todo": "person 1: the five rows of plan section 4.5; verify [43]'s study design first"
+    "effect": { "published": 0.43, "low": 0.215, "high": 0.43, "range_rule": "half_to_full" }
+  },
+  {
+    "_id": "annual_patient_survey",
+    "title": "Annual survey of pathway patients",
+    "gap_pattern": { "phase": "experience", "cause": null, "group": null },
+    "roadmap_action": "Goal 1",
+    "evidence": [
+      { "ref": 44, "label": "Sweden's 2025 national patient survey had 21,819 respondents", "url": "https://www.varden.se/blogg/50001-nationella-patientenkaten-2025-sa-upplever-cancerpatienter-standardiserade-vardforlopp" }
+    ],
+    "badge": "nordic_policy",
+    "lever": null,
+    "effect": null
   }
 ]

@@ -26,7 +26,7 @@ RUNTIME_TABLES = ["contacts", "patients", "events", "alerts", "escalation_steps"
 # Seeded on startup
 SEEDED_TABLES = ["coordinators", "clock_state"]
 # Fixtures: seeded once, never written at runtime
-FIXTURE_TABLES = ["counties", "actions", "clinicians"]
+FIXTURE_TABLES = ["counties", "actions", "insight_cards", "clinicians"]
 TABLES = RUNTIME_TABLES + SEEDED_TABLES + FIXTURE_TABLES
 
 _pool: asyncpg.Pool | None = None

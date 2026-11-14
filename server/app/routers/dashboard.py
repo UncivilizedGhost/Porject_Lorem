@@ -6,13 +6,16 @@ Reads fixtures only; the only write is the append-only Decision Log.
 
 from fastapi import APIRouter, HTTPException
 
+from app import db
+
 router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 
 
 @router.get("/counties")
 async def counties():
     """All 22 for level 1: name, tile, the three numbers."""
-    raise HTTPException(status_code=501, detail="not implemented")
+    keys = ("name", "tile", "pct_within_target", "median_days_referral_to_treatment", "reach_rate_over_75")
+    return [{k: c[k] for k in keys} for c in await db.find("counties")]
 
 
 @router.get("/counties/{name}")
