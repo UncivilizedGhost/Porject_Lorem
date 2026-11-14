@@ -1,0 +1,19 @@
+https://cpe.org.uk/wp-content/uploads/2015/05/44929-Lung-Health-Check-Questionnaire.pdf
+https://liverpoollungproject.org.uk/MLRV3/MLRCalculation.html
+
+What is your age? (Integer)
+What sex were you born? (Male / Female)
+Are you a current smoker? (Yes / No)
+    If yes:
+        How many cigarettes do you smoke per day? (Integer)
+        For how many years have you been smoking? (Integer)
+    If no:
+        Are you an ex-smoker? (Yes / No)
+            If yes:
+                For how many years have you been smoking? (Integer)
+Do you suffer from frequent coughing? (Yes / No)
+Do you suffer from breathlessness? (Yes / No)
+Do you currently use any inhaled medication? (Yes / No)
+Have you ever been diagnosed with Pneumonia, Emphysema, Bronchitis, TB or COPD? (Yes / No)
+Have you ever been diagnosed a malignancy or cancer? (Yes / No)
+
