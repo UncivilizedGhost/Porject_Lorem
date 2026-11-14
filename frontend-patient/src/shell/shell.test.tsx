@@ -81,6 +81,24 @@ test("Back is not shown on Home", async () => {
   expect(within(header).queryByRole("button", { name: "Back" })).not.toBeInTheDocument();
 });
 
+test("saved text size and contrast are applied on whichever screen the person opens", async () => {
+  mockApi.getPatient.mockResolvedValue({
+    ...patient,
+    accessibility: { read_aloud: false, voice_mode: false, text_size: "xl", high_contrast: true },
+  });
+  renderAt("/pathway");
+  await waitFor(() => expect(document.documentElement.dataset.textSize).toBe("xl"));
+  expect(document.documentElement.dataset.contrast).toBe("high");
+});
+
+test("a Trusted Person never triggers a request for the full Patient record", async () => {
+  setSession({ role: "trusted_person", patientId: "p1", trustedPersonName: "Liisa Virtanen" });
+  renderAt("/trusted");
+  await screen.findByRole("banner");
+  await waitFor(() => expect(mockApi.trustedView).toHaveBeenCalled());
+  expect(mockApi.getPatient).not.toHaveBeenCalled();
+});
+
 test("bottom bar offers Home, Pathway, Medicines and Learn with the current tab marked", async () => {
   renderAt("/pathway");
   const nav = await screen.findByRole("navigation", { name: "Main" });

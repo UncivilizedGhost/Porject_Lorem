@@ -113,6 +113,7 @@ export interface TrustedView {
   next_step: NextStep | null;
   appointments: { _id: string; what: string; at: string; where: string }[];
   trusted_people: TrustedPerson[];
+  accessibility?: Accessibility;
 }
 
 export interface ContactView {

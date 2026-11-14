@@ -9,6 +9,7 @@
   --amber: #e6a23c;    /* waiting */
   --red: #b02a20;      /* urgent only */
   --card: #ffffff;
+  --on-action: #ffffff; /* text on teal or red */
 
   --font: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, sans-serif;
   --text-body: 17px;

@@ -3,10 +3,10 @@
 import { NavLink } from "react-router-dom";
 
 const tabs = [
-  { to: "/home", label: "Home" },
-  { to: "/pathway", label: "Pathway" },
-  { to: "/medicines", label: "Medicines" },
-  { to: "/learn", label: "Learn" },
+  { to: "/home", label: "Home", icon: "⌂" },
+  { to: "/pathway", label: "Pathway", icon: "➜" },
+  { to: "/medicines", label: "Medicines", icon: "✚" },
+  { to: "/learn", label: "Learn", icon: "?" },
 ];
 
 export function BottomNav() {
@@ -14,7 +14,8 @@ export function BottomNav() {
     <nav className="bottom-nav" aria-label="Main">
       {tabs.map((t) => (
         <NavLink key={t.to} to={t.to}>
-          {t.label}
+          <span className="tab-icon" aria-hidden="true">{t.icon}</span>
+          <span>{t.label}</span>
         </NavLink>
       ))}
     </nav>

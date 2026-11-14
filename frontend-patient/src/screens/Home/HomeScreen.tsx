@@ -78,6 +78,7 @@ export function HomeScreen() {
         <a href={`tel:${NURSE_PHONE}`}>Call Nurse Aino</a>
       </div>
       <Link to="/report">Report a symptom</Link>
+      <Link to="/care-plan-card">Print your care plan card</Link>
     </section>
   );
 }
