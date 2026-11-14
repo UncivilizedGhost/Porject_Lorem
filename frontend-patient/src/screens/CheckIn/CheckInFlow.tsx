@@ -8,6 +8,7 @@ import { api } from "../../api/client";
 import type { AdviceShown, Question } from "../../api/types";
 import { NumberPad, parseNumber } from "../../components/NumberPad";
 import { actorFields, getSession } from "../../lib/session";
+import { useFlowBack } from "../../shell/FlowBack";
 import { useReadable } from "../../voice/useReadable";
 import { useVoiceActions } from "../../voice/useVoiceActions";
 import { CheckRing, OptionIcon } from "../SymptomReport/R4GuidedQuestion";
@@ -74,6 +75,14 @@ export function CheckInFlow() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [q, answered, index, last]);
   useVoiceActions(actions);
+
+  // The header's Back steps to the previous question instead of leaving the check-in;
+  // on the first question (and on the result) there is nothing inside the flow to undo.
+  const back = useMemo<(() => void) | null>(
+    () => (index > 0 ? () => setIndex(index - 1) : null),
+    [index],
+  );
+  useFlowBack(back);
 
   if (result) return <CheckInResult advice={result} />;
   if (!items || !q) return error ? <p role="alert">{error}</p> : <p>Loading…</p>;
