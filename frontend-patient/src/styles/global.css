@@ -460,6 +460,9 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .number-pad-value { display: block; font-size: 2.2em; font-weight: 700; text-align: center; padding: 8px; }
 .number-pad-keys { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .number-pad-keys button { min-height: var(--target-primary); font-size: 1.4em; }
+/* Weekly check-in: the temperature keys are circles instead of the standard tiles. */
+.checkin .number-pad-keys { grid-template-columns: repeat(3, 76px); justify-content: center; }
+.checkin .number-pad-keys button { width: 76px; min-height: 0; aspect-ratio: 1; border-radius: 50%; }
 
 .slide-track {
   position: relative; height: var(--target-primary);
@@ -844,13 +847,19 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .brand { display: flex; align-items: center; gap: 10px; font-size: 1.29em; font-weight: 700; }
 .brand svg { flex: none; }
 .login-title { margin-top: 12px; font-size: 2.1em; }
-.role-tiles { display: flex; flex-direction: column; gap: 10px; }
+.role-tiles { flex: 1; display: flex; flex-direction: column; gap: 14px; }
 .role-tile {
-  width: 100%; min-height: 76px; margin: 0; padding: 20px 18px;
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  flex: 1; width: 100%; min-height: 140px; margin: 0; padding: 20px 18px;
+  display: grid; grid-template-columns: 64px minmax(0, 1fr) 28px; align-items: center; gap: 16px;
   background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-tile);
-  color: var(--ink); font: inherit; font-size: 1.47em; font-weight: 700; text-align: left;
+  color: var(--ink); font: inherit; text-align: left;
 }
+.role-tile:hover { border-color: var(--teal); }
+.role-icon {
+  display: grid; place-items: center; width: 64px; height: 64px;
+  border-radius: var(--radius-pill); background: var(--chip-teal-bg); color: var(--teal);
+}
+.role-name { display: block; font-size: 1.55em; font-weight: 700; }
 .role-tile svg { flex: none; }
 a.role-tile { box-sizing: border-box; margin-top: 10px; text-decoration: none; font-size: 1.1em; }
 .role-tile:disabled { opacity: 0.55; }
@@ -1027,15 +1036,11 @@ a.role-tile { box-sizing: border-box; margin-top: 10px; text-decoration: none; f
   background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-tile);
 }
 .sign[data-sent="true"] { background: var(--chip-teal-bg); border: 2px solid var(--teal); padding: 13px; }
+.sign.selected { border: 2px solid var(--teal); background: var(--chip-teal-bg); }
 .sign:last-child:nth-child(odd) { grid-column: span 2; }
 .sign-icons { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
 .sign-label { font-size: 1em; font-weight: 700; line-height: 1.25; }
 .sign-sent { font-size: 0.82em; font-weight: 600; color: var(--teal-dark); line-height: 1.35; }
-.signs-note {
-  padding: 12px 14px; border-radius: var(--radius-button);
-  background: var(--danger-soft-bg); color: var(--danger-soft-ink);
-  font-size: 0.88em; line-height: 1.45;
-}
 .callout-red {
   display: flex; flex-direction: column; gap: 10px;
   padding: 16px; border-radius: var(--radius-card);

@@ -12,7 +12,7 @@ import pytest
 
 ELIGIBLE = {
     "age": 60,
-    "smoking_status": "daily",
+    "current_smoker": "yes",
     "cigarettes_per_day": 20,
     "years_smoked": 30,
 }
@@ -76,8 +76,8 @@ async def test_accessibility_patch_for_unknown_contact_is_404(client):
         ({"cigarettes_per_day": 10, "years_smoked": 31}, "Ostrobothnia", "not_eligible"),
         ({"cigarettes_per_day": 11, "years_smoked": 30}, "Ostrobothnia", "not_eligible"),
         ({"cigarettes_per_day": 11, "years_smoked": 31}, "Ostrobothnia", "screening_pilot_eligible"),
-        ({"smoking_status": "former", "cigarettes_per_day": None, "years_smoked": None}, "Western Uusimaa", "not_eligible"),
-        ({"smoking_status": "never", "cigarettes_per_day": None, "years_smoked": None}, "Western Uusimaa", "never_smoked"),
+        ({"current_smoker": "no", "ex_smoker": "yes", "years_smoked": 20}, "Western Uusimaa", "not_eligible"),
+        ({"current_smoker": "no", "ex_smoker": "no"}, "Western Uusimaa", "never_smoked"),
         ({}, "Kymenlaakso", "not_eligible"),
         ({}, "North Ostrobothnia", "screening_pilot_eligible"),
         ({}, "Southwest Finland", "screening_pilot_eligible"),

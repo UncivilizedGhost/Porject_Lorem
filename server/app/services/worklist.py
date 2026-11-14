@@ -137,6 +137,42 @@ async def reopen_step(step_id: str) -> dict[str, Any] | None:
     return await db.update("escalation_steps", step_id, {"handled_at": None, "handled_outcome": None})
 
 
+async def escalate_now(patient_id: str) -> dict[str, Any] | None:
+    """Demo shim for 'Escalate': put the patient's Confirmation ladder back on the Worklist.
+
+    Fires the next open rung; if every rung was confirmed or handled, reopens the first rung.
+    """
+    if await db.get("patients", patient_id) is None:
+        return None
+    steps = sorted(
+        await db.find("escalation_steps", {"patient_id": patient_id}),
+        key=lambda s: s["step_index"],
+    )
+    if not steps:
+        return None
+    today = await current_day()
+    pending = next((s for s in steps if not s.get("confirmed_at") and not s.get("handled_at")), None)
+    if pending is not None:
+        return await db.update(
+            "escalation_steps",
+            pending["_id"],
+            {"fired_at": now_iso(), "due_demo_day": today, "handled_at": None, "handled_outcome": None},
+        )
+    first = steps[0]
+    return await db.update(
+        "escalation_steps",
+        first["_id"],
+        {
+            "fired_at": now_iso(),
+            "due_demo_day": today,
+            "confirmed_at": None,
+            "confirmed_by": None,
+            "handled_at": None,
+            "handled_outcome": None,
+        },
+    )
+
+
 # ---------------------------------------------------------------- the merge
 
 
@@ -217,9 +253,11 @@ async def _alert_rows(today: int) -> list[dict[str, Any]]:
         doc = await db.get(table, a["subject_id"])
         patient = doc if a["subject_type"] == "patient" else None
         red = a["level"] == "red"
-        actions = ["call"]
+        actions = ["call", "book_appointment"]
         if red and not a.get("acknowledged_at"):
             actions.append("acknowledge")
+        if a["subject_type"] == "patient":
+            actions.append("escalate")
         actions += ["assign_to_me", "record_action", "mark_done"]
         if a["source"] == "symptom_report":
             actions.append("open_card")
@@ -269,7 +307,7 @@ async def _callback_rows(today: int) -> list[dict[str, Any]]:
                 delivery_status=await _delivery_status("contact", c["_id"], None),
                 created_at=cb["at"],
                 waiting_working_days=float(today - cb.get("demo_day", today)),
-                actions=["call", "book_health_station_xray", "flag_referral", "mark_handled"],
+                actions=["call", "book_appointment", "book_health_station_xray", "flag_referral", "mark_handled"],
                 detail_ref=c["_id"],
             )
         )

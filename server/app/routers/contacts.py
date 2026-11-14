@@ -57,7 +57,8 @@ async def create_contact(body: dict[str, Any]):
         group = risk_group(
             age=answers["age"],
             county=body["county"],
-            smoking_status=answers["smoking_status"],
+            current_smoker=answers.get("current_smoker"),
+            ex_smoker=answers.get("ex_smoker"),
             cigarettes_per_day=answers.get("cigarettes_per_day"),
             years_smoked=answers.get("years_smoked"),
         )

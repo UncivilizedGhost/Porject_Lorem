@@ -58,6 +58,9 @@ export function WorklistScreen() {
       case "flag_referral":
         await api.promote(row.person.subject_id);
         break;
+      case "escalate":
+        await api.escalate(row.person.subject_id);
+        break;
       case "book_health_station_xray":
         await api.callbackHandled(row.person.subject_id, "booked");
         break;

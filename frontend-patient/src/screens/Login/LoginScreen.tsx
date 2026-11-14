@@ -37,9 +37,8 @@ export function LoginScreen() {
         return;
       }
       setSession({ role, patientId: ids.patient_id ?? undefined, contactId: ids.contact_id ?? undefined });
-      if (ids.patient_id) navigate("/home");
-      else if (ids.contact_id) navigate("/warning-signs");
-      else navigate("/risk-check");
+      // Every patient login retakes the initial assessment questionnaire.
+      navigate("/risk-check");
     } catch {
       setError(true);
     } finally {
@@ -55,18 +54,20 @@ export function LoginScreen() {
         <div className="login-head">
           <span className="brand">
             <Icon name="brand-mark" size={32} />
-            Pathway Companion
+            Cancer Support
           </span>
           <h1 className="login-title">{t("login.title")}</h1>
         </div>
 
         <div className="role-tiles">
           <button type="button" className="role-tile" disabled={busy} onClick={() => enter("patient")}>
-            {t("login.patient")}
+            <span className="role-icon"><Icon name="person" size={40} /></span>
+            <span className="role-name">{t("login.patient")}</span>
             <Icon name="chevron-right" size={28} />
           </button>
           <button type="button" className="role-tile" disabled={busy} onClick={() => enter("trusted_person")}>
-            {t("login.support")}
+            <span className="role-icon"><Icon name="helping" size={40} /></span>
+            <span className="role-name">{t("login.support")}</span>
             <Icon name="chevron-right" size={28} />
           </button>
         </div>
@@ -77,6 +78,7 @@ export function LoginScreen() {
         </a>
 
         {error && <p role="alert">{t("login.error")}</p>}
+        <p className="login-note">{t("login.note")}</p>
       </main>
     </div>
   );

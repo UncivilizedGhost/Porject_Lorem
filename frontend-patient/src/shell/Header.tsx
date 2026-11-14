@@ -9,25 +9,6 @@ import { useI18n } from "../i18n/LanguageProvider";
 import { BackButton } from "./BackButton";
 import { Icon } from "../components/Icon";
 
-function SpeakerOffIcon() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" focusable="false">
-      <path d="M3 9h3.5L11 5.5v11L6.5 13H3z" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
-      <path d="M14.5 8a4 4 0 010 6M17 5.5a7.5 7.5 0 010 11" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-      <path d="M8 8L14 14M14 8L8 14" fill="none" stroke="currentColor" strokeWidth="1.7" stroke-linecap="round" />
-    </svg>
-  );
-}
-
-function SpeakerIcon() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" focusable="false">
-      <path d="M3 9h3.5L11 5.5v11L6.5 13H3z" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
-      <path d="M14.5 8a4 4 0 010 6M17 5.5a7.5 7.5 0 010 11" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-    </svg>
-  );
-}
-
 export function Header() {
   const { toggleVoiceAssistant, settings } = useVoice();
   const { t } = useI18n();
@@ -50,7 +31,7 @@ export function Header() {
           aria-pressed={voiceAssistant}
           aria-label={voiceAssistant ? t("voice.assistantOff") : t("voice.assistantOn")}
         >
-          {voiceAssistant ? <SpeakerOffIcon /> : <SpeakerIcon />}
+          {voiceAssistant ? <Icon name="speaker" size={22} /> : <Icon name="speaker-slash" size={22} />}
         </button>
         <Link className="icon-button aa" to="/settings" aria-label={t("common.settings")}>
           <Icon name="settings" size={22} />

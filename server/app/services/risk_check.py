@@ -24,11 +24,17 @@ PILOT_COUNTIES = {
 }
 
 
-def risk_group(*, age: int, county: str, smoking_status: str, cigarettes_per_day: int | None,
-               years_smoked: int | None) -> str:
-    if smoking_status == "never":
+def risk_group(*, age: int, county: str, current_smoker: str | None = None,
+               ex_smoker: str | None = None, cigarettes_per_day: int | None = None,
+               years_smoked: int | None = None) -> str:
+    # Never smoked: not a current smoker and not an ex-smoker.
+    if current_smoker != "yes" and ex_smoker != "yes":
         return "never_smoked"
-    if smoking_status != "daily" or not 50 <= age <= 74 or county not in PILOT_COUNTIES:
+    # Former smokers are not eligible.
+    if ex_smoker == "yes":
+        return "not_eligible"
+    # Current smoker: apply pilot criteria.
+    if not 50 <= age <= 74 or county not in PILOT_COUNTIES:
         return "not_eligible"
     cigs, years = cigarettes_per_day or 0, years_smoked or 0
     if (cigs > 15 and years > 25) or (cigs > 10 and years > 30):

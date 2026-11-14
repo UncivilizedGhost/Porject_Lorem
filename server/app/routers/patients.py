@@ -11,7 +11,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
 from app import db
-from app.services import accessibility, messaging, pathway, reporting
+from app.services import accessibility, messaging, pathway, reporting, worklist
 
 # Request bodies carry no grade / rule / advice_shown: those are computed server-side and any
 # client-sent value is dropped (pydantic ignores unknown fields).
@@ -160,6 +160,15 @@ async def medication_log(patient_id: str, body: MedicationLogBody):
     return await _graded(
         reporting.log_medication(patient_id, body.medicine_id, body.status, body.actor, body.input)
     )
+
+
+@router.post("/{patient_id}/escalate")
+async def escalate(patient_id: str):
+    """person 3 demo shim: reopen the Confirmation ladder and fire a rung now."""
+    step = await worklist.escalate_now(patient_id)
+    if step is None:
+        raise HTTPException(status_code=404, detail="patient or escalation ladder not found")
+    return step
 
 
 @router.get("/{patient_id}/kanta-medicines")

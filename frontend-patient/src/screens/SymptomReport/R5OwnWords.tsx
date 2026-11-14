@@ -18,7 +18,7 @@ export function R5OwnWords({ onDone }: Props) {
   const [source, setSource] = useState<"voice" | "typed">("typed");
   const [speaking, setSpeaking] = useState(false);
   const readable = useMemo(
-    () => ({ heading: t("report.ownTitle"), body: t("report.ownBubble") }),
+    () => ({ heading: t("report.ownTitle") }),
     [t],
   );
   useReadable(readable);
@@ -112,7 +112,6 @@ export function R5OwnWords({ onDone }: Props) {
 
       <label className="own-bubble">
         <span className="own-bubble-label">
-          {t("report.ownBubble")}
           <Icon name="pencil" size={20} />
         </span>
         <textarea

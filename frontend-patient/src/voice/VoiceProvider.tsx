@@ -285,13 +285,13 @@ export function VoiceProvider({
       }
       return next;
     });
-    const next = !settings.voice_assistant;
+    const next = !settingsRef.current.voice_assistant;
     if (next) {
       await say(t.voiceAssistantOn);
     } else {
       await say(t.voiceAssistantOff);
     }
-  }, [say, settings.voice_assistant]);
+  }, [say]);
 
   const speakElementText = useCallback(async (text: string) => {
     await say(text);

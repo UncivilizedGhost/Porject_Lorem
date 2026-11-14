@@ -165,6 +165,17 @@ async def log_medication(
     event_id = await write_event(
         "patient", patient_id, "medication_log", {"medicine_id": medicine_id, "status": status}, actor=actor, input=input
     )
+    # Kanta sync: the sim log's FHIR half would otherwise stay empty forever.
+    medicine = MEDICINES.get(medicine_id, {})
+    await messaging.log_fhir_sync(
+        "patient",
+        patient_id,
+        {
+            "resource_type": "MedicationStatement",
+            "display": medicine.get("label", medicine_id),
+            "status": "completed" if status == "taken" else "not-taken",
+        },
+    )
     raised = False
     if status == "skipped":
         history = [

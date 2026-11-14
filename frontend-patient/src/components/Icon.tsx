@@ -28,10 +28,12 @@ import {
   Question,
   Smiley,
   SpeakerHigh,
+  SpeakerSlash,
   Stairs,
   Sun,
   Timer,
   Thermometer,
+  User,
   Users,
   Virus,
   Warning,
@@ -99,8 +101,10 @@ export type IconName =
   | "help"
   // Shell
   | "speaker"
+  | "speaker-slash"
   | "help-pill"
   | "settings"
+  | "person"
   | "brand-mark"
   // Symptom report
   | "symptom-breathlessness"
@@ -173,8 +177,10 @@ const ICONS: Record<IconName, React.ElementType> = {
   help: Question,
   // Shell
   speaker: SpeakerHigh,
+  "speaker-slash": SpeakerSlash,
   "help-pill": Question,
   settings: Gear,
+  person: User,
   "brand-mark": Circle,
   // Symptom report
   "symptom-breathlessness": Virus,
