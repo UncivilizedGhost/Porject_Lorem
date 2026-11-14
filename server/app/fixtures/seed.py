@@ -29,8 +29,8 @@ async def ensure_clock_and_coordinator() -> None:
 
 async def ensure_fixtures() -> None:
     # TODO(person 1): db.upsert(...) counties.json, actions.json, insight_cards.json by name / _id.
-    # TODO(person 3): clinicians.json (stretch).
-    pass
+    for clinician in load("clinicians.json"):
+        await db.upsert("clinicians", clinician["_id"], clinician)
 
 
 async def ensure_seeded() -> None:

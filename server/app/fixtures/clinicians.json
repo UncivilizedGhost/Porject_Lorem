@@ -1,1 +1,38 @@
-[]
+[
+  {
+    "_id": "clin-radiology-jorvi",
+    "name": "Dr. Helena Virtanen (synthetic)",
+    "types": ["xray_ct"],
+    "location": "Jorvi Hospital, Espoo (HUS imaging)",
+    "working_days": [1, 2, 3, 4, 5],
+    "hours": { "start": "08:00", "end": "15:00" },
+    "slot_minutes": 30
+  },
+  {
+    "_id": "clin-health-station",
+    "name": "Nurse Kaisa Lehto (synthetic)",
+    "types": ["xray_ct", "check_up"],
+    "location": "Health station (terveysasema), Espoo",
+    "working_days": [1, 3, 5],
+    "hours": { "start": "09:00", "end": "16:00" },
+    "slot_minutes": 30
+  },
+  {
+    "_id": "clin-oncology",
+    "name": "Dr. Mikko Salo (synthetic)",
+    "types": ["chemotherapy", "immunotherapy", "radiotherapy"],
+    "location": "HUS Cancer Center",
+    "working_days": [2, 3, 4],
+    "hours": { "start": "08:00", "end": "16:00" },
+    "slot_minutes": 60
+  },
+  {
+    "_id": "clin-lung-surgery",
+    "name": "Dr. Anna Koskinen (synthetic)",
+    "types": ["surgery_consultation", "check_up"],
+    "location": "HUS Heart and Lung Center",
+    "working_days": [1, 2, 4],
+    "hours": { "start": "09:00", "end": "14:00" },
+    "slot_minutes": 30
+  }
+]
