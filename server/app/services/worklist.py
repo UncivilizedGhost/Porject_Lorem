@@ -119,6 +119,24 @@ async def mark_step_handled(step_id: str, outcome: str | None) -> dict[str, Any]
     return await db.get("escalation_steps", step_id)
 
 
+async def reopen_alert(alert_id: str) -> dict[str, Any] | None:
+    """Undo 'Mark done': clear closed_at so the Alert returns to the open Worklist."""
+    alert = await db.get("alerts", alert_id)
+    if alert is None:
+        return None
+    if not alert.get("closed_at"):
+        return alert
+    return await db.update("alerts", alert_id, {"closed_at": None})
+
+
+async def reopen_step(step_id: str) -> dict[str, Any] | None:
+    """Undo 'Mark handled': clear handled_at so the Escalation Step row returns."""
+    step = await db.get("escalation_steps", step_id)
+    if step is None:
+        return None
+    return await db.update("escalation_steps", step_id, {"handled_at": None, "handled_outcome": None})
+
+
 # ---------------------------------------------------------------- the merge
 
 
@@ -297,8 +315,60 @@ async def workload(today: int) -> dict[str, Any]:
     return {"alerts_today": len(todays), "false_alarm_share": share}
 
 
+async def _done_rows() -> list[dict[str, Any]]:
+    """Recently closed Alerts and handled Escalation Steps, newest first."""
+    out = []
+    for a in await db.find("alerts"):
+        if not a.get("closed_at"):
+            continue
+        table = "patients" if a["subject_type"] == "patient" else "contacts"
+        doc = await db.get(table, a["subject_id"])
+        actions = a.get("actions_taken") or []
+        note = (actions[-1].get("note") or "").strip() if actions else ""
+        out.append(
+            {
+                "row_id": f"done:alert:{a['_id']}",
+                "kind": "alert",
+                "level": a.get("level"),
+                "label": LABELS.get(a.get("level")),
+                "person": _person(a["subject_type"], doc, a["subject_id"]),
+                "reason": a.get("reason", ""),
+                "done_at": a["closed_at"],
+                "outcome": note or "Marked done",
+                "detail_ref": a["_id"],
+            }
+        )
+    for p in await db.find("patients"):
+        for s in await db.find("escalation_steps", {"patient_id": p["_id"]}):
+            if not s.get("handled_at"):
+                continue
+            out.append(
+                {
+                    "row_id": f"done:escalation:{s['_id']}",
+                    "kind": "escalation",
+                    "level": None,
+                    "label": "Handled",
+                    "person": _person("patient", p, p["_id"]),
+                    "reason": RUNG_REASON[s["rung"]],
+                    "done_at": s["handled_at"],
+                    "outcome": (s.get("handled_outcome") or "handled").replace("_", " "),
+                    "detail_ref": s["_id"],
+                }
+            )
+    out.sort(key=lambda r: r["done_at"], reverse=True)
+    return out
+
+
 async def build(coordinator_id: str | None = None) -> dict[str, Any]:
     today = await current_day()
     rows = [*await _alert_rows(today), *await _callback_rows(today), *await _escalation_rows(today)]
     rows.sort(key=lambda r: (r["band"], r["created_at"]))
-    return {"rows": rows, "workload": await workload(today), "current_demo_day": today}
+    done = await _done_rows()
+    total = len(rows) + len(done)
+    counts = await workload(today)
+    counts.update(
+        open_count=len(rows),
+        done_count=len(done),
+        pct_done=round(100 * len(done) / total) if total else 0,
+    )
+    return {"rows": rows, "done": done[:20], "workload": counts, "current_demo_day": today}

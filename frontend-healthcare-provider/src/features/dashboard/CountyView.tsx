@@ -43,11 +43,7 @@ export function CountyView() {
         <p className="muted">These pathways never had a clock running.</p>
       </div>
       <EquityBreakdown breakdown={county.breakdown} average={county.pct_within_target} />
-      <VulnerabilityPanel
-        county={county.name}
-        breakdown={county.breakdown}
-        average={county.pct_within_target}
-      />
+      <VulnerabilityPanel county={county.name} breakdown={county.breakdown} />
       {cardSlug && (
         <p>
           <Link className="button-link" to={`/dashboard/county/${encodeURIComponent(county.name)}/insight/${cardSlug}`}>

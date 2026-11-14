@@ -36,3 +36,12 @@ async def handled(step_id: str, body: HandledBody | None = None):
     if step is None:
         raise HTTPException(status_code=404, detail="escalation step not found")
     return step
+
+
+@router.post("/{step_id}/reopen")
+async def reopen(step_id: str):
+    """Undo 'Mark handled': clears handled_at so the row returns to the Worklist."""
+    step = await worklist.reopen_step(step_id)
+    if step is None:
+        raise HTTPException(status_code=404, detail="escalation step not found")
+    return step

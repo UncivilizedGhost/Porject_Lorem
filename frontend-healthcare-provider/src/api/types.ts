@@ -27,9 +27,28 @@ export interface WorklistRow {
 }
 
 // detail_ref: alert id for alert rows, escalation step id for escalation rows, contact id for call-backs.
+export interface WorklistDoneRow {
+  row_id: string;
+  kind: "alert" | "callback" | "escalation";
+  level: Grade | null;
+  label: string | null;
+  person: WorklistRow["person"];
+  reason: string;
+  done_at: string;
+  outcome: string | null;
+  detail_ref: string | null;
+}
+
 export interface WorklistResponse {
   rows: WorklistRow[];
-  workload: { alerts_today: number; false_alarm_share: number };
+  done?: WorklistDoneRow[];
+  workload: {
+    alerts_today: number;
+    false_alarm_share: number;
+    open_count?: number;
+    done_count?: number;
+    pct_done?: number;
+  };
   current_demo_day: number;
 }
 

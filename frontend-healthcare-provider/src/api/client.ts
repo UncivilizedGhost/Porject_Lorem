@@ -42,11 +42,13 @@ export const api = {
     request<unknown>("POST", `/alerts/${alertId}/acknowledge`, { coordinator_id: coordinatorId }),
   alertAction: (alertId: string, body: { action: string; note?: string }) =>
     request<unknown>("POST", `/alerts/${alertId}/actions`, body),
+  reopenAlert: (alertId: string) => request<unknown>("POST", `/alerts/${alertId}/reopen`),
   promote: (contactId: string) => request<unknown>("POST", `/contacts/${contactId}/promote`),
   callbackHandled: (contactId: string, status: "handled" | "booked" = "handled") =>
     request<unknown>("POST", `/contacts/${contactId}/callback-handled`, { status }),
   stepHandled: (stepId: string, outcome?: string) =>
     request<unknown>("POST", `/escalation-steps/${stepId}/handled`, outcome ? { outcome } : undefined),
+  reopenStep: (stepId: string) => request<unknown>("POST", `/escalation-steps/${stepId}/reopen`),
   clinicians: (type: string) => request<Clinician[]>("GET", `/clinicians?type=${type}`),
   availability: (id: string, from: string, to: string) =>
     request<Availability>("GET", `/clinicians/${id}/availability?from=${from}&to=${to}`),

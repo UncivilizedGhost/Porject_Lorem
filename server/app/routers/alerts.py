@@ -38,6 +38,15 @@ async def acknowledge(alert_id: str, body: AcknowledgeBody):
     return alert
 
 
+@router.post("/{alert_id}/reopen")
+async def reopen(alert_id: str):
+    """Undo 'Mark done': clears closed_at so the Alert returns to the Worklist. Idempotent."""
+    alert = await worklist.reopen_alert(alert_id)
+    if alert is None:
+        raise HTTPException(status_code=404, detail="alert not found")
+    return alert
+
+
 @router.post("/{alert_id}/actions")
 async def actions(alert_id: str, body: ActionBody):
     """Body { action: assign_to_me | record_action | mark_done, note? }. Appends to actions_taken; mark_done sets closed_at."""
