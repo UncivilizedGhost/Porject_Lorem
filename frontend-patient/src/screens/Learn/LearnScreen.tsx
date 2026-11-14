@@ -1,14 +1,12 @@
 // Owner: person 4 — design port of app/learn.html (artboard "9 · Learn" / "Ask about your care").
 // A labelled question row with Ask, the answer card with its reviewed source, and the "answers
-// only come from reviewed sources" note. The page copy and the answer language both follow
-// Settings → Language; there is no language selector here. Answers come only from the reviewed
-// corpus on the server → POST /learn/ask. Safety and "ask your nurse" replies are fixed text and
-// never pretend to be an explanation.
-import { useMemo, useState } from "react";
+// only come from reviewed sources" note. Answers come only from the reviewed corpus on the server
+// → POST /learn/ask. Safety and "ask your nurse" replies are fixed text and never pretend to be
+// an explanation.
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { api } from "../../api/client";
 import type { Language } from "../../api/types";
-import { useI18n } from "../../i18n/LanguageProvider";
 import type { Readable, VoiceAction } from "../../voice/types";
 import { useReadable } from "../../voice/useReadable";
 import { useVoiceActions } from "../../voice/useVoiceActions";
@@ -60,6 +58,8 @@ const TEXT: Record<Language, Record<string, string>> = {
     ask: "Ask",
     askVoice: "Ask by voice",
     prompt: "What would you like to know?",
+    listening: "Listening…",
+    listeningStop: "Stop listening",
     suggested: "Suggested questions",
     source: "Source",
     readAnswer: "Read answer",
@@ -73,6 +73,8 @@ const TEXT: Record<Language, Record<string, string>> = {
     ask: "Kysy",
     askVoice: "Kysy puheella",
     prompt: "Mitä haluat tietää?",
+    listening: "Kuuntelee…",
+    listeningStop: "Lopeta kuuntelu",
     suggested: "Ehdotetut kysymykset",
     source: "Lähde",
     readAnswer: "Lue vastaus",
@@ -86,6 +88,8 @@ const TEXT: Record<Language, Record<string, string>> = {
     ask: "Fråga",
     askVoice: "Fråga med rösten",
     prompt: "Vad vill du veta?",
+    listening: "Lyssnar…",
+    listeningStop: "Sluta lyssna",
     suggested: "Förslag på frågor",
     source: "Källa",
     readAnswer: "Läs svaret",
@@ -94,15 +98,31 @@ const TEXT: Record<Language, Record<string, string>> = {
   },
 };
 
+/** Microphone icon matching report-words.html "Hold to speak" button. */
+function MicIcon() {
+  return (
+    <svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <rect x="9" y="3" width="6" height="11" rx="3" fill="none" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M5.5 11a6.5 6.5 0 0013 0M12 17.5V21" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export function LearnScreen() {
-  const { dictate, readPage } = useVoice();
+  const { settings, dictate, readPage } = useVoice();
   // Settings → Language drives both the copy and the language of the answer.
-  const { language } = useI18n();
+  const language = settings.language;
   const [question, setQuestion] = useState("");
   const [result, setResult] = useState<LearnResult | null>(null);
   const [failed, setFailed] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [dictating, setDictating] = useState(false);
   const t = TEXT[language];
+
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const isRecordingRef = useRef(false);
 
   const submit = async (q: string) => {
     const text = q.trim();
@@ -120,9 +140,62 @@ export function LearnScreen() {
     }
   };
 
-  const dictateAndAsk = async () => {
-    const heard = await dictate({ prompt: t.prompt });
-    if (heard) await submit(heard);
+  const startRecording = async () => {
+    if (isRecordingRef.current || !navigator.mediaDevices?.getUserMedia) return;
+    isRecordingRef.current = true;
+    audioChunksRef.current = [];
+    setDictating(true);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      streamRef.current = stream;
+      if (!isRecordingRef.current) {
+        stream.getTracks().forEach((t) => t.stop());
+        streamRef.current = null;
+        setDictating(false);
+        return;
+      }
+      const rec = new MediaRecorder(stream);
+      mediaRecorderRef.current = rec;
+      rec.ondataavailable = (e) => {
+        if (e.data.size > 0) audioChunksRef.current.push(e.data);
+      };
+      rec.onstop = async () => {
+        stream.getTracks().forEach((track) => track.stop());
+        streamRef.current = null;
+        mediaRecorderRef.current = null;
+        isRecordingRef.current = false;
+        const blob = new Blob(audioChunksRef.current, { type: "audio/webm" });
+        const form = new FormData();
+        form.append("audio", blob, "recording.webm");
+        try {
+          const res = await api.stt(form);
+          const data = await res.json();
+          if (data.transcript) {
+            setQuestion(data.transcript);
+          }
+        } catch {
+          // STT failed — leave the textbox unchanged.
+        } finally {
+          setDictating(false);
+        }
+      };
+      rec.start();
+    } catch {
+      isRecordingRef.current = false;
+      setDictating(false);
+    }
+  };
+
+  const stopRecording = () => {
+    if (!isRecordingRef.current) return;
+    if (mediaRecorderRef.current) {
+      mediaRecorderRef.current.stop();
+    } else if (streamRef.current) {
+      streamRef.current.getTracks().forEach((t) => t.stop());
+      streamRef.current = null;
+      isRecordingRef.current = false;
+      setDictating(false);
+    }
   };
 
   const actions = useMemo<VoiceAction[]>(
@@ -134,7 +207,10 @@ export function LearnScreen() {
         synonyms: [TEXT[language].askVoice],
         confirm_text: `${TEXT[language].askVoice}?`,
         run: () => {
-          void dictateAndAsk(); // not awaited: it waits for the next spoken turns
+          void (async () => {
+            const heard = await dictate({ prompt: t.prompt });
+            if (heard) await submit(heard);
+          })();
         },
       },
       { id: "learn_read_answer", label: TEXT[language].readAnswer, run: () => readPage() },
@@ -151,6 +227,17 @@ export function LearnScreen() {
     return { heading: t.title, body: sources ? `${result.text} ${t.source}: ${sources}` : result.text };
   }, [result, t]);
   useReadable(readable);
+
+  useEffect(() => {
+    return () => {
+      if (mediaRecorderRef.current) {
+        mediaRecorderRef.current.stop();
+      }
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((t) => t.stop());
+      }
+    };
+  }, []);
 
   return (
     <section className="learn">
@@ -172,6 +259,26 @@ export function LearnScreen() {
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
             />
+            <button
+              type="button"
+              className="ask-mic"
+              onMouseDown={startRecording}
+              onMouseUp={stopRecording}
+              onMouseLeave={stopRecording}
+              onTouchStart={(e) => {
+                e.preventDefault();
+                void startRecording();
+              }}
+              onTouchEnd={(e) => {
+                e.preventDefault();
+                stopRecording();
+              }}
+              disabled={busy}
+              aria-label={dictating ? t.listeningStop : t.listening}
+              aria-pressed={dictating}
+            >
+              <MicIcon />
+            </button>
             <button type="submit" className="ask-button" disabled={busy}>{t.ask}</button>
           </span>
         </label>

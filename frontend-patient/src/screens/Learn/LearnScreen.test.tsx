@@ -82,14 +82,6 @@ test("no source shows the ask-your-nurse text and no source chip", async () => {
   expect(screen.queryByRole("link")).toBeNull();
 });
 
-test("Learn's own language toggle changes the question language", async () => {
-  ask.mockResolvedValue(answer);
-  renderLearn("en");
-  await userEvent.click(screen.getByRole("button", { name: "Svenska" }));
-  await userEvent.click(screen.getByRole("button", { name: "Vad är en bronkoskopi?" }));
-  expect(ask).toHaveBeenCalledWith({ question: "Vad är en bronkoskopi?", language: "sv" });
-});
-
 test("a server failure points to the nurse instead of leaving a blank screen", async () => {
   ask.mockRejectedValue(new Error("down"));
   renderLearn();

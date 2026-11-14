@@ -565,6 +565,19 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
   font-size: 1em; font-weight: 700;
 }
 .ask-button:hover { color: var(--on-action); filter: brightness(0.94); }
+.ask-mic {
+  flex: none;
+  width: 56px; min-height: 56px; margin: 0; padding: 0;
+  border: 0; border-radius: var(--radius-button);
+  background: var(--card); color: var(--ink);
+  font-size: 1.25em;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.ask-mic:hover { filter: brightness(0.94); }
+.ask-mic[aria-pressed="true"] {
+  background: var(--red); color: var(--on-action);
+}
+.ask-mic:disabled { opacity: 0.5; cursor: not-allowed; }
 .ask-suggestions-wrap { display: flex; flex-direction: column; gap: 8px; }
 .ask-suggestions-label { font-size: 0.82em; color: var(--secondary); }
 .ask-suggestions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
