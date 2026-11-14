@@ -30,7 +30,7 @@ export function RiskCheckFlow() {
   const [eligible, setEligible] = useState(false);
   const [saveFailed, setSaveFailed] = useState(false);
 
-  const questions = questionsFor(answers.smoking_status as string | undefined);
+  const questions = questionsFor(answers);
   const askingConsent = index >= questions.length;
   const question = questions[index];
 
@@ -54,10 +54,6 @@ export function RiskCheckFlow() {
 
   const answer = (id: string, value: string | number) => {
     const next = { ...answers, [id]: value };
-    if (id === "smoking_status" && value !== "daily") {
-      delete next.cigarettes_per_day;
-      delete next.years_smoked;
-    }
     setAnswers(next);
     setRaw("");
     setIndex(index + 1);

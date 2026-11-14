@@ -36,9 +36,8 @@ export function LoginScreen() {
         return;
       }
       setSession({ role, patientId: ids.patient_id ?? undefined, contactId: ids.contact_id ?? undefined });
-      if (ids.patient_id) navigate("/home");
-      else if (ids.contact_id) navigate("/warning-signs");
-      else navigate("/risk-check");
+      // Every patient login retakes the initial assessment questionnaire.
+      navigate("/risk-check");
     } catch {
       setError(true);
     } finally {

@@ -370,14 +370,19 @@ export const MESSAGES = {
   ],
 
   "signs.title": [
-    "Five signs worth telling a nurse",
-    "Viisi merkkiä, joista kannattaa kertoa hoitajalle",
-    "Fem tecken värda att berätta för en sjuksköterska",
+    "Choose all symptoms which apply to you",
+    "Valitse kaikki oireet, jotka koskevat sinua",
+    "Välj alla symtom som stämmer för dig",
   ],
   "signs.body": [
-    "If you notice one of these, tap it once and a nurse will call you.",
-    "Jos huomaat jonkin näistä, napauta sitä kerran, niin hoitaja soittaa sinulle.",
-    "Om du märker något av dessa, tryck en gång så ringer en sjuksköterska dig.",
+    "Tap each symptom that applies to you. Tap again to deselect. Then tap Continue.",
+    "Napauta kutakin sinua koskevaa oiretta. Napauta uudelleen poistaaksesi valinnan. Siirry sitten eteenpäin painikkeella Jatka.",
+    "Tryck på varje symtom som stämmer för dig. Tryck igen för att avmarkera. Tryck sedan på Fortsätt.",
+  ],
+  "signs.none": [
+    "None of these apply to me",
+    "Yksikään näistä ei koske minua",
+    "Inget av dessa stämmer för mig",
   ],
   "signs.sent": [
     "Sent. Nurse Aino will call you.",
@@ -390,15 +395,10 @@ export const MESSAGES = {
     "Älä odota soittoa. Soita nyt.",
     "Vänta inte på ett samtal. Ring nu.",
   ],
-  "signs.note": [
-    "Heavy bleeding or struggling to breathe: call 112.",
-    "Runsas verenvuoto tai hengitysvaikeus: soita 112.",
-    "Kraftig blödning eller andningssvårigheter: ring 112.",
-  ],
-  "signs.continue": [
-    "Continue to your pathway",
-    "Jatka hoitopolullesi",
-    "Fortsätt till din vårdväg",
+  "signs.submit": [
+    "Submit symptoms",
+    "Lähetä oireet",
+    "Skicka symtom",
   ],
   "signs.error": [
     "We could not send that. Please try again.",
