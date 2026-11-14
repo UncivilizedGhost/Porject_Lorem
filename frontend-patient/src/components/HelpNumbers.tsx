@@ -9,20 +9,41 @@ export function HelpNumbers() {
   return (
     <ol className="help-numbers">
       <li>
-        <a className="call-button emergency" href="tel:112">Call 112</a>
-        <span> In an emergency.</span>
+        <div className="help-item">
+          <a className="call-button emergency" href="tel:112">
+            <span className="call-button-title">Call 112</span>
+          </a>
+          <span className="call-button-desc">In an emergency.</span>
+        </div>
       </li>
       <li>
-        <a className="call-button" href="tel:116117">Call 116 117</a>
-        <span> If you suddenly feel much worse, day or night (Päivystysapu). During treatment, 38 °C or more means the emergency department.</span>
+        <div className="help-item">
+          <a className="call-button urgent" href="tel:116117">
+            <span className="call-button-title">Call 116 117</span>
+          </a>
+          <span className="call-button-desc">
+            If you suddenly feel much worse, day or night (Päivystysapu). During treatment, 38 °C or
+            more means the emergency department.
+          </span>
+        </div>
       </li>
       <li>
-        <a className="call-button" href={`tel:${NURSE_PHONE}`}>Call Nurse Aino</a>
-        <span> Weekdays 8–16, for questions about your pathway.</span>
+        <div className="help-item">
+          <a className="call-button nurse" href={`tel:${NURSE_PHONE}`}>
+            <span className="call-button-title">Tell Nurse Aino</span>
+          </a>
+          <span className="call-button-desc">Weekdays 8–16, for questions about your pathway.</span>
+        </div>
       </li>
       <li>
-        <Link className="call-button" to="/report">Report a symptom</Link>
-        <span> Anything that is not urgent. A nurse replies within 1–2 working days.</span>
+        <div className="help-item">
+          <Link className="call-button report" to="/report">
+            <span className="call-button-title">Report a symptom</span>
+          </Link>
+          <span className="call-button-desc">
+            Anything that is not urgent. A nurse replies within 1–2 working days.
+          </span>
+        </div>
       </li>
     </ol>
   );

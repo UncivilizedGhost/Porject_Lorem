@@ -1,8 +1,8 @@
-// Owner: person 4 — .scratch/learn-sms-fhir-voice/spec.md (artboard "9 · Learn")
-// Suggested questions as buttons, a labelled question box, an answer card with source chips and
-// Learn's own language toggle (Selkosuomi / Svenska / English) → POST /learn/ask. Answers come
-// only from the reviewed corpus on the server; safety and "ask your nurse" replies are fixed text.
-// Voice actions: each suggested question, "ask" (dictation), "read answer". Open to Contacts too.
+// Owner: person 4 — design port of app/learn.html (artboard "9 · Learn" / "Ask about your care").
+// A labelled question row with Ask, answer-language tiles (Selkosuomi / Svenska / English), the
+// answer card with its reviewed source, and the "answers only come from reviewed sources" note.
+// Answers come only from the reviewed corpus on the server → POST /learn/ask. Safety and
+// "ask your nurse" replies are fixed text and never pretend to be an explanation.
 import { useMemo, useState } from "react";
 
 import { api } from "../../api/client";
@@ -58,8 +58,8 @@ const SUGGESTED: Record<Language, string[]> = {
 
 const TEXT: Record<Language, Record<string, string>> = {
   en: {
-    title: "Learn",
-    intro: "Ask about tests and what to expect. Answers come from reviewed Finnish sources.",
+    title: "Ask about your care",
+    intro: "Ask about tests and what to expect.",
     label: "Your question",
     ask: "Ask",
     askVoice: "Ask by voice",
@@ -68,11 +68,12 @@ const TEXT: Record<Language, Record<string, string>> = {
     source: "Source",
     readAnswer: "Read answer",
     failure: "I could not reach the answer service. Please ask your nurse.",
-    languageGroup: "Language",
+    languageGroup: "Answer language",
+    note: "Answers come only from reviewed Finnish sources. For your own results, ask Nurse Aino.",
   },
   fi: {
     title: "Opi",
-    intro: "Kysy tutkimuksista ja siitä, mitä odottaa. Vastaukset perustuvat tarkistettuihin suomalaisiin lähteisiin.",
+    intro: "Kysy tutkimuksista ja siitä, mitä odottaa.",
     label: "Kysymyksesi",
     ask: "Kysy",
     askVoice: "Kysy puheella",
@@ -81,11 +82,12 @@ const TEXT: Record<Language, Record<string, string>> = {
     source: "Lähde",
     readAnswer: "Lue vastaus",
     failure: "Vastauspalveluun ei saatu yhteyttä. Kysy hoitajalta.",
-    languageGroup: "Kieli",
+    languageGroup: "Vastauksen kieli",
+    note: "Vastaukset tulevat vain tarkistetuista suomalaisista lähteistä. Omista tuloksistasi kysy hoitaja Ainolta.",
   },
   sv: {
     title: "Lär dig",
-    intro: "Fråga om undersökningar och vad du kan vänta dig. Svaren kommer från granskade finländska källor.",
+    intro: "Fråga om undersökningar och vad du kan vänta dig.",
     label: "Din fråga",
     ask: "Fråga",
     askVoice: "Fråga med rösten",
@@ -94,9 +96,56 @@ const TEXT: Record<Language, Record<string, string>> = {
     source: "Källa",
     readAnswer: "Läs svaret",
     failure: "Jag nådde inte svarstjänsten. Fråga din sjuksköterska.",
-    languageGroup: "Språk",
+    languageGroup: "Svarens språk",
+    note: "Svaren kommer bara från granskade finländska källor. Fråga din egen sjuksköterska om dina resultat.",
   },
 };
+
+/** Small SVG flags instead of emoji: flag emoji do not render on Windows. */
+function FlagIcon({ code }: { code: Language }) {
+  if (code === "fi") {
+    return (
+      <svg viewBox="0 0 30 20" width="30" height="20" aria-hidden="true" focusable="false">
+        <rect width="30" height="20" fill="#ffffff" />
+        <rect x="9" y="0" width="4" height="20" fill="#002F6C" />
+        <rect x="0" y="8" width="30" height="4" fill="#002F6C" />
+      </svg>
+    );
+  }
+  if (code === "sv") {
+    return (
+      <svg viewBox="0 0 30 20" width="30" height="20" aria-hidden="true" focusable="false">
+        <rect width="30" height="20" fill="#006AA7" />
+        <rect x="9" y="0" width="4" height="20" fill="#FECC02" />
+        <rect x="0" y="8" width="30" height="4" fill="#FECC02" />
+      </svg>
+    );
+  }
+  return (
+    <svg viewBox="0 0 30 20" width="30" height="20" aria-hidden="true" focusable="false">
+      <rect width="30" height="20" fill="#012169" />
+      <path d="M0 0l30 20M30 0L0 20" stroke="#ffffff" strokeWidth="4" />
+      <path d="M0 0l30 20M30 0L0 20" stroke="#C8102E" strokeWidth="2" />
+      <rect x="12" y="0" width="6" height="20" fill="#ffffff" />
+      <rect x="0" y="7" width="30" height="6" fill="#ffffff" />
+      <rect x="13.5" y="0" width="3" height="20" fill="#C8102E" />
+      <rect x="0" y="8.5" width="30" height="3" fill="#C8102E" />
+    </svg>
+  );
+}
+
+function CheckDot({ on }: { on: boolean }) {
+  return on ? (
+    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="11" fill="currentColor" />
+      <path d="M7 12.5l3.5 3.5 6.5-7" fill="none" stroke="#ffffff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ) : (
+    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="2" />
+    </svg>
+  );
+}
 
 export function LearnScreen() {
   const { settings, dictate, readPage } = useVoice();
@@ -156,62 +205,90 @@ export function LearnScreen() {
   useReadable(readable);
 
   return (
-    <section>
+    <section className="learn">
       <h1>{t.title}</h1>
-      <p>{t.intro}</p>
-
-      <div role="group" aria-label={t.languageGroup}>
-        {LANGUAGES.map((l) => (
-          <button key={l.code} type="button" aria-pressed={language === l.code} onClick={() => setLanguage(l.code)}>
-            {l.label}
-          </button>
-        ))}
-      </div>
-
-      <h2>{t.suggested}</h2>
-      <ul>
-        {SUGGESTED[language].map((q) => (
-          <li key={q}>
-            <button type="button" onClick={() => void submit(q)}>
-              {q}
-            </button>
-          </li>
-        ))}
-      </ul>
 
       <form
+        className="ask-form"
         onSubmit={(e) => {
           e.preventDefault();
           void submit(question);
         }}
       >
-        <label htmlFor="learn-question">{t.label}</label>
-        <input id="learn-question" value={question} onChange={(e) => setQuestion(e.target.value)} />
-        <button type="submit" disabled={busy}>
-          {t.ask}
-        </button>
+        <label className="ask-label" htmlFor="learn-question">
+          {t.label}
+          <span className="ask-row">
+            <input
+              id="learn-question"
+              className="ask-input"
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+            />
+            <button type="submit" className="ask-button" disabled={busy}>{t.ask}</button>
+          </span>
+        </label>
       </form>
 
-      {failed && <p role="alert">{t.failure}</p>}
+      <fieldset className="opt-fieldset">
+        <legend>{t.languageGroup}</legend>
+        <div className="opt-grid cols-3">
+          {LANGUAGES.map((l) => (
+            <label key={l.code} className="opt answer-language" data-selected={language === l.code}>
+              <input
+                type="radio"
+                name="answer-language"
+                checked={language === l.code}
+                onChange={() => setLanguage(l.code)}
+              />
+              <span className="opt-icons">
+                <span className="opt-icon opt-flag"><FlagIcon code={l.code} /></span>
+                <span className="opt-check"><CheckDot on={language === l.code} /></span>
+              </span>
+              <span className="opt-label">{l.label}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <section className="ask-suggestions-wrap" aria-labelledby="suggested-label">
+        <p className="ask-suggestions-label" id="suggested-label">{t.suggested}</p>
+        <div className="ask-suggestions">
+          {SUGGESTED[language].map((q) => (
+            <button key={q} type="button" className="ask-chip" onClick={() => void submit(q)}>
+              {q}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {failed && <p className="error" role="alert">{t.failure}</p>}
 
       {result && (
-        <article aria-live="polite">
-          {result.kind === "safety" ? <p role="alert">{result.text}</p> : <p>{result.text}</p>}
+        <article className="card learn-answer" aria-live="polite">
+          {result.kind === "safety" ? (
+            <p className="learn-answer-alert" role="alert">{result.text}</p>
+          ) : (
+            <p>{result.text}</p>
+          )}
+
           {result.sources.length > 0 && (
-            <p>
-              {t.source}:{" "}
+            <div className="learn-source">
+              <span>{t.source}</span>
               {result.sources.map((s) => (
                 <a key={s.passage_id} href={s.url} target="_blank" rel="noreferrer">
                   {s.label}
                 </a>
               ))}
-            </p>
+            </div>
           )}
-          <button type="button" onClick={() => readPage()}>
+
+          <button type="button" className="learn-read" onClick={() => readPage()}>
             {t.readAnswer}
           </button>
         </article>
       )}
+
+      <p className="learn-note">{t.note}</p>
     </section>
   );
 }
