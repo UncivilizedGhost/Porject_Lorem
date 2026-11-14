@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f6f4f0">
+<title>Trusted-person view · Pathway Companion</title>
+<link rel="stylesheet" href="assets/app.css">
+<style>
+body{margin:0}
+a{color:#0a6670}a:hover{color:#074d55}
+a.btn,button{transition:transform .12s ease,filter .15s ease}
+a.btn:hover,button:hover{filter:brightness(.96)}
+a.btn:active,button:active{transform:scale(.98)}
+</style>
+</head>
+<body>
+<div class="app-frame">
+<div class="screen" style="width: 100%; min-height: 100%; box-sizing: border-box; display: flex; flex-direction: column; font-family: 'Atkinson Hyperlegible Next', system-ui, sans-serif; color: #1d2a2e; background: #f6f4f0">
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 12px 0 4px">
+<a href="home.html" aria-label="Back" style="min-width: 56px; min-height: 56px; display: flex; align-items: center; justify-content: center; text-decoration: none"><svg width="40" height="40" viewBox="0 0 20 20" aria-hidden="true"><path d="M13 4l-6 6 6 6" fill="none" stroke="#0a6670" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
+<span style="display: flex; gap: 6px">
+<button aria-label="Read this page aloud" style="width: 48px; height: 48px; border: 1px solid #e2ddd5; border-radius: 999px; background: #ffffff; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M3 9h3.5L11 5.5v11L6.5 13H3z" fill="none" stroke="#1d2a2e" stroke-width="1.7" stroke-linejoin="round"></path><path d="M14.5 8a4 4 0 010 6M17 5.5a7.5 7.5 0 010 11" fill="none" stroke="#1d2a2e" stroke-width="1.7" stroke-linecap="round"></path></svg></button>
+<a href="accessibility.html" aria-label="Language, text size and voice" class="btn" style="min-width: 48px; height: 48px; box-sizing: border-box; padding: 0 12px; border: 1px solid #e2ddd5; border-radius: 999px; background: #ffffff; color: #1d2a2e; text-decoration: none; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 700">Aa</a>
+<a href="help.html" class="btn" style="height: 48px; padding: 0 14px; border-radius: 999px; background: #1d2a2e; color: #ffffff; text-decoration: none; display: flex; align-items: center; gap: 6px; font-size: 16px; font-weight: 600"><svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 3h3l1.5 4-2 1.2a9 9 0 004.3 4.3l1.2-2 4 1.5v3a1.5 1.5 0 01-1.6 1.5A14 14 0 013.5 4.6 1.5 1.5 0 015 3z" fill="none" stroke="#ffffff" stroke-width="1.7" stroke-linejoin="round"></path></svg>Help</a>
+</span>
+</div>
+<div style="padding: 8px 20px 20px; display: flex; flex-direction: column; gap: 14px; flex: 1">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-size: 28px; font-weight: 700; line-height: 1.15; letter-spacing: -0.01em">Helping your father, Matti</h1>
+
+</div>
+<div style="background: #ffffff; border: 2px solid #c98a1a; border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="align-self: flex-start; padding: 4px 10px; border-radius: 999px; background: #fbefd9; color: #7a4d00; font-size: 14px; font-weight: 700">He hasn't confirmed yet</span>
+<span style="font-size: 22px; font-weight: 700">Chest CT scan</span>
+<span style="font-size: 17px">Wednesday 18.11. at 9.30 · Jorvi Hospital</span>
+</div>
+<ol style="list-style: none; margin: 0; padding: 12px 0 0; border-top: 1px solid #efebe4; display: flex; flex-direction: column; gap: 6px; font-size: 15px">
+<li style="display: flex; justify-content: space-between; gap: 8px"><span>Day 0 · message and text</span><span style="color: #7a4d00">No reply</span></li>
+<li style="display: flex; justify-content: space-between; gap: 8px"><span>Day 2 · automated call</span><span style="color: #7a4d00">Not answered</span></li>
+<li style="display: flex; justify-content: space-between; gap: 8px"><span>Day 3 · Nurse Aino called</span><span style="color: #7a4d00">Not answered</span></li>
+</ol>
+<div role="slider" data-href="home.html" aria-label="Slide to confirm for him" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0" style="position: relative; height: 64px; border-radius: 999px; background: #f6f4f0; border: 1px solid #e2ddd5; display: flex; align-items: center; justify-content: center">
+<span style="font-size: 17px; font-weight: 700">Slide to confirm for him</span>
+<span style="position: absolute; left: 5px; top: 5px; width: 54px; height: 54px; border-radius: 999px; background: #0a6670; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+</div>
+<button style="min-height: 44px; border: 0; background: transparent; color: #0a6670; font: inherit; font-size: 16px; font-weight: 600; text-decoration: underline; text-underline-offset: 4px" data-href="home.html">Or tap here to confirm</button>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<a href="report-pick.html" class="btn" style="min-height: 140px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; padding: 14px; background: #ffffff; border: 1.5px solid #0a6670; border-radius: 18px; text-decoration: none; color: #1d2a2e"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path d="M6 6h18v18H6zM15 11v8M11 15h8" fill="none" stroke="#0a6670" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg><span style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 18px; font-weight: 700; line-height: 1.2">Report a symptom for him</span><span style="font-size: 15px; line-height: 1.3; color: #4b575b">Saved as reported by you</span></span></a>
+<a href="help.html" class="btn" style="min-height: 140px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; padding: 14px; background: #f5e6d8; border: 0; border-radius: 18px; text-decoration: none; color: #1d2a2e"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path d="M7 4h4l2 5-3 2a13 13 0 006 6l2-3 5 2v4a2 2 0 01-2 2A19 19 0 015 6a2 2 0 012-2z" fill="none" stroke="#6b3511" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg><span style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 18px; font-weight: 700; line-height: 1.2">Call Nurse Aino</span><span style="font-size: 15px; line-height: 1.3; color: #5a3a22">His nurse, weekdays 8–16</span></span></a>
+</div>
+</div>
+</div>
+</div>
+<script src="assets/app.js"></script>
+</body>
+</html>
