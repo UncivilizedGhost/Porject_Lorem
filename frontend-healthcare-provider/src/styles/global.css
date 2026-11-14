@@ -55,7 +55,7 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .pathway-bar { display: flex; gap: 4px; margin-top: 8px; }
 .phase { display: flex; flex-direction: column; gap: 2px; min-width: 110px; padding: 10px; border-radius: 8px; background: var(--band-under-60); }
-.phase[data-exceeded="true"] { background: #f3c9c4; border: 2px solid var(--red); }
+.phase[data-exceeded="true"] { background: #f5d2b8; border: 2px solid var(--red); }
 .phase-label { font-size: 13px; }
 .breakdown { display: grid; gap: 12px; }
 .breakdown-head { align-items: flex-start; }

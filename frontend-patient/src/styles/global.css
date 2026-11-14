@@ -661,7 +661,7 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .q-bar {
   flex: 1; height: 8px; overflow: hidden;
   border-radius: var(--radius-pill);
-  background: #e7e2da;
+  background: #e3e8ef;
 }
 :root[data-contrast="high"] .q-bar { background: #ffffff; box-shadow: inset 0 0 0 1px var(--ink); }
 .q-bar-fill {
@@ -713,7 +713,7 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
   display: flex; align-items: center; gap: 12px;
   padding: 10px 14px;
   border-radius: 16px;
-  background: #ebe6de;
+  background: #e6ebf1;
   font-size: 0.94em; line-height: 1.35;
 }
 :root[data-contrast="high"] .q-voice { background: var(--card); border: 1px solid var(--border); }
@@ -802,9 +802,9 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* --------------------------------------------------------- page tones */
 .app-frame[data-tone="alert"] { background: var(--danger-soft-bg); }
-.app-frame[data-tone="alert"] .icon-button { border-color: #e9b8b1; }
+.app-frame[data-tone="alert"] .icon-button { border-color: #ebc4a8; }
 .app-frame[data-tone="dark"] { background: var(--ink); color: var(--on-action); }
-.app-frame[data-tone="dark"] .back-button { color: #a8dcd8; }
+.app-frame[data-tone="dark"] .back-button { color: #9dd1f0; }
 .app-frame[data-tone="dark"] .icon-button { background: transparent; border-color: #3f5359; color: #ffffff; }
 .app-frame[data-tone="dark"] .icon-button:hover { color: #ffffff; }
 .app-frame[data-tone="dark"] .help-pill { background: #ffffff; color: var(--ink); }
@@ -847,7 +847,7 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
   display: flex; flex-direction: column; gap: 14px; padding: 20px;
   background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-tile);
 }
-.goal-bar { height: 16px; overflow: hidden; border-radius: var(--radius-pill); background: #efebe4; }
+.goal-bar { height: 16px; overflow: hidden; border-radius: var(--radius-pill); background: #e6ebf1; }
 :root[data-contrast="high"] .goal-bar { background: #ffffff; box-shadow: inset 0 0 0 1px var(--ink); }
 .goal-fill { display: block; height: 16px; border-radius: var(--radius-pill); background: var(--teal); }
 .goal-row { display: flex; justify-content: space-between; gap: 12px; font-size: 1.12em; font-weight: 600; }
@@ -991,7 +991,7 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .callout-red {
   display: flex; flex-direction: column; gap: 10px;
   padding: 16px; border-radius: var(--radius-card);
-  background: #fbe8e5; border: 2px solid var(--red); color: var(--danger-soft-ink);
+  background: #f9e4d6; border: 2px solid var(--red); color: var(--danger-soft-ink);
 }
 .continue-button {
   display: flex; align-items: center; justify-content: center;
@@ -1032,10 +1032,10 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 }
 .confirm-secondary:hover { color: var(--on-action); border-color: #ffffff; }
 .app-frame[data-tone="dark"] .slide-track { background: #2a3a3f; border-color: #3f5359; }
-.app-frame[data-tone="dark"] .slide-thumb { background: #7fd0c8; color: var(--ink); }
+.app-frame[data-tone="dark"] .slide-thumb { background: #56b4e9; color: var(--ink); }
 .app-frame[data-tone="dark"] .slide-hint { color: #e1e7e8; }
 .app-frame[data-tone="dark"] .slide-to-confirm .primary {
-  border: 0; background: transparent; color: #a8dcd8;
+  border: 0; background: transparent; color: #9dd1f0;
   text-decoration: underline; text-underline-offset: 4px;
 }
 .app-frame[data-tone="dark"] .slide-to-confirm .primary:hover { color: #ffffff; }

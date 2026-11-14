@@ -1,4 +1,4 @@
-/* Dashboard / Worklist tokens: separate from the patient design system.
+/* Dashboard / Worklist tokens: separate from the patient design system. Status colours are Okabe-Ito.
    Map bands differ in lightness, not only hue (colour-vision safe); see the dataviz skill. */
 :root {
   --bg: #f7f8fa;
@@ -6,11 +6,11 @@
   --ink: #16202a;
   --muted: #5b6672;
   --line: #e1e5ea;
-  --accent: #0a6670;
+  --accent: #0072b2;
 
-  --red: #b02a20;
-  --yellow: #c98a00;
-  --green: #2e7d4f;
+  --red: #d55e00;
+  --yellow: #e69f00;
+  --green: #009e73;
 
   /* % within target bands */
   --band-under-60: #c7d3e3;
