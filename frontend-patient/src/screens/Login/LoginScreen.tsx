@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../../api/client";
 import { useI18n } from "../../i18n/LanguageProvider";
 import { setSession } from "../../lib/session";
+import { Header } from "../../shell/Header";
 import { useReadable } from "../../voice/useReadable";
 
 function BrandMark() {
@@ -63,6 +64,8 @@ export function LoginScreen() {
 
   return (
     <div className="app-frame">
+      {/* Same bar as every other screen: Read aloud, Aa (settings, incl. language), Help. */}
+      <Header />
       <main className="login-page">
         <div className="login-head">
           <span className="brand">
@@ -79,14 +82,6 @@ export function LoginScreen() {
           </button>
           <button type="button" className="role-tile" disabled={busy} onClick={() => enter("trusted_person")}>
             {t("login.support")}
-            <Chevron />
-          </button>
-          <button type="button" className="role-tile" disabled>
-            {t("login.coordinator")}
-            <Chevron />
-          </button>
-          <button type="button" className="role-tile" disabled>
-            {t("login.county")}
             <Chevron />
           </button>
         </div>

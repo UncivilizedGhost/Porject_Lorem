@@ -811,7 +811,7 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .app-frame[data-tone="dark"] .help-pill:hover { color: var(--ink); }
 
 /* ---------------------------------------------------------------- login */
-.login-page { display: flex; flex-direction: column; gap: 22px; padding: 48px 20px 24px; min-height: 100%; }
+.login-page { display: flex; flex-direction: column; gap: 22px; padding: 12px 20px 24px; min-height: 100%; }
 .login-head { display: flex; flex-direction: column; gap: 8px; }
 .brand { display: flex; align-items: center; gap: 10px; font-size: 1.29em; font-weight: 700; }
 .brand svg { flex: none; }

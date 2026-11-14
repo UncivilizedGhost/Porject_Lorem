@@ -29,8 +29,6 @@ export const MESSAGES = {
   ],
   "login.patient": ["Patient", "Potilas", "Patient"],
   "login.support": ["Support person", "Läheinen", "Närstående"],
-  "login.coordinator": ["Coordinator nurse", "Koordinaattihoitaja", "Koordinerande sjuksköterska"],
-  "login.county": ["County decision-maker", "Hyvinvointialueen päättäjä", "Beslutsfattare"],
   "login.note": [
     "Coordinator nurse and county decision-maker are not part of this demo.",
     "Koordinaattihoitaja ja hyvinvointialueen päättäjä eivät kuulu tähän demoon.",

@@ -9,7 +9,7 @@ import { api } from "../../api/client";
 import type { Accessibility, Language, TextSize } from "../../api/types";
 import { useI18n } from "../../i18n/LanguageProvider";
 import { applyAccessibility } from "../../lib/applyAccessibility";
-import { getSession, setSession } from "../../lib/session";
+import { getSession } from "../../lib/session";
 import { useReadable } from "../../voice/useReadable";
 import { useVoice } from "../../voice/VoiceProvider";
 import { useVoiceActions } from "../../voice/useVoiceActions";
@@ -37,17 +37,12 @@ function targetFromSession(): Target | null {
 }
 
 /** Recovery for an empty session, or for an id a demo reset removed: ask the demo identity
- * endpoint for the current record and keep it in the session. */
+ * endpoint for the current record. It deliberately does not write a session — this screen is
+ * reachable from the login page's header, and opening it must not choose a role for the person. */
 async function refreshTarget(): Promise<Target> {
   const ids = await api.identities();
-  if (ids.patient_id) {
-    setSession({ role: "patient", patientId: ids.patient_id, contactId: ids.contact_id ?? undefined });
-    return { kind: "patients", id: ids.patient_id };
-  }
-  if (ids.contact_id) {
-    setSession({ role: "patient", contactId: ids.contact_id });
-    return { kind: "contacts", id: ids.contact_id };
-  }
+  if (ids.patient_id) return { kind: "patients", id: ids.patient_id };
+  if (ids.contact_id) return { kind: "contacts", id: ids.contact_id };
   throw new Error("no demo identity");
 }
 

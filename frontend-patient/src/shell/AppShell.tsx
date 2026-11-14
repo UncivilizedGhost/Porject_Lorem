@@ -32,14 +32,19 @@ function useSavedAccessibility() {
 /** Screens written for the patient. A Trusted Person is sent to their own view instead. */
 const PATIENT_ONLY = ["/home", "/pathway", "/medicines"];
 
+/** Reachable before a role is chosen: the header's Aa and Help buttons open these, and the
+ * emergency numbers / text size are needed to make that choice. */
+const OPEN_WITHOUT_ROLE = ["/settings", "/help"];
+
 function Frame() {
   const tone = usePageTone();
   const { pathname } = useLocation();
   const session = getSession();
-  // The role is chosen on the login screen. No role at all means this page was opened directly.
-  if (!session) return <Navigate to="/" replace />;
+  // The role is chosen on the login screen. No role at all means this page was opened directly,
+  // unless it is one of the two screens the login page's own header can open.
+  if (!session && !OPEN_WITHOUT_ROLE.includes(pathname)) return <Navigate to="/" replace />;
   if (
-    session.role === "trusted_person" &&
+    session?.role === "trusted_person" &&
     PATIENT_ONLY.some((path) => pathname === path || pathname.startsWith(`${path}/`))
   ) {
     return <Navigate to="/trusted" replace />;
