@@ -297,65 +297,63 @@ export function VoiceProvider({
     await say(text);
   }, [say]);
 
-  // Global hold-to-read: when voice assistant is on, holding on any element reads it aloud.
-  const holdTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const holdTargetRef = useRef<HTMLElement | null>(null);
-
-  const startHold = useCallback((target: HTMLElement) => {
+  // Global click-to-read: when voice assistant is on, clicking on any element reads it aloud.
+  // Uses pointerup (fires immediately on touch, no 300 ms double-tap delay) with click as a
+  // fallback. Walks up from the clicked target so icons inside buttons still read the button's
+  // text. Form controls are excluded so they still work normally.
+  const handlePointerUp = useCallback((e: PointerEvent) => {
     if (!settings.voice_assistant) return;
-    holdTargetRef.current = target;
-    holdTimerRef.current = setTimeout(() => {
-      // For buttons, prioritize aria-label (what the button does) over text content
-      const text = target.tagName === "BUTTON"
-        ? target.getAttribute("aria-label") || target.textContent?.trim() || ""
-        : target.textContent?.trim() || target.getAttribute("aria-label") || target.getAttribute("aria-valuetext") || "";
-      if (text) {
-        void say(text);
-      }
-    }, 400);
+    const target = e.target as HTMLElement;
+    if (target.closest("input, textarea, select")) return; // let form controls work normally
+    if (target.closest('[data-voice-read="false"]')) return; // exclude buttons that must not be read aloud
+    const readable = findReadableElement(target);
+    if (readable) {
+      void say(readable);
+    }
   }, [settings.voice_assistant, say]);
 
-  const endHold = useCallback(() => {
-    if (holdTimerRef.current) {
-      clearTimeout(holdTimerRef.current);
-      holdTimerRef.current = null;
+  const handleClick = useCallback((e: MouseEvent) => {
+    if (!settings.voice_assistant) return;
+    const target = e.target as HTMLElement;
+    if (target.closest("input, textarea, select")) return;
+    if (target.closest('[data-voice-read="false"]')) return;
+    const readable = findReadableElement(target);
+    if (readable) {
+      void say(readable);
     }
-    holdTargetRef.current = null;
-  }, []);
+  }, [settings.voice_assistant, say]);
+
+  /** Walk up from the clicked node to find the nearest element with readable text. */
+  function findReadableElement(node: HTMLElement): string | null {
+    let element: HTMLElement | null = node;
+    const root = document.documentElement;
+    while (element && element !== root) {
+      // For buttons, prioritize aria-label (what the button does) over text content
+      if (element.tagName === "BUTTON") {
+        const text = element.getAttribute("aria-label") || element.textContent?.trim() || "";
+        if (text) return text;
+      } else {
+        const text =
+          element.getAttribute("aria-label") ||
+          element.textContent?.trim() ||
+          element.getAttribute("aria-valuetext") ||
+          "";
+        if (text) return text;
+      }
+      element = element.parentElement;
+    }
+    return null;
+  }
 
   useEffect(() => {
     if (!settings.voice_assistant) return;
-    document.addEventListener("mousedown", handleMouseDown);
-    document.addEventListener("mouseup", handleMouseUp);
-    document.addEventListener("touchstart", handleTouchStart, { passive: false });
-    document.addEventListener("touchend", handleTouchEnd, { passive: false });
+    document.addEventListener("pointerup", handlePointerUp);
+    document.addEventListener("click", handleClick);
     return () => {
-      document.removeEventListener("mousedown", handleMouseDown);
-      document.removeEventListener("mouseup", handleMouseUp);
-      document.removeEventListener("touchstart", handleTouchStart);
-      document.removeEventListener("touchend", handleTouchEnd);
+      document.removeEventListener("pointerup", handlePointerUp);
+      document.removeEventListener("click", handleClick);
     };
-  }, [settings.voice_assistant]);
-
-  const handleMouseDown = useCallback((e: MouseEvent) => {
-    const target = e.target as HTMLElement;
-    if (target.closest("input, textarea, select, button")) return; // let form controls work normally
-    startHold(target);
-  }, [startHold]);
-
-  const handleMouseUp = useCallback(() => {
-    endHold();
-  }, [endHold]);
-
-  const handleTouchStart = useCallback((e: TouchEvent) => {
-    const target = e.target as HTMLElement;
-    if (target.closest("input, textarea, select, button")) return;
-    startHold(target);
-  }, [startHold]);
-
-  const handleTouchEnd = useCallback(() => {
-    endHold();
-  }, [endHold]);
+  }, [settings.voice_assistant, handlePointerUp, handleClick]);
 
   useEffect(
     () => () => {

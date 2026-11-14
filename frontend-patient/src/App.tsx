@@ -48,6 +48,7 @@ export function App() {
           <Route path="/settings" element={<SettingsScreen />} />
           <Route path="/help" element={<HelpScreen />} />
           <Route path="/report/*" element={<SymptomReportFlow />} />
+          <Route path="/alarm" element={<ConfirmationScreen />} />
           <Route path="/trusted" element={<TrustedPersonView />} />
         </Route>
         <Route path="/care-plan-card" element={<CarePlanCardPrint />} />

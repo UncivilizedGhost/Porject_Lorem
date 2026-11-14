@@ -21,7 +21,9 @@ export function HomeScreen() {
   const { language, t } = useI18n();
   const next = patient?.next_step ?? null;
   const pending = next?.pending_confirmation ?? null;
-  const name = patient?.display_name ?? null;
+  const name = patient?.display_name?.trim() ?? null;
+  // The greeting uses the first name: "Good morning, Matti", not the whole record name.
+  const firstName = name ? name.split(/\s+/)[0] : null;
   const when = next
     ? `${formatWeekday(next.date, language)} ${formatDate(next.date)} at ${formatClock(next.time)}`
     : "";
@@ -39,7 +41,7 @@ export function HomeScreen() {
 
   const hour = new Date().getHours();
   const greeting = t(hour < 12 ? "home.morning" : hour < 18 ? "home.afternoon" : "home.evening");
-  const hello = `${greeting}${name ? `, ${name}` : ""}`;
+  const hello = `${greeting}${firstName ? `, ${firstName}` : ""}`;
   const statusLine = patient
     ? t(patient.status === "on_track" ? "home.status.on_track" : "home.status.running_late")
     : "";

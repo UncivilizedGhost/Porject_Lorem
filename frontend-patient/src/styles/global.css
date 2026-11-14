@@ -166,17 +166,22 @@ p { margin: 0; }
 
 /* --------------------------------------------------------------- demo */
 .demo-bar {
-  display: flex; align-items: center; justify-content: space-between; gap: 8px;
-  padding: 2px 12px;
+  display: flex; flex-direction: column; gap: 1px;
+  padding: 2px 12px 3px;
   background: var(--ink); color: var(--ground);
   font-size: 13px;
 }
+.demo-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.demo-names { font-size: 11px; line-height: 1.25; color: var(--ground); opacity: 0.8; }
+.demo-actions { display: flex; align-items: center; gap: 6px; }
+.demo-error { color: #ffd7d2; opacity: 1; }
 .demo-bar button {
   min-height: 32px; margin: 2px 0; padding: 2px 10px;
   border: 1px solid rgba(255, 255, 255, 0.45);
   border-radius: var(--radius-pill);
   background: transparent; color: inherit; font-size: 13px;
 }
+.demo-bar .demo-alarm { border-color: #f0a8a0; color: #ffd7d2; }
 
 /* ------------------------------------------------------------ controls */
 /* Every control: >= 48 px, primary 56 px, visible label. */
@@ -462,17 +467,22 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
   background: var(--apricot);
   border: 2px solid var(--teal);
   touch-action: none; overflow: hidden;
+  cursor: grab;
 }
+.slide-track[data-dragging="true"] { cursor: grabbing; }
 .slide-thumb {
   position: absolute; top: 0; bottom: 0; width: var(--target-primary);
   display: grid; place-items: center;
   background: var(--teal); color: var(--on-action);
   border-radius: var(--radius-pill);
   transform: translateX(0);
+  transition: left 140ms ease;
 }
+.slide-track[data-dragging="true"] .slide-thumb { transition: none; }
 .slide-hint {
   position: absolute; inset: 0; display: grid; place-items: center;
   pointer-events: none; color: var(--secondary);
+  transition: opacity 120ms linear;
 }
 
 /* ------------------------------------------------------- symptom report */
@@ -809,6 +819,24 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .app-frame[data-tone="dark"] .icon-button:hover { color: #ffffff; }
 .app-frame[data-tone="dark"] .help-pill { background: #ffffff; color: var(--ink); }
 .app-frame[data-tone="dark"] .help-pill:hover { color: var(--ink); }
+/* The alarm tone covers the whole frame: the background itself runs from a light maroon to ink
+   while a red glow deepens, so the header, content and nav all sit on the alarm shade. */
+.app-frame[data-tone="alarm"] {
+  background: var(--ink); color: var(--on-action);
+  animation: alarm-frame 12s ease-in forwards;
+}
+.app-frame[data-tone="alarm"] .back-button { color: #9dd1f0; }
+.app-frame[data-tone="alarm"] .icon-button { background: transparent; border-color: #3f5359; color: #ffffff; }
+.app-frame[data-tone="alarm"] .icon-button:hover { color: #ffffff; }
+.app-frame[data-tone="alarm"] .help-pill { background: #ffffff; color: var(--ink); }
+.app-frame[data-tone="alarm"] .help-pill:hover { color: var(--ink); }
+.app-frame[data-tone="alarm"] .demo-bar { background: transparent; }
+.app-frame[data-tone="alarm"] .bottom-nav { background: transparent; border-top-color: #3f5359; }
+.app-frame[data-tone="alarm"] .bottom-nav a { color: #e1e7e8; }
+.app-frame[data-tone="alarm"] .bottom-nav a[aria-current="page"] { color: #ffffff; }
+.app-frame[data-tone="alarm"] .bottom-nav a[aria-current="page"] .tab-icon {
+  background: transparent; box-shadow: inset 0 0 0 2px #ffffff;
+}
 
 /* ---------------------------------------------------------------- login */
 .login-page { display: flex; flex-direction: column; gap: 22px; padding: 12px 20px 24px; min-height: 100%; }
@@ -899,6 +927,22 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .help-call-sub { font-size: 1em; line-height: 1.3; }
 .help-call.nurse .help-call-sub { font-size: 0.94em; color: var(--secondary); }
 
+/* ------------------------------------------------------------ alarm */
+/* Full-frame alarm shade: the background darkens from maroon to ink and the red glow deepens.
+   It is applied to .app-frame[data-tone="alarm"] (see page tones), so it is not clipped to the
+   report column and continues behind the transparent header, demo strip and bottom nav. */
+@keyframes alarm-frame {
+  from {
+    background-color: var(--ink);
+    box-shadow: inset 0 0 0 0 rgba(176, 42, 32, 0);
+  }
+  to {
+    background-color: #3a1a16;
+    box-shadow: inset 0 0 220px 60px rgba(176, 42, 32, 0.6);
+  }
+}
+.alarm-page { flex: 1; }
+
 /* ------------------------------------------------------------ call now */
 .alert-page { display: flex; flex-direction: column; gap: 18px; }
 .alert-icon { color: var(--red); display: flex; }
@@ -917,7 +961,7 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .alert-button.urgent { background: var(--ink); }
 .alert-note {
   margin-top: auto; padding: 16px 18px;
-  border-radius: var(--radius-tile); background: var(--card);
+  border-radius: var(--radius-tile); background: var(--card); color: var(--ink);
   font-size: 1.12em; line-height: 1.4;
 }
 
@@ -959,8 +1003,11 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 }
 .sent-home:hover { color: var(--on-action); filter: brightness(0.94); }
 .app-frame[data-tone="dark"] .sent h1,
-.app-frame[data-tone="dark"] .sent-home { color: var(--on-action); }
-.app-frame[data-tone="dark"] .sent-home { background: var(--teal); }
+.app-frame[data-tone="dark"] .sent-home,
+.app-frame[data-tone="alarm"] .sent h1,
+.app-frame[data-tone="alarm"] .sent-home { color: var(--on-action); }
+.app-frame[data-tone="dark"] .sent-home,
+.app-frame[data-tone="alarm"] .sent-home { background: var(--teal); }
 
 /* ------------------------------------------------------------- check-in */
 .checkin .q-opt { min-height: 96px; }
@@ -1028,17 +1075,24 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
   display: flex; align-items: center; justify-content: center;
   min-height: 56px; padding: 0 10px;
   border: 1px solid #577075; border-radius: var(--radius-button);
+  background: transparent;
   color: var(--on-action); font-size: 0.94em; font-weight: 600; text-align: center; text-decoration: none;
 }
 .confirm-secondary:hover { color: var(--on-action); border-color: #ffffff; }
-.app-frame[data-tone="dark"] .slide-track { background: #2a3a3f; border-color: #3f5359; }
-.app-frame[data-tone="dark"] .slide-thumb { background: #56b4e9; color: var(--ink); }
-.app-frame[data-tone="dark"] .slide-hint { color: #e1e7e8; }
-.app-frame[data-tone="dark"] .slide-to-confirm .primary {
+.confirm-secondary:disabled { opacity: 0.6; }
+.app-frame[data-tone="dark"] .slide-track,
+.app-frame[data-tone="alarm"] .slide-track { background: #2a3a3f; border-color: #3f5359; }
+.app-frame[data-tone="dark"] .slide-thumb,
+.app-frame[data-tone="alarm"] .slide-thumb { background: #56b4e9; color: var(--ink); }
+.app-frame[data-tone="dark"] .slide-hint,
+.app-frame[data-tone="alarm"] .slide-hint { color: #e1e7e8; }
+.app-frame[data-tone="dark"] .slide-to-confirm .primary,
+.app-frame[data-tone="alarm"] .slide-to-confirm .primary {
   border: 0; background: transparent; color: #9dd1f0;
   text-decoration: underline; text-underline-offset: 4px;
 }
-.app-frame[data-tone="dark"] .slide-to-confirm .primary:hover { color: #ffffff; }
+.app-frame[data-tone="dark"] .slide-to-confirm .primary:hover,
+.app-frame[data-tone="alarm"] .slide-to-confirm .primary:hover { color: #ffffff; }
 
 /* --------------------------------------------------------------- forms */
 textarea {
@@ -1067,6 +1121,57 @@ fieldset legend { font-weight: 700; padding: 0 0 8px; }
 /* Login sits outside the frame: it is the demo door, not a companion screen. */
 .login { max-width: 30rem; margin: 0 auto; padding: 40px 20px; display: flex; flex-direction: column; gap: 16px; }
 .login .primary { min-height: 64px; }
+
+/* ---------------------------------------------------- high contrast layer */
+/* The token switch alone left 1 px grey borders, pastel tiles and borderless chips in place,
+   so the mode looked almost the same. Here every surface gets a black boundary, links are
+   underlined, selected tiles are ringed, and the dark screens switch to pure black/white. */
+:root[data-contrast="high"] .card,
+:root[data-contrast="high"] .tile,
+:root[data-contrast="high"] .row-link,
+:root[data-contrast="high"] .sign,
+:root[data-contrast="high"] .opt,
+:root[data-contrast="high"] .notice,
+:root[data-contrast="high"] .sent-card,
+:root[data-contrast="high"] .trusted-card {
+  border: 2px solid #000000;
+}
+:root[data-contrast="high"] .card.person,
+:root[data-contrast="high"] .tile-apricot { border: 2px solid #000000; }
+:root[data-contrast="high"] .chip { border: 1px solid #000000; }
+:root[data-contrast="high"] .opt[data-selected="true"] { box-shadow: inset 0 0 0 3px #000000; }
+:root[data-contrast="high"] input[type="text"],
+:root[data-contrast="high"] input[type="number"],
+:root[data-contrast="high"] input[type="tel"],
+:root[data-contrast="high"] select,
+:root[data-contrast="high"] textarea { border-width: 2px; }
+:root[data-contrast="high"] .text-link,
+:root[data-contrast="high"] .text-link:hover,
+:root[data-contrast="high"] .row-link,
+:root[data-contrast="high"] .continue-button { text-decoration: underline; text-underline-offset: 3px; }
+:root[data-contrast="high"] .callout-red {
+  background: #ffffff; border: 3px solid #8c1f17; color: #000000;
+}
+:root[data-contrast="high"] .demo-bar { background: #000000; color: #ffffff; }
+:root[data-contrast="high"] .demo-names { opacity: 1; }
+:root[data-contrast="high"] .demo-bar button { border: 2px solid #ffffff; }
+:root[data-contrast="high"] .demo-bar .demo-alarm,
+:root[data-contrast="high"] .demo-error { color: #ffffff; }
+:root[data-contrast="high"] .app-frame[data-tone="dark"],
+:root[data-contrast="high"] .app-frame[data-tone="alarm"] { background: #000000; }
+:root[data-contrast="high"] .confirm-eyebrow,
+:root[data-contrast="high"] .confirm-where,
+:root[data-contrast="high"] .slide-hint { color: #ffffff; }
+:root[data-contrast="high"] .confirm-note { background: #000000; border: 2px solid #ffffff; color: #ffffff; }
+:root[data-contrast="high"] .confirm-secondary { border: 2px solid #ffffff; }
+:root[data-contrast="high"] .slide-track { background: #000000; border: 2px solid #ffffff; }
+:root[data-contrast="high"] .slide-thumb { background: #ffffff; color: #000000; }
+:root[data-contrast="high"] .bottom-nav a[aria-current="page"] .tab-icon {
+  box-shadow: inset 0 0 0 2px #000000;
+}
+:root[data-contrast="high"] :focus-visible { outline: 4px solid #000000; outline-offset: 2px; }
+:root[data-contrast="high"] .app-frame[data-tone="dark"] :focus-visible,
+:root[data-contrast="high"] .app-frame[data-tone="alarm"] :focus-visible { outline-color: #ffffff; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }

@@ -6,6 +6,11 @@ export type UiLanguage = "en" | "fi" | "sv";
 
 const INDEX: Record<UiLanguage, 0 | 1 | 2> = { en: 0, fi: 1, sv: 2 };
 
+/** Records and old stored settings can carry a language outside the three the app translates. */
+export function isUiLanguage(value: unknown): value is UiLanguage {
+  return value === "en" || value === "fi" || value === "sv";
+}
+
 export const MESSAGES = {
   "nav.home": ["Home", "Etusivu", "Hem"],
   "nav.pathway": ["Pathway", "Hoitopolku", "Vårdväg"],
@@ -135,9 +140,9 @@ export const MESSAGES = {
     "Svaren kommer bara från granskade finländska källor. Fråga din egen sjuksköterska om dina resultat.",
   ],
   "voice.assistantOn": [
-    "Voice assistant on. tap and hold anywhere on the screen to have it read out loud.",
-    "Ääniavustaja päällä, pidä painettuna missä tahansa ruudulla saadaksesi sen luettavaksi ääneen.",
-    "Röstassistenten är på, håll nedtryckt var som helst på skärmen för att få det läst högt.",
+    "Voice assistant on. Tap or click anywhere on the screen to have it read out loud.",
+    "Ääniavustaja päällä. Napauta tai klikkaa missä tahansa ruudulla saadaksesi sen luettavaksi ääneen.",
+    "Röstassistenten är på. Tryck eller klicka var som helst på skärmen för att få det läst högt.",
   ],
   "voice.assistantOff": [
     "Voice assistant off.",
@@ -529,6 +534,15 @@ export const MESSAGES = {
     "Endast demo · dag {day}",
   ],
   "demo.advance": ["Advance one day", "Siirry päivä eteenpäin", "Gå fram en dag"],
+  "demo.patient": ["patient", "potilas", "patient"],
+  "demo.caretaker": ["caretaker", "omainen", "anhörig"],
+  "demo.alarm": ["Trigger alarm", "Laukaise hälytys", "Utlös larm"],
+
+  "demo.alarmFailed": [
+    "The alarm was not sent to the nurse.",
+    "Hälytystä ei lähetetty hoitajalle.",
+    "Larmet skickades inte till sjuksköterskan.",
+  ],
   "card.title": ["My care plan card", "Hoitosuunnitelmani kortti", "Mitt vårdplanskort"],
   "card.nextStep": ["Next step", "Seuraava vaihe", "Nästa steg"],
   "card.bring": ["Bring with you", "Ota mukaan", "Ta med dig"],
@@ -719,7 +733,10 @@ export function translate(
   // A variant exists only where the patient's wording would be wrong; the rest falls back.
   const variant = role === "trusted_person" ? (`${key}.trusted` as MessageKey) : null;
   const row = variant && variant in MESSAGES ? MESSAGES[variant] : MESSAGES[key];
-  let text: string = row[INDEX[language]];
+  // A bad record language, or a key from stale code, must never crash a screen: fall back to
+  // English, then to the key itself.
+  const index = INDEX[language] ?? 0;
+  let text: string = row?.[index] ?? row?.[0] ?? key;
   if (vars) {
     for (const [name, value] of Object.entries(vars)) {
       text = text.split(`{${name}}`).join(String(value));

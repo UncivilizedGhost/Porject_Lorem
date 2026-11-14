@@ -4,7 +4,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
 import { getSession } from "../lib/session";
-import { translate, type MessageKey, type UiLanguage } from "./dict";
+import { isUiLanguage, translate, type MessageKey, type UiLanguage } from "./dict";
 
 const STORAGE_KEY = "pathway.language";
 
@@ -25,18 +25,21 @@ const LanguageContext = createContext<LanguageValue>({
 function storedLanguage(): UiLanguage {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved === "fi" || saved === "sv" || saved === "en") return saved;
+    if (isUiLanguage(saved)) return saved;
   } catch {
     /* private window etc. */
   }
   const spoken = typeof navigator !== "undefined" ? navigator.language.slice(0, 2) : "en";
-  return spoken === "fi" || spoken === "sv" ? spoken : "en";
+  return isUiLanguage(spoken) ? spoken : "en";
 }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<UiLanguage>(storedLanguage);
 
-  const setLanguage = useCallback((next: UiLanguage) => setLanguageState(next), []);
+  // A record can carry a language the app does not translate; ignore it rather than crash.
+  const setLanguage = useCallback((next: UiLanguage) => {
+    if (isUiLanguage(next)) setLanguageState(next);
+  }, []);
 
   useEffect(() => {
     document.documentElement.lang = language;

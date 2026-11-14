@@ -21,6 +21,9 @@ def load(name: str) -> list[dict]:
 
 COORDINATOR_ID = "coordinator-aino"
 COORDINATOR_COUNTY = "Western Uusimaa"
+# The app never asks for a name, so records created without one are named after the demo family.
+DEMO_PATIENT_NAME = "Matti Virtanen"
+DEMO_TRUSTED_PERSON = {"name": "Liisa Virtanen", "relationship": "daughter", "contact_method": "sms"}
 # The oldest two bands pool into the card's 75+ baseline.
 OVER_75_BANDS = ("75-84", "85+")
 
@@ -47,6 +50,19 @@ async def ensure_clock_and_coordinator() -> None:
     await db.upsert(
         "coordinators", COORDINATOR_ID, {"name": "Nurse Aino", "county": COORDINATOR_COUNTY}, overwrite=False
     )
+
+
+async def ensure_demo_people() -> None:
+    """Name the demo family on Contacts and Patients created before display names were set."""
+    for table in ("contacts", "patients"):
+        for doc in await db.find(table):
+            patch: dict = {}
+            if not doc.get("display_name"):
+                patch["display_name"] = DEMO_PATIENT_NAME
+            if not doc.get("trusted_people"):
+                patch["trusted_people"] = [dict(DEMO_TRUSTED_PERSON)]
+            if patch:
+                await db.update(table, doc["_id"], patch)
 
 
 async def ensure_fixtures() -> None:
@@ -87,6 +103,7 @@ async def ensure_learn_reference() -> None:
 
 async def ensure_seeded() -> None:
     await ensure_clock_and_coordinator()
+    await ensure_demo_people()
     await ensure_fixtures()
     await ensure_learn_reference()
 
