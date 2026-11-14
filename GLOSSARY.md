@@ -88,6 +88,26 @@ _Avoid_: Worklist, Report.
 A wellbeing services county (hyvinvointialue), the geographic aggregation unit for the Equity Dashboard; the City of Helsinki counts as one. The MVP uses the real names of all 21 counties plus Helsinki with synthetic figures, every figure labelled synthetic. The demo county is Western Uusimaa.
 _Avoid_: Region, Area.
 
+**Insight Card**:
+The Equity Dashboard's third level: one gap (what, where, who), its Cause Codes, the Matched Actions with simulated effect ranges, and the human decision taken on it.
+_Avoid_: Recommendation, Alert (a Patient-level signal on the Worklist).
+
+**Action Library**:
+The curated, hand-authored set of actions an Insight Card can show, each tied to a national strategy or roadmap action and to cited evidence with an evidence badge.
+_Avoid_: Recommendations, Playbook.
+
+**Matched Action**:
+An Action Library entry whose gap pattern matches an Insight Card. The system matches; it never invents, ranks or recommends — a person decides.
+_Avoid_: Recommended action, Suggested action.
+
+**Cause Code**:
+The reason days are lost at a pathway stage, aggregated per County: unconfirmed, transport, waiting for a slot. Synthetic in the MVP.
+_Avoid_: Root cause, Reason (unqualified).
+
+**Decision Log**:
+The append-only record of who approved, adapted or rejected which Matched Actions on an Insight Card, when, why, with which owner, and on which numbers and evidence as shown at the time.
+_Avoid_: Audit log (no production audit logging in the MVP), History.
+
 ### Accessibility
 
 **Read-aloud**:

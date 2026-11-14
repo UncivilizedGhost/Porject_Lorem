@@ -22,5 +22,5 @@ async def identities():
 
 @router.post("/reset")
 async def reset():
-    """Drop runtime collections, reseed clock_state and the Coordinator. Fixtures stay."""
+    """Truncate runtime tables, reseed clock_state and the Coordinator. Fixtures stay."""
     raise HTTPException(status_code=501, detail="not implemented")

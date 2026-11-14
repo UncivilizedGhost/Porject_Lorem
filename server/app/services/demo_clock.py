@@ -6,5 +6,5 @@ reached; a fired message_sms / auto_call rung writes a simulated event through
 services.messaging. Returns { current_demo_day, fired }.
 
 identities(): Coordinator id, most recent Contact id, most recent Patient id.
-reset(): drops runtime collections, reseeds clock_state and the Coordinator.
+reset(): truncates db.RUNTIME_TABLES, reseeds clock_state and the Coordinator.
 """

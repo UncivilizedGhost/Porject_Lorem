@@ -18,25 +18,26 @@ def load(name: str) -> list[dict]:
 
 
 async def ensure_clock_and_coordinator() -> None:
-    await db.clock_state().update_one(
-        {"_id": "demo"}, {"$setOnInsert": {"current_demo_day": 0}}, upsert=True
-    )
+    await db.upsert("clock_state", "demo", {"current_demo_day": 0}, overwrite=False)
     # TODO(person 3): seed the demo Coordinator ("Nurse Aino", "Western Uusimaa") if missing.
 
 
 async def ensure_fixtures() -> None:
-    # TODO(person 1): upsert counties.json, actions.json, insight_cards.json by name / _id.
+    # TODO(person 1): db.upsert(...) counties.json, actions.json, insight_cards.json by name / _id.
     # TODO(person 3): clinicians.json (stretch).
     pass
 
 
 async def ensure_seeded() -> None:
-    try:
-        await ensure_clock_and_coordinator()
-        await ensure_fixtures()
-    except Exception as exc:  # noqa: BLE001
-        print(f"[seed] skipped, Mongo not reachable: {exc}")
+    await ensure_clock_and_coordinator()
+    await ensure_fixtures()
+
+
+async def _main() -> None:
+    await db.init_schema()
+    await ensure_seeded()
+    await db.close_pool()
 
 
 if __name__ == "__main__":
-    asyncio.run(ensure_seeded())
+    asyncio.run(_main())

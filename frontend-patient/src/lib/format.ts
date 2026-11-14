@@ -1,4 +1,4 @@
-// Finnish display formats. Values from the server are ISO; format only here, never in Mongo.
+// Finnish display formats. Values from the server are ISO; format only here, never in the database.
 //   dates   18.11.  or  14.11.2026
 //   times   9.30
 //   decimals with a comma: 38,6 °C

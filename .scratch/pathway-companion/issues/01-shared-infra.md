@@ -1,13 +1,13 @@
 Status: ready-for-human
 
-# Shared infra: Mongo schema, FastAPI skeleton, demo-day engine, fake login
+# Shared infra: Postgres schema, FastAPI skeleton, demo-day engine, fake login
 
 Owner: whoever's free first (no fixed role — see spec.md). Everyone else is blocked on the bare minimum of this.
 
 ## Tasks
 
-1. Stand up `server/` (FastAPI + Motor). Connect to local `mongod` via `MONGODB_URI` env var (default `mongodb://localhost:27017/pathway`). Do not hardcode Atlas anywhere yet (ADR-0001).
-2. Create the collections in `.scratch/pathway-companion/spec.md`'s data contract as Pydantic models + Motor collection wrappers. No migrations needed — Mongo is schemaless, the Pydantic layer is the real contract.
+1. Stand up `server/` (FastAPI + asyncpg). Connect to local Postgres via the `DATABASE_URL` env var (default `postgresql://pathway:pathway@localhost:5432/pathway`, `server/compose.yaml`). Do not hardcode the Aiven URI anywhere (ADR-0007).
+2. Create the collections in `.scratch/pathway-companion/spec.md`'s data contract as Pydantic models + the JSONB document helpers in `app/db.py`. No migrations needed — documents live in a `jsonb` column, the Pydantic layer is the real contract.
 3. Seed `clock_state` with `{ _id: "demo", current_demo_day: 0 }` on startup if missing.
 4. Implement `POST /demo/advance-day`: increments `clock_state.current_demo_day`, then for every Patient with an open `escalation_steps` entry whose `due_demo_day <= current_demo_day` and `fired_at` is null, set `fired_at = now`. This is the only scheduling mechanism in the build (ADR-0004) — no cron, no background worker.
 5. Implement `POST /contacts/{id}/promote`: creates the Patient document, sets `pathway_clock.started_demo_day = clock_state.current_demo_day`, creates the 5 `escalation_steps` rows (due days 0/2/3/5/7 relative to `started_demo_day`) for the first pending confirmation.

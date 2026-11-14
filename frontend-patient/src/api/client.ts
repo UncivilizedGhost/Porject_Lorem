@@ -22,7 +22,7 @@ function withInput<B extends object>(body: B): B & { input: "touch" | "voice" } 
 
 export const api = {
   // shared
-  health: () => request<{ status: string; mongo: boolean; current_demo_day: number | null }>("GET", "/health"),
+  health: () => request<{ status: string; db: boolean; current_demo_day: number | null }>("GET", "/health"),
   advanceDay: () => request<{ current_demo_day: number }>("POST", "/demo/advance-day"),
   identities: () => request<unknown>("GET", "/demo/identities"),
   rules: () => request<unknown>("GET", "/rules"),

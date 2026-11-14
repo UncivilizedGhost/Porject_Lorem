@@ -1,6 +1,6 @@
 # Cancer Pathway Companion — hackathon build spec
 
-Source plan: `Cancer Pathway Companion – MVP Plan (Junction 2026).md` (repo root). Domain vocabulary: `GLOSSARY.md`. Hard-to-reverse decisions: `docs/adr/0001`–`0006`. Wireframes (agreed 14 Nov, patient screens redesigned and Symptom Report added the same day): https://claude.ai/artifact/87qpPWJkCW8y2XQvaEX4EA. Symptom-reporting research: `docs/research/on-demand-symptom-reporting.md`.
+Source plan: `Cancer Pathway Companion – MVP Plan (Junction 2026).md` (repo root). Domain vocabulary: `GLOSSARY.md`. Hard-to-reverse decisions: `docs/adr/0001`–`0007`. Wireframes (agreed 14 Nov, patient screens redesigned and Symptom Report added the same day): https://claude.ai/artifact/87qpPWJkCW8y2XQvaEX4EA. Symptom-reporting research: `docs/research/on-demand-symptom-reporting.md`.
 
 Scope for this build: the demo script in the plan's section 7.2, for suspected lung cancer, demo county Western Uusimaa (real county name, synthetic figures), 8-hour build, 4 people working in parallel. `backend/` (`medml`) is unrelated and untouched.
 
@@ -46,23 +46,25 @@ Every screen's content uses Finnish services and formats, as in the wireframes:
   - dates as 18.11. or 14.11.2026
   - times as 9.30
   - decimals with a comma (38,6 °C)
-  - store ISO values in Mongo and format only in the UI
+  - store ISO values in the database and format only in the UI
 - **Names:** Finnish demo names (Nurse Aino; patients Matti K., Leena S. and others), all fictional.
 - **Learn source label:** "Syöpätalo (Cancer Hub), Terveyskylä.fi".
 
 ## Architecture
 
-- One frontend (React + Vite) with three route groups: `/companion`, `/worklist`, `/dashboard`, plus a shared fake-login screen that picks a demo identity and routes into one of the three.
-- One shared backend (new directory, e.g. `server/`): Python + FastAPI + Motor (async PyMongo).
-- Datastore: MongoDB. Local `mongod` for the build; swap the `MONGODB_URI` env var to Atlas once Junction credits/cluster exist. No other code changes needed (ADR-0001).
+- Two frontends (React + Vite), each with its own fake-login screen and demo bar:
+  - `frontend-patient`: the companion, for Contacts, Patients and Trusted People.
+  - `frontend-healthcare-provider`: the Worklist, the Equity Dashboard and the simulated SMS / FHIR log.
+- One shared backend (new directory, e.g. `server/`): Python + FastAPI + asyncpg.
+- Datastore: PostgreSQL on Aiven (Junction partner credits), documents stored as JSONB, one table per collection below (ADR-0007, supersedes ADR-0001). Local Postgres in Docker (`server/compose.yaml`) for the build; swap the `DATABASE_URL` env var to the Aiven service URI. No other code changes needed. Hosting: `docs/deploy.md`.
 - Worklist and dashboard poll the backend every few seconds rather than using websockets/SSE.
 - No real auth (ADR-0004): the login screen is cosmetic, backed by a handful of preset demo identities (one Patient, one Trusted Person, one Coordinator, one county-admin viewer).
 - Demo time does not run on the wall clock: `POST /demo/advance-day` bumps a single `clock_state` document and re-evaluates every Patient's Alerts/Escalation Steps for the new day (ADR-0004). A shared demo-bar component shows the current day and the advance button on every screen of all three apps.
 - Voice: the browser never talks to ElevenLabs directly. The server proxies text-to-speech and speech-to-text with the key from `.secrets/elevenlabs_key` (ADR-0005).
 
-## Data contract (Mongo collections)
+## Data contract (document tables)
 
-All documents get `_id` (ObjectId) and `created_at` (UTC datetime) unless noted.
+All documents get `_id` (uuid string) and `created_at` (UTC datetime) unless noted. Each collection is one Postgres table `(id text, created_at timestamptz, doc jsonb)`; the fields below live in `doc` (ADR-0007). Ids typed `str` below are document ids.
 
 **contacts** — phase 0–1 people (ADR-0002)
 ```
@@ -73,15 +75,15 @@ risk_check: { taken: bool, risk_group: str | null, at: datetime | null }
 warning_sign_tap: { symptom: str, at: datetime } | null
 trusted_people: [{ name: str, relationship: str, contact_method: str, consented_at: datetime }]
 accessibility: { read_aloud: bool, voice_mode: bool, text_size: "m" | "l" | "xl", high_contrast: bool }
-promoted_patient_id: ObjectId | null
+promoted_patient_id: str | null
 ```
 
 **patients** — created only by the promotion endpoint (ADR-0002)
 ```
-contact_id: ObjectId
+contact_id: str
 county: str
 demographics: { age: int, language: str, education_group: str, municipality_type: str }
-coordinator_id: ObjectId
+coordinator_id: str
 referral: { flagged_by: str, source: str, at: datetime }   # at == pathway_clock.started_at
 phase: "suspected_cancer" | "treatment"
 pathway_clock: { started_demo_day: int, current_demo_day: int }
@@ -92,7 +94,7 @@ accessibility: { ... same shape as contacts.accessibility, copied at promotion }
 **events** — append-only log, one collection for every patient/contact action
 ```
 subject_type: "contact" | "patient"
-subject_id: ObjectId
+subject_id: str
 type: "warning_sign_tap" | "confirmation" | "checkin" | "symptom_report" | "medication_log" | "sms_sent" | "fhir_sync"
 payload: { ... shape depends on type, see issue files; symptom_report below }
 actor: "self" | "trusted_person" | "coordinator"   # "trusted_person" = proxy; confirmations, check-ins and symptom reports only
@@ -117,18 +119,26 @@ advice_shown: "call_now" | "nurse_review" | "self_care"
 
 **alerts** — symptom-driven (ADR-0003): Check-ins and Symptom Reports for Patients, red warning-sign taps for Contacts
 ```
-patient_id: ObjectId
+subject_type: "contact" | "patient"   # a red warning-sign tap belongs to a Contact
+subject_id: str
 level: "red" | "yellow" | "green"
-source: "checkin" | "symptom_report" | "warning_sign_tap"
+source: "checkin" | "symptom_report" | "warning_sign_tap" | "medication_log"
+symptom: str | null         # grouping key for "same symptom while open"
 reason: str                 # e.g. "Breathlessness on stairs, new, getting worse"
-trigger_event_ids: [ObjectId]   # a new report on the same symptom while the alert is open appends here instead of creating a new alert
-acknowledged_by: ObjectId | null
+trigger_event_ids: [str]   # a new report on the same symptom while the alert is open appends here instead of creating a new alert
+actor: "self" | "trusted_person"
+trusted_person_name: str | null
+acknowledged_by: str | null
 acknowledged_at: datetime | null
+actions_taken: [{ action: str, by: str, at: datetime, note: str | null }]
+closed_at: datetime | null
 ```
+
+`contacts` also gains `callback: { status: "pending" | "booked" | "handled", at: datetime } | null`.
 
 **escalation_steps** — time-driven, phase 2+ (ADR-0003)
 ```
-patient_id: ObjectId
+patient_id: str
 step_index: 0 | 1 | 2 | 3 | 4   # day 0 / 2 / 3 / 5 / 7
 rung: "message_sms" | "auto_call" | "nurse_call" | "trusted_person" | "flag_health_centre"
 due_demo_day: int
@@ -149,7 +159,36 @@ tile: { col: int, row: int }    # position on the dashboard tile map, see wirefr
 pct_within_target: float
 median_days_referral_to_treatment: float
 reach_rate_over_75: float
-breakdown: { age: {...}, language: {...}, education_group: {...}, municipality_type: {...} }
+pct_outside_fast_track: float   # lung cancers diagnosed without a suspected-cancer Referral
+days_per_phase: { detection: float, referral: float, diagnosis: float, treatment: float }
+causes: { <phase>: { unconfirmed: float, transport: float, waiting_for_slot: float } }   # Cause Code shares, synthetic
+breakdown: { age: { <group>: { pct_within_target: float, n: int } }, language: {...}, education_group: {...}, municipality_type: {...} }
+                                # n < 5 -> suppressed ("not enough data"); n < 20 -> small-sample warning
+```
+
+**actions** — hand-authored fixture, the Action Library (plan section 4.5), seeded once
+```
+_id: str                        # e.g. "reminders_nurse_call"
+title: str
+gap_pattern: { phase: str, cause: str | null, group: str | null }   # what the Insight Card matches on
+roadmap_action: str | null      # e.g. "1.2.3 named coordinator"
+evidence: [{ ref: int, label: str, url: str }]
+badge: "trial_review" | "registry_evaluation" | "nordic_policy" | "single_site"
+lever: "days_sooner" | "missed_visits" | "silent_reached"
+effect: { published: float, low: float, high: float, range_rule: "ci" | "half_to_full" } | null   # null = not simulated
+```
+
+**decisions** — Decision Log, append-only, written from the Insight Card
+```
+card_id: str                    # e.g. "western-uusimaa/missed-first-visits-75"
+action_ids: [str]
+verdict: "approve" | "adapt" | "reject"
+reason: str                     # required
+owner: str                      # e.g. "County coordinator team"
+due: date
+decided_by: str                 # demo identity
+demo_day: int
+snapshot: { facts: [...], simulation: {...}, badges: {...} }   # what the decision-maker saw
 ```
 
 **clock_state** — singleton
@@ -176,9 +215,28 @@ GET  /worklist?coordinator_id=...        merges alerts + escalation_steps + call
 POST /alerts/{id}/acknowledge
 
 GET  /dashboard/counties                 reads the counties fixture
-POST /dashboard/simulate                 sliders -> recomputed days-saved (pure function, no DB write)
+GET  /dashboard/actions                  reads the Action Library fixture
+POST /dashboard/simulate                 { county, action_ids, dial values } -> days saved + extra people within target as ranges, needed-vs-evidence (pure function, no DB write)
+POST /dashboard/summary                  { card_id } -> cited AI summary; facts with ids sent to the Nemotron endpoint, unsourced sentences dropped, cached fallback
+POST /dashboard/decisions                append a Decision Log entry (reason required)
+GET  /dashboard/decisions?card_id=...    the card's Decision Log
 
 POST /demo/advance-day                   bumps clock_state, re-fires escalation/alert rules
+GET  /demo/identities                    demo Coordinator id, most recent Contact and Patient ids (both login screens)
+POST /demo/reset                         clears runtime tables for a rehearsal; fixtures stay
+
+GET  /rules                              questions catalogue from the rules module (Safety Check, symptoms, guided questions, Check-in items, warning signs); no grade maps
+POST /alerts/{id}/actions                assign_to_me | record_action | mark_done
+GET  /patients/{id}/trusted-view         appointments and Confirmations only, no clinical content
+GET  /contacts/{id}                      a Contact before promotion
+GET  /patients/{id}/kanta-medicines      medicine list as a FHIR mock-up (simulated)
+
+GET  /clinicians?type=...                stretch: Booking screen (synthetic clinicians fixture)
+GET  /clinicians/{id}/availability       stretch: free slots in working hours
+POST /appointments                       stretch: books a slot + simulated SMS
+
+GET  /sim/log                            simulated SMS / call / FHIR events, newest first
+POST /sim/sms/{event_id}/reply           simulate a reply ("YES" confirms the linked Escalation Step)
 
 POST /learn/ask                          proxies to the Nemotron endpoint in opencode.json, retrieval-restricted to the allowed sources (plan section 4.6)
 
@@ -188,7 +246,16 @@ POST /voice/stt                          audio -> { transcript }; proxies Eleven
 
 ## Role breakdown
 
-- `issues/01-shared-infra.md` — Mongo collections, FastAPI skeleton, demo-day engine, fake-login screen. Build this first; everyone else depends on it.
+Each developer works from one spec. These specs replace issues 01–06 as the source to build from:
+
+- Person 1: `.scratch/equity-dashboard/spec.md`. Issue 02, plus the provider-app shell, login and demo bar.
+- Person 2: `.scratch/patient-companion/spec.md`. Issue 03, plus the Contact, Patient and accessibility endpoints, the patient-app login and demo bar, and voice-action registration on every screen.
+- Person 3: `.scratch/coordinator-worklist/spec.md`. Issue 04, plus the server core from issue 01 (skeleton, models, promote, advance-day) and Booking as a stretch goal.
+- Person 4: `.scratch/learn-sms-fhir-voice/spec.md`. Issues 05 and 06 (server proxy and voice layer).
+
+The original issues are kept as the record of how the work was first cut:
+
+- `issues/01-shared-infra.md` — document tables, FastAPI skeleton, demo-day engine, fake-login screen. Build this first; everyone else depends on it.
 - `issues/02-equity-dashboard.md` — person 1 (dashboard builder in plan section 7.3)
 - `issues/03-patient-companion-app.md` — person 2
 - `issues/04-coordinator-worklist.md` — person 3
@@ -198,7 +265,8 @@ POST /voice/stt                          audio -> { transcript }; proxies Eleven
 ## Explicit non-goals for this build
 
 - No real SMS/telecom, no real Kanta/FHIR server, no real Suomi.fi/eID login (ADR-0004).
-- No statistically generated synthetic cohort — the dashboard reads a hand-authored fixture (22 counties).
+- No statistically generated synthetic cohort — the dashboard reads hand-authored fixtures (22 counties, the Action Library).
 - No real patient audio or health data sent to ElevenLabs: demo identities only, until EU data residency and retention are settled (ADR-0005).
-- No production auth, access control, or audit logging.
+- No production auth, access control, or production audit logging (the dashboard's Decision Log is a demo of the idea, not a tamper-proof audit trail).
+- No AI question answering, briefing notes or before/after tracking on the dashboard; these are design only (plan section 4.5).
 - `backend/` (`medml`) is not touched or referenced by any of this.

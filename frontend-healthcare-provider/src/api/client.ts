@@ -14,7 +14,7 @@ async function request<T>(method: string, path: string, body?: unknown): Promise
 
 export const api = {
   // shared
-  health: () => request<{ status: string; mongo: boolean; current_demo_day: number | null }>("GET", "/health"),
+  health: () => request<{ status: string; db: boolean; current_demo_day: number | null }>("GET", "/health"),
   advanceDay: () => request<{ current_demo_day: number }>("POST", "/demo/advance-day"),
   identities: () => request<{ coordinator_id: string }>("GET", "/demo/identities"),
   reset: () => request<unknown>("POST", "/demo/reset"),

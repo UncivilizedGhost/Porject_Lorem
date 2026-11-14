@@ -11,7 +11,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app import config
+from app import config, db
 from app.fixtures.seed import ensure_seeded
 from app.routers import (
     alerts,
@@ -32,10 +32,16 @@ from app.routers import (
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    # Seeds clock_state, the demo Coordinator and the fixtures if missing (ADR-0004).
-    await ensure_seeded()
+    # Creates the JSONB tables if missing (ADR-0007), then seeds clock_state, the demo
+    # Coordinator and the fixtures if missing (ADR-0004).
+    try:
+        await db.init_schema()
+        await ensure_seeded()
+    except Exception as exc:  # noqa: BLE001 - the server still starts; /health reports db: false
+        print(f"[startup] database not reachable, skipping schema + seed: {exc}")
     # TODO(person 4): log loudly if the ElevenLabs key is missing (ADR-0005).
     yield
+    await db.close_pool()
 
 
 app = FastAPI(title="Cancer Pathway Companion API", version="0.1.0", lifespan=lifespan)

@@ -12,7 +12,7 @@ Nov 13, 2026&#32;
 | --- | --- | --- |
 | Patient companion (web app, SMS, phone, paper) | Patient and next of kin | Warning signs, next step, confirmations, symptom check-ins, plain-language information |
 | Coordinator worklist | Coordinator nurse | One prioritised list of who needs action today, and why |
-| Equity dashboard | County and national decision-makers | Time to treatment by county and population group, with recommended actions |
+| Equity dashboard | County and national decision-makers | Time to treatment by county and population group, with evidence-matched actions and a recorded human decision |
 
 **MVP scope:** suspected lung cancer in one demo county, from risk check to the first treatment cycle. Lung cancer carries the national strategy's largest survival-gap target \[1\], and a national lung cancer programme launched in 2026 [\[2\]](https://www.filha.fi/wp-content/uploads/2026/05/Valtakunnallinen-keuhkosyopaohjelma-2026-2035_180526_preprint.pdf).
 
@@ -22,11 +22,11 @@ Nov 13, 2026&#32;
 | --- | --- | --- |
 | Identify the gap | Share starting treatment within target time, by county, age, language and education group | 4.5 |
 | Locate it in the pathway | Clock split into detection → referral → diagnosis → treatment | 4.1 |
-| Recommend actions | Each gap linked to a Nordic-proven action with simulated impact | 4.5 |
+| Recommend actions | Each gap matched to library actions with an evidence badge and a simulated effect range; a person decides | 4.5 |
 | Goal 3 indicator | Patients start treatment within target times, with equity breakdown \[1\] | 4.5 |
 | Reliable, sourced evidence | Numbered references; synthetic data labelled | 9 |
 | Working demo | Patient app, worklist and dashboard on one data flow | 7 |
-| Clear in 2 minutes | Dashboard opens on 3 numbers, 1 map, 3 actions | 4.5 |
+| Clear in 2 minutes | Dashboard opens on 3 numbers and 1 map; one click to the pathway view, one more to an Insight Card | 4.5 |
 
 ## 2. Problem statement
 
@@ -148,25 +148,66 @@ Eligibility rules miss many cases: almost two-thirds of US lung cancer patients 
 
 ### 4.5 Equity dashboard
 
-**The first screen answers three questions in under 2 minutes: are people treated in time, where are days lost, and who is left behind.**
+**A decision-support tool: it shows where cancer pathways lose time and for whom, and which evidence-based national actions fit. People decide; the tool explains, compares and records.**
 
-- **3 numbers:** % starting treatment within target time (with Norway's 70% and Sweden's 80% target lines); median days from referral to treatment; reach rate among over-75s
-- **1 map:** the same % by wellbeing services county
-- **1 pathway bar:** days per phase, from warning sign to treatment, coloured where targets are exceeded
-- **Equity breakdown:** age, language, education group, municipality type
-- **3 recommended actions,** each with evidence and simulated effect
+**Three levels, each one click deeper.** The first screen answers three questions in under 2 minutes: are people treated in time, where are days lost, and who is left behind.
+
+| Level | Who uses it | What they see |
+| --- | --- | --- |
+| 1. National overview | Ministry, FICAN, county leadership | 3 numbers: % starting treatment within target time (with Norway's 70% and Sweden's 80% target lines), median days from referral to treatment, reach rate among over-75s. A tile map of the same % by wellbeing services county |
+| 2. Pathway view | County or unit leaders | 1 pathway bar: days per phase, from warning sign to treatment, coloured where targets are exceeded. Equity breakdown by age, language, education group and municipality type. Share of lung cancers diagnosed outside the fast-track: without a suspected-cancer Referral, so the Pathway Clock never ran |
+| 3. Insight Cards | Whoever must act | What, where and who; why (Cause Codes such as unconfirmed, transport, waiting for a slot); Matched Actions with evidence badge, roadmap action and simulated effect; the decision and its owner |
 
 The indicator copies Norway's: share of pathways completed within the maximum time, from referral to treatment start, by treatment type [\[29\]](https://www.helsedirektoratet.no/statistikk/kvalitetsindikatorer/kreft-behandling-og-overlevelse/pakkeforl%C3%B8p-for-26-organspesifikke-kreftformer/Pakkeforl%C3%B8p%20for%2024%20organspesifikke%20kreftformer%204.0.pdf).
 
-| Gap detected | Recommended action | Evidence |
-| --- | --- | --- |
-| Warning signs reported late, worst in low-education groups | Opt-in risk check + warning-sign tap with call-back; plain-language messages that counter negative beliefs | [\[7\]](https://www.demogr.mpg.de/en/publications_databases_6118/publications_1904/journal_articles/disparities_in_cancer_incidence_stage_at_diagnosis_treatment_and_mortality_across_socioeconomic_groups_8291/) [\[35\]](https://orca.cardiff.ac.uk/110555/1/s12885-018-4287-8%20K%20Brain.pdf) |
-| Large regional variation in referral-to-treatment time | National pathway time limits, with waiting-time reporting as a funding condition | Sweden [\[19\]](https://cancercentrum.se/syd/regional-cancer-centres/knowledge-based-healthcare/cancer-patient-pathways/) |
-| No one owns the patient between units | Named coordinator for every patient, recorded in the register | Sweden [\[22\]](https://cancercentrum.se/globalassets/patient-och-narstaende/samverkan/kssk/nationellt-uppdrag-for-kontaktsjukskoterska.pdf) |
-| Missed first visits, worst among over-75s | Phone or SMS reminders; nurse call when not confirmed | Phone reminders cut missed appointments by 43% in Denmark [\[43\]](https://www.ugeskriftet.dk/dmj/A5083) |
-| Patient experience not measured | Annual survey of pathway patients | Sweden's 2025 survey had 21,819 respondents [\[44\]](https://www.varden.se/blogg/50001-nationella-patientenkaten-2025-sa-upplever-cancerpatienter-standardiserade-vardforlopp); supports Goal 1 \[1\] |
+**Action Library.** Insight Cards only *match* a gap pattern (stage + Cause Code + group) to actions in a curated library; the system never invents or ranks an action. Each action is tied to a national strategy or roadmap action \[1\] and to cited evidence, and carries one of four evidence badges: **Trial / review**, **Registry evaluation**, **Nordic national policy (not evaluated)**, **Single-site project**.
 
-**Simulation:** sliders for "warning signs acted on X days sooner", "missed visits reduced by Y%" and "coordinator reaches Z% of silent patients" → days saved and extra people within target time, per county. Effect sizes come only from the cited evidence; synthetic patient flow is labelled.
+| Gap detected | Matched Action | Roadmap \[1\] | Evidence | Badge |
+| --- | --- | --- | --- | --- |
+| Warning signs reported late, worst in low-education groups | Opt-in risk check + warning-sign tap with call-back; plain-language messages that counter negative beliefs | 2.5.2 standardised referral criteria | Gap: [\[7\]](https://www.demogr.mpg.de/en/publications_databases_6118/publications_1904/journal_articles/disparities_in_cancer_incidence_stage_at_diagnosis_treatment_and_mortality_across_socioeconomic_groups_8291/) [\[35\]](https://orca.cardiff.ac.uk/110555/1/s12885-018-4287-8%20K%20Brain.pdf); action: [\[34\]](https://bmcpublichealth.biomedcentral.com/track/pdf/10.1186/s12889-018-5606-3) | Single-site project |
+| Large regional variation in referral-to-treatment time | National pathway time limits, with waiting-time reporting as a funding condition | 3.1.2 national care pathways | Sweden [\[19\]](https://cancercentrum.se/syd/regional-cancer-centres/knowledge-based-healthcare/cancer-patient-pathways/) | Nordic national policy |
+| No one owns the patient between units | Named coordinator for every patient, recorded in the register | 1.2.3 named coordinator | Sweden [\[22\]](https://cancercentrum.se/globalassets/patient-och-narstaende/samverkan/kssk/nationellt-uppdrag-for-kontaktsjukskoterska.pdf) | Nordic national policy |
+| Missed first visits, worst among over-75s | Phone or SMS reminders; nurse call when not confirmed | — | Phone reminders cut missed appointments by 43% in Denmark [\[43\]](https://www.ugeskriftet.dk/dmj/A5083) | Trial / review (study design to verify) |
+| Patient experience not measured | Annual survey of pathway patients | Goal 1 | Sweden's 2025 survey had 21,819 respondents [\[44\]](https://www.varden.se/blogg/50001-nationella-patientenkaten-2025-sa-upplever-cancerpatienter-standardiserade-vardforlopp) | Nordic national policy |
+
+**Simulation: compare options, not free sliders.** A county board chooses between actions, not between percentages, so the Insight Card shows its Matched Actions side by side:
+
+- **Effect range from evidence only.** The study's confidence interval where published; otherwise half to full published effect (a stated discount for transferring evidence from another country). Each action has one dial, bounded to that range and labelled "assumed effect in Finland", with the published value marked.
+- **Target gap.** "Needed to reach 70% / 80%" is shown beside "evidence shows", e.g. *over-75s in Western Uusimaa can't reach 70% through fewer missed visits alone (even none missed gives 58%); evidence shows 21–43% fewer.* Saying an action can't close a gap is as useful as saying it can.
+- **Output as ranges:** days saved and extra people within target time, never a single point.
+- **Unevaluated actions are not simulated.** Nordic-policy actions are listed with "No effect estimate: not simulated", because inventing an effect size would break the evidence rule.
+- **No double counting.** When two actions act on the same lever (reminders and a coordinator both cut missed visits), the larger single effect is used, not the sum.
+
+**Where the AI fits.** AI explains; it never decides.
+
+| AI does | AI does not |
+| --- | --- |
+| Writes a plain-language summary of each view, e.g. "Days are lost mainly between referral and first visit; the biggest gap is among over-75s in rural municipalities" | Decide which action to take |
+| Answers questions ("Why is Western Uusimaa late?") from dashboard data and the Action Library only, citing every claim | Answer without a source |
+| Explains trade-offs between Matched Actions and their evidence strength | Rank people or flag individuals |
+| Drafts a briefing note for a board meeting | Change targets, thresholds or allocations |
+| Says "not enough data" when samples are small | Fill gaps with guesses |
+
+**Guardrails:**
+
+- **Every AI sentence links to the fact or source it comes from.** The server gives the model a list of facts, each with an id; any sentence without a valid fact id is dropped before display.
+- **Uncertainty is shown.** Cells with fewer than 5 people are suppressed ("not enough data"); cells under 20 carry a small-sample warning. The same rule applies to the AI text.
+- **Evidence limits are stated.** Once on the national overview and in every briefing: "Evidence linking time-to-treatment and lung cancer survival is mixed [\[28\]](https://doi.org/10.1183/16000617.0045-2018); this dashboard targets equal access and adherence to the national time limit."
+- **Only de-identified aggregates are visible;** no patient-level data.
+
+**From insight to decision: the human loop.**
+
+1. **Review:** the decision-maker opens the Insight Card and reads the AI summary and sources.
+2. **Compare:** they compare Matched Actions and their simulated effect ranges.
+3. **Decide:** a person approves, adapts or rejects, and records the reason.
+4. **Assign:** an owner and a due date are attached (e.g. county coordinator team, roadmap 1.2.3).
+5. **Track:** the dashboard shows before/after results from the decision date; the card stays open until reviewed.
+
+Every decision is written to a **Decision Log**: who decided what, when, and on which numbers and evidence (a snapshot as shown at the time). That gives wellbeing services counties and national follow-up of the strategy a transparent audit trail.
+
+**Cause Codes** come from the companion's own signals: Escalation Steps that end without a Confirmation (unconfirmed), and a one-tap reason the Coordinator records on the Worklist (transport, waiting for a slot).
+
+**MVP build:** levels 1 and 2, and one Insight Card for Western Uusimaa (missed first visits among over-75s) with a live cited AI summary, the simulation and a recorded decision. AI questions, briefing notes and before/after tracking are shown as design only. Cause Codes and all figures are synthetic and labelled.
 
 ### 4.6 Learn knowledge base
 
@@ -235,12 +276,12 @@ The indicator copies Norway's: share of pathways completed within the maximum ti
 
 ### 7.2 Demo script (2 minutes)
 
-1. **(20 s) Dashboard:** "In County X, many over-75s start treatment late; days are lost before referral and before the first visit." Numbers synthetic and labelled.
+1. **(20 s) Dashboard:** "In Western Uusimaa, many over-75s start treatment late; days are lost before referral and before the first visit." Numbers synthetic and labelled.
 2. **(20 s) Phase 0–1:** a 68-year-old former smoker in a pilot county takes the risk check, later taps "hoarseness over 3 weeks" → call-back → GP + X-ray booked.
 3. **(25 s) Phase 2:** X-ray raises suspicion → referral flagged, clock starts → SMS goes unanswered → daughter confirms on his behalf.
 4. **(20 s) Phase 3:** check-in reports fever → red alert → worklist line "Call now".
 5. **(15 s) Learn:** "What is a bronchoscopy?" → plain-Finnish answer with source.
-6. **(20 s) Dashboard:** simulation shows days saved and the 3 recommended Nordic actions.
+6. **(20 s) Dashboard:** the Western Uusimaa Insight Card: cited AI summary, Matched Actions compared with days-saved ranges, and a recorded decision.
 
 ### 7.3 Build split
 

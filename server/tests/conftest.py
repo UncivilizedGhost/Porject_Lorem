@@ -1,7 +1,8 @@
 """Shared test fixtures.
 
 Style follows backend/tests: hermetic, external clients stubbed, no network. The API tests
-need a local mongod; they use a unique throwaway database per session and drop it afterwards.
+need a local Postgres (`docker compose up -d` in server/); they use a throwaway schema per
+session (`PATHWAY_DB_SCHEMA=test_<hex>`) and drop it afterwards.
 """
 
 from __future__ import annotations
@@ -12,17 +13,22 @@ import uuid
 
 import pytest
 
-os.environ.setdefault("MONGODB_URI", f"mongodb://localhost:27017/pathway_test_{uuid.uuid4().hex[:8]}")
+os.environ.setdefault("DATABASE_URL", "postgresql://pathway:pathway@localhost:5432/pathway")
+os.environ["PATHWAY_DB_SCHEMA"] = f"test_{uuid.uuid4().hex[:8]}"
 
-from app import db  # noqa: E402
+from app import config, db  # noqa: E402
 from app.main import app  # noqa: E402
 
 
 @pytest.fixture(scope="session", autouse=True)
-def _drop_test_db():
+async def _throwaway_schema():
+    with contextlib.suppress(Exception):  # no Postgres → tests that need it fail on their own
+        await db.init_schema()
     yield
     with contextlib.suppress(Exception):
-        db.get_client().drop_database(db.get_db().name)
+        pool = await db.get_pool()
+        await pool.execute(f'DROP SCHEMA IF EXISTS "{config.DB_SCHEMA}" CASCADE')
+        await db.close_pool()
 
 
 @pytest.fixture

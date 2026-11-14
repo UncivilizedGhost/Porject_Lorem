@@ -6,7 +6,7 @@ synthetic figures, Finnish services, UI text in English.
 
 | Directory | What |
 |---|---|
-| `server/` | Shared FastAPI + Motor backend (MongoDB) |
+| `server/` | Shared FastAPI backend, PostgreSQL/JSONB on Aiven |
 | `frontend-patient/` | The companion: Contacts, Patients, Trusted People (React + Vite) |
 | `frontend-healthcare-provider/` | Worklist, Equity Dashboard, simulated SMS / FHIR log (React + Vite) |
 | `backend/` | `medml`, an unrelated ML template; not used by the above |

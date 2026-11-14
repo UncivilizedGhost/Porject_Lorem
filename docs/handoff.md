@@ -24,21 +24,24 @@ then works from their own spec. `backend/` (medml) is unrelated and untouched.
 
 - Every file names its owner and spec in its header. Touch another person's file only for a
   one-line route registration or import; otherwise ask.
-- Mongo stores ISO values; Finnish formats (18.11., 9.30, 38,6 °C) only in `lib/format.ts`.
+- The database stores ISO values; Finnish formats (18.11., 9.30, 38,6 °C) only in `lib/format.ts`.
+- Storage is PostgreSQL with one JSONB document table per collection (ADR-0007); go through
+  the helpers in `server/app/db.py`, not raw SQL, except for range filters.
 - The server computes `grade` / `rule` / `advice_shown` / `risk_group`; clients never send them.
 - Every write carries `actor` and `input`; the patient API client sets `input: "voice"` itself.
 - Secrets live in `.secrets/` (see `.env.example`); nothing reaches a frontend bundle.
-- Tests: pytest in `server/tests/` (throwaway local Mongo, external clients stubbed),
+- Tests: pytest in `server/tests/` (throwaway Postgres schema, external clients stubbed),
   Vitest + Testing Library in each app (API client mocked). Test files per seam are stubbed
   with the cases from each spec's "Testing Decisions".
 
 ## Run everything
 
 ```bash
-mongod --dbpath <somewhere>                       # or set MONGODB_URI
-cd server && pip install -e ".[dev]" && uvicorn app.main:app --reload --port 8000
+cd server && docker compose up -d                 # local Postgres; or set DATABASE_URL to Aiven
+pip install -e ".[dev]" && uvicorn app.main:app --reload --port 8000
 cd frontend-patient && npm install && npm run dev               # :5173
 cd frontend-healthcare-provider && npm install && npm run dev   # :5174
 ```
 
-Both dev servers proxy `/api/*` to `:8000`.
+Both dev servers proxy `/api/*` to `:8000`. Hosting (Aiven + Railway, laptop fallback,
+pre-demo checklist): `docs/deploy.md`.
