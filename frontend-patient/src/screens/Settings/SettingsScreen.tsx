@@ -16,7 +16,7 @@ import { useReadable } from "../../voice/useReadable";
 import { useVoice } from "../../voice/VoiceProvider";
 import { useVoiceActions } from "../../voice/useVoiceActions";
 
-const DEFAULTS: Accessibility = { read_aloud: false, voice_mode: false, text_size: "m", high_contrast: false };
+const DEFAULTS: Accessibility = { read_aloud: false, text_size: "m", high_contrast: false };
 const LANGUAGES: { id: Language; label: string }[] = [
   { id: "fi", label: "Suomi" },
   { id: "sv", label: "Svenska" },
@@ -190,7 +190,6 @@ export function SettingsScreen() {
     () => [
       ...LANGUAGES.map((l) => ({ id: `settings:lang:${l.id}`, label: l.label, run: () => { void save({ language: l.id }); } })),
       ...SIZES.map((s) => ({ id: `settings:size:${s.id}`, label: t("settings.textSize", { size: s.label }), run: () => { void save({ text_size: s.id }); } })),
-      { id: "settings:voice_mode", label: t("settings.voiceMode"), run: () => { void save({ voice_mode: !settings.voice_mode }); } },
       { id: "settings:contrast", label: t("settings.contrast"), run: () => { void save({ high_contrast: !settings.high_contrast }); } },
     ],
     // save closes over `settings`; re-register when the record changes.
@@ -272,20 +271,6 @@ export function SettingsScreen() {
       </fieldset>
 
       <div className="opt-grid cols-2">
-        <Opt selected={settings.voice_mode} className="toggle">
-          <input
-            type="checkbox"
-            aria-label={t("settings.voiceMode")}
-            checked={settings.voice_mode}
-            onChange={(e) => save({ voice_mode: e.target.checked })}
-          />
-          <span className="opt-icons">
-            <span className="opt-icon"><Icon name="mic" size={30} /></span>
-            <span className="opt-check">{settings.voice_mode ? <Icon name="check-circle" size={24} /> : <Icon name="circle" size={24} />}</span>
-          </span>
-          <span className="opt-label">{t("settings.voiceOn")}</span>
-        </Opt>
-
         <Opt selected={settings.high_contrast} className="toggle">
           <input
             type="checkbox"

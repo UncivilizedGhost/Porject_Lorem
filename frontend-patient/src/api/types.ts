@@ -10,7 +10,7 @@ export type TextSize = "m" | "l" | "xl";
 
 export interface Accessibility {
   read_aloud: boolean;
-  voice_mode: boolean;
+  voice_mode?: boolean;
   text_size: TextSize;
   high_contrast: boolean;
 }

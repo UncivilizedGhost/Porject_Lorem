@@ -161,8 +161,6 @@ export const MESSAGES = {
   "settings.normal": ["Normal", "Normaali", "Normal"],
   "settings.slow": ["Slow", "Hidas", "Långsam"],
   "settings.appearance": ["Appearance", "Ulkoasu", "Utseende"],
-  "settings.voiceMode": ["Voice mode", "Äänitila", "Röstläge"],
-  "settings.voiceOn": ["Use the app by voice", "Käytä sovellusta puheella", "Använd appen med rösten"],
   "settings.contrast": ["High contrast", "Suuri kontrasti", "Hög kontrast"],
   "settings.contrastOn": ["Stronger contrast", "Vahvempi kontrasti", "Starkare kontrast"],
   "settings.textSize": ["Text size {size}", "Tekstikoko {size}", "Textstorlek {size}"],
@@ -306,11 +304,6 @@ export const MESSAGES = {
     "Anything to add in your own words?",
     "Haluatko lisätä jotain omin sanoin?",
     "Något att tillägga med egna ord?",
-  ],
-  "report.ownBubble": [
-    "You said. Tap the text to change it.",
-    "Sanoit näin. Muuta napauttamalla tekstiä.",
-    "Du sa så här. Ändra genom att trycka på texten.",
   ],
   "report.ownPlaceholder": [
     "Type here, or tap the microphone",
