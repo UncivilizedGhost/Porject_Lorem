@@ -4,6 +4,16 @@ Three things need hosting: the database, the server and two static frontends. De
 (hour 2, with the 501 stubs) and redeploy on every merge; never deploy for the first time
 before the demo.
 
+## Live URLs
+
+| Service | URL |
+|---|---|
+| Server (Railway) | https://cancer-pathway-companion.up.railway.app |
+| Patient companion (Vercel) | https://cancer-pathway-companion.vercel.app |
+| Provider dashboard (Vercel) | https://cancer-care-dashboard.vercel.app |
+
+`CORS_ORIGINS` on the server must list the two Vercel URLs.
+
 ## Database: Aiven for PostgreSQL (ADR-0007)
 
 1. Aiven console → Create service → PostgreSQL, free plan, region `europe-north1` (Finland)
