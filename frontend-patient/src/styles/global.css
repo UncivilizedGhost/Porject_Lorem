@@ -846,7 +846,10 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .help-call.emergency { background: var(--red); }
 .help-call.urgent { background: var(--ink); }
 .help-call.nurse { min-height: 92px; background: var(--card); border: 1px solid var(--border); color: var(--ink); }
-.help-call:hover { color: inherit; filter: brightness(0.97); }
+.help-call:hover { filter: brightness(0.97); }
+/* The 112 and 116 117 cards keep white text on hover; only the white nurse card stays dark. */
+.help-call.emergency:hover, .help-call.urgent:hover { color: var(--on-action); }
+.help-call.nurse:hover { color: var(--ink); }
 .help-call-title { font-size: 1.65em; font-weight: 700; }
 .help-call.nurse .help-call-title { font-size: 1.24em; }
 .help-call-sub { font-size: 1em; line-height: 1.3; }
