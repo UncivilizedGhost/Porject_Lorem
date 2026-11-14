@@ -118,3 +118,10 @@ def test_an_action_without_an_effect_is_not_simulated_and_carries_no_numbers():
     assert out["actions"]["coordinator"] == {"simulated": False}
     # nothing simulated → the baseline range collapses to the baseline, which is a no-effect statement
     assert out["combined"]["pct_within_target"] is None
+
+
+def test_two_sentences_run_together_after_the_fact_ids_are_still_split():
+    assert filter_sentences("First [f1].Second [f2].", {"f1", "f2"}) == [
+        {"text": "First", "fact_ids": ["f1"]},
+        {"text": "Second", "fact_ids": ["f2"]},
+    ]

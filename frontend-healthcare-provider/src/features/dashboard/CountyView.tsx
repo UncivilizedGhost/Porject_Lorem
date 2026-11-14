@@ -1,7 +1,7 @@
 // Owner: person 1 — .scratch/equity-dashboard/spec.md (artboard "Equity dashboard · 2 Pathway view (Western Uusimaa)")
 // PathwayBar (days per phase, coloured where exceeded), EquityBreakdown (one dimension at a time:
-// column chart + table), VulnerabilityPanel (compact ranking + AI options), share outside the
-// fast-track, link to the Insight Card, back to overview. GET /dashboard/counties/{name}.
+// column chart + table), VulnerabilityPanel (compact ranking; each group links to its Insight
+// Card), share outside the fast-track, back to overview. GET /dashboard/counties/{name}.
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
@@ -24,11 +24,10 @@ export function CountyView() {
     api.county(name).then(setCounty).catch(() => setFailed(true));
   }, [name]);
 
-  const back = <Link to="/dashboard">← National overview</Link>;
+  const back = <Link className="back-link" to="/dashboard">← National overview</Link>;
   if (failed) return <p role="alert">Could not load {name}. {back}</p>;
-  if (!county) return <p>Loading…</p>;
+  if (!county) return <p role="status" className="loading">Loading…</p>;
 
-  const cardSlug = county.insight_card_id?.split("/")[1];
   return (
     <div className="dashboard">
       {back}
@@ -39,18 +38,11 @@ export function CountyView() {
           <span className="muted">Lung cancers diagnosed outside the fast-track (no suspected-cancer Referral)</span>
           <SyntheticBadge />
         </div>
-        <p className="key-number-value">{formatPercent(county.pct_outside_fast_track)}</p>
+        <p className="key-number-value key-number-value--alert">{formatPercent(county.pct_outside_fast_track)}</p>
         <p className="muted">These pathways never had a clock running.</p>
       </div>
       <EquityBreakdown breakdown={county.breakdown} average={county.pct_within_target} />
       <VulnerabilityPanel county={county.name} breakdown={county.breakdown} />
-      {cardSlug && (
-        <p>
-          <Link className="button-link" to={`/dashboard/county/${encodeURIComponent(county.name)}/insight/${cardSlug}`}>
-            Open the Insight Card: missed first visits among over-75s
-          </Link>
-        </p>
-      )}
     </div>
   );
 }

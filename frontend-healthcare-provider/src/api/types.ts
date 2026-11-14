@@ -127,7 +127,6 @@ export interface CountyDetail extends CountySummary {
   stage_warning_days: Record<Phase, number>;
   causes: Record<string, Record<string, number>>;
   breakdown: Partial<Record<BreakdownDimension, Record<string, BreakdownCell>>>;
-  insight_card_id?: string;
 }
 
 export type Badge = "trial_review" | "registry_evaluation" | "nordic_policy" | "single_site";
@@ -142,77 +141,35 @@ export interface DashboardAction {
   effect: { published: number; low: number; high: number; range_rule: "ci" | "half_to_full" } | null;
 }
 
+// recommended_because: where the recommendation comes from (the Action Library gap pattern it fits).
+export interface RecommendedAction extends DashboardAction {
+  recommended_because: string;
+}
+
+// One card per breakdown group of a county.
 export interface InsightCardDoc {
   card_id: string;
   what: string;
   where: string;
   who: string;
-  stage: Phase;
-  cause: string;
+  dimension: string;
   group: string;
-  baseline: { pct_within_target: number; n: number; missed_visit_share: number; days_lost_to_missed_visits: number };
-  matched_actions: DashboardAction[];
+  stage: Phase;
+  cause: string | null;
+  baseline: { pct_within_target: number; n: number; small_sample: boolean };
+  county_pct_within_target: number;
+  cause_shares: Record<string, number>;
+  recommended_actions: RecommendedAction[];
 }
 
-export interface Range { low: number; high: number }
-
-export type ActionSimulation =
-  | { simulated: false }
-  | { simulated: true; assumed_effect: number; days_saved: Range; extra_within_target: Range };
-
-export interface SimulationResult {
-  actions: Record<string, ActionSimulation>;
-  combined: {
-    pct_within_target: Range | null;
-    lever_rule_applied: { lever: string; counted: string; not_counted: string[] }[] | null;
-  };
-  target_gap: {
-    needed_for_70: number;
-    needed_for_80: number;
-    reachable_70: boolean;
-    reachable_80: boolean;
-    evidence_max_effect: number | null;
-    max_achievable_pct: number;
-  };
-}
+export interface GroupRef { county: string; dimension: string; group: string }
 
 export interface SummaryFact { id: string; text: string; value: number | string; source_url?: string }
 
 export interface SummaryResult {
   sentences: { text: string; fact_ids: string[] }[];
   facts: SummaryFact[];
-  source: "live" | "pregenerated" | "cached";
-}
-
-export interface SuggestionsResult {
-  sentences: { text: string; fact_ids: string[] }[];
-  facts: SummaryFact[];
-  source: "ai" | "rules";
-}
-
-export interface DecisionRow {
-  _id: string;
-  card_id: string;
-  action_ids: string[];
-  verdict: "approve" | "adapt" | "reject";
-  reason: string;
-  owner: string;
-  due: string;
-  decided_by: string;
-  demo_day: number;
-  created_at: string;
-  snapshot: Record<string, unknown>;
-}
-
-export interface DecisionInput {
-  card_id: string;
-  action_ids: string[];
-  verdict: DecisionRow["verdict"];
-  reason: string;
-  owner: string;
-  due: string;
-  decided_by: string;
-  snapshot: Record<string, unknown>;
+  source: "live" | "pregenerated" | "rules";
 }
 
 export interface SimLogRow {

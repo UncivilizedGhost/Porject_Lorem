@@ -1543,8 +1543,7 @@
       "semi-urban": { "pct_within_target": 52.5, "n": 264 },
       "rural": { "pct_within_target": 43.4, "n": 41 }
     }
-  },
-  "insight_card_id": "western-uusimaa/missed-first-visits-75"
+  }
 },
   {
     "name": "Vantaa-Kerava",

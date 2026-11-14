@@ -1,34 +1,21 @@
 // Owner: person 1 — seam 3 for the Insight Card (level 3). API client mocked. .scratch/equity-dashboard/spec.md
-import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render, screen, within } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
 import { api } from "../../api/client";
-import type {
-  CountyDetail,
-  DashboardAction,
-  DecisionRow,
-  InsightCardDoc,
-  SimulationResult,
-  SummaryResult,
-} from "../../api/types";
+import type { InsightCardDoc, RecommendedAction, SummaryResult } from "../../api/types";
 import { InsightCard } from "./InsightCard";
-import { MatchedActions } from "./components/MatchedActions";
-import { SimulationPanel } from "./components/SimulationPanel";
+import { RecommendedActions } from "./components/RecommendedActions";
 
 vi.mock("../../api/client", () => ({
   api: {
-    county: vi.fn(),
     insight: vi.fn(),
-    simulate: vi.fn(),
     summary: vi.fn(),
-    decisions: vi.fn(),
-    createDecision: vi.fn(),
   },
 }));
 const mocked = vi.mocked(api);
 
-const REMINDERS: DashboardAction = {
+const REMINDERS: RecommendedAction = {
   _id: "reminders_nurse_call",
   title: "Phone or SMS reminders, with a nurse call when not confirmed",
   roadmap_action: null,
@@ -36,8 +23,9 @@ const REMINDERS: DashboardAction = {
   badge: "single_site",
   lever: "missed_visits",
   effect: { published: 0.43, low: 0.215, high: 0.43, range_rule: "half_to_full" },
+  recommended_because: "Its gap pattern in the Action Library targets people aged 85 and over at the referral stage.",
 };
-const COORDINATOR: DashboardAction = {
+const COORDINATOR: RecommendedAction = {
   _id: "named_coordinator",
   title: "Named coordinator for every patient",
   roadmap_action: "1.2.3 named coordinator",
@@ -45,67 +33,43 @@ const COORDINATOR: DashboardAction = {
   badge: "nordic_policy",
   lever: "missed_visits",
   effect: null,
+  recommended_because: "Its gap pattern in the Action Library covers every group at the referral stage.",
 };
 
 const CARD: InsightCardDoc = {
-  card_id: "western-uusimaa/missed-first-visits-75",
+  card_id: "western-uusimaa/age/85+",
   what: "Missed first visits",
   where: "Western Uusimaa",
-  who: "People aged 75 and over",
+  who: "People aged 85 and over",
+  dimension: "age",
+  group: "85+",
   stage: "referral",
   cause: "unconfirmed",
-  group: "75+",
-  baseline: { pct_within_target: 46, n: 186, missed_visit_share: 12, days_lost_to_missed_visits: 14 },
-  matched_actions: [REMINDERS, COORDINATOR],
-};
-
-const SIM: SimulationResult = {
-  actions: {
-    reminders_nurse_call: {
-      simulated: true,
-      assumed_effect: 0.43,
-      days_saved: { low: 180, high: 361 },
-      extra_within_target: { low: 5, high: 10 },
-    },
-    named_coordinator: { simulated: false },
-  },
-  combined: { pct_within_target: { low: 49.2, high: 51.2 }, lever_rule_applied: null },
-  target_gap: {
-    needed_for_70: 2,
-    needed_for_80: 2.83,
-    reachable_70: false,
-    reachable_80: false,
-    evidence_max_effect: 0.43,
-    max_achievable_pct: 58,
-  },
+  baseline: { pct_within_target: 29.7, n: 105, small_sample: false },
+  county_pct_within_target: 53.6,
+  cause_shares: { unconfirmed: 0.46, transport: 0.21, waiting_for_slot: 0.33 },
+  recommended_actions: [REMINDERS, COORDINATOR],
 };
 
 const SUMMARY: SummaryResult = {
   sentences: [
-    { text: "Only 46% of over-75s start in time", fact_ids: ["group_pct"] },
+    { text: "Only 30% of the oldest start in time", fact_ids: ["group_pct"] },
     { text: "Reminders cut missed visits in Denmark", fact_ids: ["action_reminders_nurse_call"] },
   ],
   facts: [
-    { id: "group_pct", text: "46% of over-75s", value: 46 },
+    { id: "group_pct", text: "30% of people aged 85 and over", value: 29.7 },
     { id: "action_reminders_nurse_call", text: "Reminders", value: "single_site", source_url: "https://example.org/43" },
   ],
-  source: "cached",
+  source: "rules",
 };
 
-const COUNTY = {
-  causes: { referral: { unconfirmed: 0.46, transport: 0.21, waiting_for_slot: 0.33 } },
-} as unknown as CountyDetail;
-
-function renderCard(summary: SummaryResult = SUMMARY) {
-  mocked.insight.mockResolvedValue(CARD);
-  mocked.county.mockResolvedValue(COUNTY);
-  mocked.simulate.mockResolvedValue(SIM);
+function renderCard(summary: SummaryResult = SUMMARY, card: InsightCardDoc = CARD) {
+  mocked.insight.mockResolvedValue(card);
   mocked.summary.mockResolvedValue(summary);
-  mocked.decisions.mockResolvedValue([]);
   return render(
-    <MemoryRouter initialEntries={["/dashboard/county/Western%20Uusimaa/insight/missed-first-visits-75"]}>
+    <MemoryRouter initialEntries={["/dashboard/county/Western%20Uusimaa/insight?dimension=age&group=85%2B"]}>
       <Routes>
-        <Route path="/dashboard/county/:name/insight/:cardSlug" element={<InsightCard />} />
+        <Route path="/dashboard/county/:name/insight" element={<InsightCard />} />
       </Routes>
     </MemoryRouter>,
   );
@@ -113,95 +77,88 @@ function renderCard(summary: SummaryResult = SUMMARY) {
 
 beforeEach(() => vi.clearAllMocks());
 
-describe("matched actions", () => {
-  const renderActions = (actions = [REMINDERS, COORDINATOR], dials = {}) =>
-    render(<MatchedActions actions={actions} dials={dials} onDial={() => {}} />);
+describe("recommended actions", () => {
+  const renderActions = (actions = [REMINDERS, COORDINATOR]) => render(<RecommendedActions actions={actions} />);
 
-  test("a Nordic-policy action says 'No effect estimate: not simulated' and offers no dial or number", () => {
+  test("are headed 'Recommended actions' and say where the recommendations come from", () => {
     renderActions();
-    const article = screen.getByRole("article", { name: /Named coordinator/ });
-    expect(within(article).getByText("No effect estimate: not simulated")).toBeInTheDocument();
-    expect(within(article).queryByRole("slider")).not.toBeInTheDocument();
-    expect(within(article).queryByText(/assumed effect/i)).not.toBeInTheDocument();
-    expect(article.textContent).not.toMatch(/\d+\s?%/);
+    const section = screen.getByRole("region", { name: /Recommended actions/i });
+    expect(section).toHaveTextContent(/matching this group's gap .* to the Action Library/i);
+    expect(section).toHaveTextContent(/No AI model picks them/i);
+    expect(document.body.textContent).not.toMatch(/matched actions/i);
+  });
+
+  test("each action says why it is recommended for this group", () => {
+    renderActions();
+    expect(screen.getByRole("article", { name: /reminders/i })).toHaveTextContent(
+      "Why this is recommended: Its gap pattern in the Action Library targets people aged 85 and over at the referral stage.",
+    );
+    expect(screen.getByRole("article", { name: /Named coordinator/ })).toHaveTextContent(/covers every group/);
   });
 
   test("each action carries its evidence badge, roadmap action and evidence links", () => {
     renderActions();
     const named = screen.getByRole("article", { name: /Named coordinator/ });
     expect(within(named).getByText("Nordic national policy (not evaluated)")).toBeInTheDocument();
-    expect(within(named).getByText(/1\.2\.3 named coordinator/)).toBeInTheDocument();
+    expect(within(named).getByText("Strategy / roadmap: 1.2.3 named coordinator")).toBeInTheDocument();
     expect(within(named).getByRole("link", { name: /22/ })).toHaveAttribute("href", "https://example.org/22");
     const rem = screen.getByRole("article", { name: /reminders/i });
     expect(within(rem).getByText("Single-site project")).toBeInTheDocument();
   });
 
-  test("a simulated action has one dial bounded to its evidence range, labelled as an assumption in Finland", () => {
+  test("an action with evidence shows its effect as a range; one without says so and shows no number", () => {
     renderActions();
-    const dial = screen.getByRole("slider", { name: /assumed effect in Finland/i });
-    expect(dial).toHaveAttribute("min", "0.215");
-    expect(dial).toHaveAttribute("max", "0.43");
-    expect(screen.getByText(/published value/i)).toHaveTextContent("43");
+    expect(screen.getByRole("article", { name: /reminders/i })).toHaveTextContent(
+      /Evidence shows 21,5–43 % fewer missed visits/,
+    );
+    const named = screen.getByRole("article", { name: /Named coordinator/ });
+    expect(within(named).getByText("No effect estimate")).toBeInTheDocument();
+    expect(named.textContent).not.toMatch(/\d+\s?%/);
   });
 
-  test("moving the dial reports the new value for that action", async () => {
-    const onDial = vi.fn();
-    render(<MatchedActions actions={[REMINDERS]} dials={{}} onDial={onDial} />);
-    // user-event does not drive range inputs with the keyboard in jsdom, so fire the change directly
-    fireEvent.change(screen.getByRole("slider"), { target: { value: "0.3" } });
-    expect(onDial).toHaveBeenCalledWith("reminders_nurse_call", 0.3);
-  });
-
-  test("says 'Matched', never 'Recommended'", () => {
+  test("offers no dial: nothing here is simulated or decided", () => {
     renderActions();
-    expect(screen.getByRole("heading", { name: /Matched actions/i })).toBeInTheDocument();
-    expect(document.body.textContent).not.toMatch(/recommend/i);
-  });
-});
-
-describe("simulation panel", () => {
-  test("shows days saved and extra people within target as ranges, labelled synthetic", () => {
-    render(<SimulationPanel result={SIM} actions={[REMINDERS, COORDINATOR]} />);
-    const panel = screen.getByRole("group", { name: /simulation/i });
-    expect(within(panel).getByText("Synthetic")).toBeInTheDocument();
-    expect(within(panel).getByText(/180–361 days/)).toBeInTheDocument();
-    expect(within(panel).getByText(/5–10 people/)).toBeInTheDocument();
+    expect(screen.queryByRole("slider")).not.toBeInTheDocument();
   });
 
-  test("puts 'needed to reach 70 %' beside 'evidence shows' and says when the gap cannot close", () => {
-    render(<SimulationPanel result={SIM} actions={[REMINDERS, COORDINATOR]} />);
-    const gap = screen.getByRole("group", { name: /target gap/i });
-    expect(gap).toHaveTextContent(/Needed to reach 70 %/);
-    expect(gap).toHaveTextContent(/Evidence shows 21,5–43 % fewer missed visits/);
-    expect(gap).toHaveTextContent(/cannot close the gap/i);
-    expect(gap).toHaveTextContent("58 %");
-  });
-
-  test("names the action counted when two actions share a lever", () => {
-    const shared: SimulationResult = {
-      ...SIM,
-      combined: {
-        ...SIM.combined,
-        lever_rule_applied: [{ lever: "missed_visits", counted: "reminders_nurse_call", not_counted: ["other"] }],
-      },
-    };
-    render(<SimulationPanel result={shared} actions={[REMINDERS, COORDINATOR]} />);
-    expect(screen.getByText(/same lever/i)).toHaveTextContent(/larger single effect/i);
+  test("says so when the Action Library has nothing for the group", () => {
+    renderActions([]);
+    expect(screen.getByText(/No action in the Action Library fits this group yet/)).toBeInTheDocument();
   });
 });
 
 describe("insight card", () => {
-  test("states what, where and who, with the Cause Codes as synthetic shares", async () => {
+  test("asks for the card and the summary of the group named in the address", async () => {
+    renderCard();
+    await screen.findByRole("heading", { level: 1 });
+    const ref = { county: "Western Uusimaa", dimension: "age", group: "85+" };
+    expect(mocked.insight).toHaveBeenCalledWith(ref);
+    expect(mocked.summary).toHaveBeenCalledWith(ref);
+  });
+
+  test("states what, where and who with the group's share, and the Cause Codes as synthetic shares", async () => {
     renderCard();
     expect(await screen.findByRole("heading", { level: 1 })).toHaveTextContent("Missed first visits");
-    expect(screen.getByText(/Western Uusimaa/, { selector: "p" })).toBeInTheDocument();
-    expect(screen.getByText(/People aged 75 and over/)).toBeInTheDocument();
+    const gap = screen.getByRole("group", { name: "Gap" });
+    expect(gap).toHaveTextContent("Where: Western Uusimaa");
+    expect(gap).toHaveTextContent("Who: People aged 85 and over");
+    expect(gap).toHaveTextContent("30 %");
+    expect(gap).toHaveTextContent("n=105");
+    expect(gap).toHaveTextContent("county 54 %");
+    expect(within(gap).getByText("Synthetic")).toBeInTheDocument();
+    expect(within(gap).queryByText(/small sample/i)).not.toBeInTheDocument();
     const causes = screen.getByRole("group", { name: /cause codes/i });
     expect(within(causes).getByText("Synthetic")).toBeInTheDocument();
     expect(causes).toHaveTextContent("46 %");
-    expect(causes).toHaveTextContent(/unconfirmed/i);
-    expect(causes).toHaveTextContent(/transport/i);
+    expect(causes).toHaveTextContent("Visit not confirmed");
+    expect(causes).toHaveTextContent("No transport to the visit");
     expect(causes).toHaveTextContent(/waiting for a slot/i);
+  });
+
+  test("flags a small sample on the group's share", async () => {
+    renderCard(SUMMARY, { ...CARD, baseline: { pct_within_target: 43.8, n: 8, small_sample: true } });
+    const gap = await screen.findByRole("group", { name: "Gap" });
+    expect(within(gap).getByText(/small sample/i)).toBeInTheDocument();
   });
 
   test("every summary sentence links to the fact it came from", async () => {
@@ -209,7 +166,7 @@ describe("insight card", () => {
     const summary = await screen.findByRole("region", { name: /AI summary/i });
     const links = await within(summary).findAllByRole("link");
     expect(links.map((l) => l.getAttribute("href"))).toEqual(["#fact-group_pct", "https://example.org/43"]);
-    expect(within(summary).getByText(/pre-written/i)).toBeInTheDocument(); // cached source is disclosed
+    expect(within(summary).getByText(/fixed rules/i)).toBeInTheDocument(); // rule-built source is disclosed
   });
 
   test("a summary the AI model wrote ahead of time says so", async () => {
@@ -219,103 +176,26 @@ describe("insight card", () => {
     expect(within(summary).queryByText(/not available/i)).not.toBeInTheDocument();
   });
 
-  test("lays out summary, actions, results, decision form and log in the agreed order", async () => {
+  test("lays out Cause Codes, summary and recommended actions in that order, with no decision or simulation", async () => {
     renderCard();
     await screen.findByRole("region", { name: /AI summary/i });
-    await screen.findByRole("group", { name: /target gap/i });
-    const order = ["Cause Codes", "AI summary", "Matched actions", "Simulation", "Record a decision", "Decision Log"];
-    const positions = order.map((name) => {
-      const el = screen.getByRole("heading", { name: new RegExp(name, "i") });
-      return Array.from(document.querySelectorAll("h2")).indexOf(el as HTMLHeadingElement);
-    });
-    expect(positions).toEqual([...positions].sort((a, b) => a - b));
-    expect(positions.every((p) => p >= 0)).toBe(true);
+    const headings = Array.from(document.querySelectorAll("h2")).map((h) => h.textContent);
+    expect(headings).toEqual(["Cause Codes", "AI summary", "Recommended actions"]);
+    expect(document.body.textContent).not.toMatch(/decision|simulat/i);
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 
-  test("moving a dial re-runs the simulation with that dial value", async () => {
-    renderCard();
-    fireEvent.change(await screen.findByRole("slider"), { target: { value: "0.3" } });
-    await waitFor(() => {
-      const last = mocked.simulate.mock.calls.at(-1)![0];
-      expect(last.card_id).toBe(CARD.card_id);
-      expect(last.dials.reminders_nurse_call).toBe(0.3);
-    });
-  });
-});
-
-describe("decision", () => {
-  const saved: DecisionRow = {
-    _id: "d1",
-    card_id: CARD.card_id,
-    action_ids: ["reminders_nurse_call"],
-    verdict: "adapt",
-    reason: "Start with reminders only",
-    owner: "County coordinator team",
-    due: "2026-12-15",
-    decided_by: "county-viewer",
-    demo_day: 2,
-    created_at: "2026-11-14T10:00:00",
-    snapshot: {},
-  };
-
-  test("cannot be submitted without a reason", async () => {
-    renderCard();
-    const submit = await screen.findByRole("button", { name: /record decision/i });
-    expect(submit).toBeDisabled();
-    await userEvent.type(screen.getByLabelText(/reason/i), "   ");
-    expect(submit).toBeDisabled();
-    await userEvent.type(screen.getByLabelText(/reason/i), "Cheapest lever");
-    expect(submit).toBeEnabled();
-  });
-
-  test("records the verdict with owner, due date and a snapshot of what was on screen, then lists it", async () => {
-    renderCard();
-    mocked.createDecision.mockResolvedValue(saved);
-    await screen.findByRole("group", { name: /target gap/i }); // the simulation the person saw
-    await screen.findByRole("region", { name: /AI summary/i }); // and the summary
-    await userEvent.click(screen.getByRole("radio", { name: /adapt/i }));
-    await userEvent.type(screen.getByLabelText(/reason/i), "Start with reminders only");
-    await userEvent.clear(screen.getByLabelText(/owner/i));
-    await userEvent.type(screen.getByLabelText(/owner/i), "County coordinator team");
-    await userEvent.clear(screen.getByLabelText(/due date/i));
-    await userEvent.type(screen.getByLabelText(/due date/i), "2026-12-15");
-    mocked.decisions.mockResolvedValue([saved]);
-    await userEvent.click(screen.getByRole("button", { name: /record decision/i }));
-
-    await waitFor(() => expect(mocked.createDecision).toHaveBeenCalledTimes(1));
-    const body = mocked.createDecision.mock.calls[0][0];
-    expect(body).toMatchObject({
-      card_id: CARD.card_id,
-      verdict: "adapt",
-      reason: "Start with reminders only",
-      owner: "County coordinator team",
-      due: "2026-12-15",
-      action_ids: ["reminders_nurse_call", "named_coordinator"],
-    });
-    expect(body.snapshot).toMatchObject({
-      badges: { reminders_nurse_call: "single_site", named_coordinator: "nordic_policy" },
-      simulation: SIM,
-    });
-    expect((body.snapshot as { facts: unknown[] }).facts.length).toBeGreaterThan(0);
-
-    const log = await screen.findByRole("region", { name: /decision log/i });
-    expect(await within(log).findByText("Start with reminders only")).toBeInTheDocument();
-  });
-
-  test("the log lists decisions newest first as the server returns them", async () => {
-    mocked.decisions.mockResolvedValue([
-      { ...saved, _id: "d2", reason: "second" },
-      { ...saved, _id: "d1", reason: "first" },
-    ]);
-    renderCard();
-    mocked.decisions.mockResolvedValue([
-      { ...saved, _id: "d2", reason: "second" },
-      { ...saved, _id: "d1", reason: "first" },
-    ]);
-    const log = await screen.findByRole("region", { name: /decision log/i });
-    await within(log).findByText("second");
-    const items = within(log).getAllByRole("listitem");
-    expect(items[0]).toHaveTextContent("second");
-    expect(items[1]).toHaveTextContent("first");
+  test("says when the card cannot be loaded and offers the way back", async () => {
+    mocked.insight.mockRejectedValue(new Error("404"));
+    mocked.summary.mockRejectedValue(new Error("404"));
+    render(
+      <MemoryRouter initialEntries={["/dashboard/county/Western%20Uusimaa/insight?dimension=age&group=none"]}>
+        <Routes>
+          <Route path="/dashboard/county/:name/insight" element={<InsightCard />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+    expect(await screen.findByRole("alert")).toHaveTextContent(/Could not load this Insight Card/);
+    expect(screen.getByRole("link", { name: /Western Uusimaa/ })).toBeInTheDocument();
   });
 });

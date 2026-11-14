@@ -28,7 +28,7 @@ export function NationalOverview() {
   }, []);
 
   if (failed) return <p role="alert">Could not load the county figures.</p>;
-  if (!counties) return <p>Loading…</p>;
+  if (!counties) return <p role="status" className="loading">Loading…</p>;
 
   const pct = mean(counties.map((c) => c.pct_within_target));
   return (

@@ -22,7 +22,7 @@ export function App() {
         {/* person 1 */}
         <Route path="/dashboard" element={<NationalOverview />} />
         <Route path="/dashboard/county/:name" element={<CountyView />} />
-        <Route path="/dashboard/county/:name/insight/:cardSlug" element={<InsightCard />} />
+        <Route path="/dashboard/county/:name/insight" element={<InsightCard />} />
         {/* person 4 */}
         <Route path="/sim-log" element={<SimLogScreen />} />
       </Route>

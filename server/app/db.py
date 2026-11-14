@@ -23,7 +23,7 @@ import asyncpg
 from app import config
 
 # Cleared by POST /demo/reset
-RUNTIME_TABLES = ["contacts", "patients", "events", "alerts", "escalation_steps", "appointments", "decisions"]
+RUNTIME_TABLES = ["contacts", "patients", "events", "alerts", "escalation_steps", "appointments"]
 # Seeded on startup
 SEEDED_TABLES = ["coordinators", "clock_state"]
 # Fixtures: seeded once, never written at runtime
