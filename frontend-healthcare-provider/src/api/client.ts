@@ -7,6 +7,7 @@ import type {
   DecisionRow,
   InsightCardDoc,
   SimulationResult,
+  SuggestionsResult,
   SummaryResult,
 } from "./types";
 
@@ -59,6 +60,8 @@ export const api = {
   simulate: (body: { card_id: string; dials: Record<string, number> }) =>
     request<SimulationResult>("POST", "/dashboard/simulate", body),
   summary: (cardId: string) => request<SummaryResult>("POST", "/dashboard/summary", { card_id: cardId }),
+  suggest: (body: { county: string; dimension: string; group: string }) =>
+    request<SuggestionsResult>("POST", "/dashboard/suggest", body),
   createDecision: (body: DecisionInput) => request<DecisionRow>("POST", "/dashboard/decisions", body),
   decisions: (cardId: string) =>
     request<DecisionRow[]>("GET", `/dashboard/decisions?card_id=${encodeURIComponent(cardId)}`),

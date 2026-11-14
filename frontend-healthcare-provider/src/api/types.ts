@@ -94,12 +94,20 @@ export type BreakdownCell =
 
 export type Phase = "detection" | "referral" | "diagnosis" | "treatment";
 
+// ethnicity is present only where the fixture provides it (Western Uusimaa for the demo).
+export type BreakdownDimension =
+  | "age"
+  | "language"
+  | "ethnicity"
+  | "education_group"
+  | "municipality_type";
+
 export interface CountyDetail extends CountySummary {
   pct_outside_fast_track: number;
   days_per_phase: Record<Phase, number>;
   stage_warning_days: Record<Phase, number>;
   causes: Record<string, Record<string, number>>;
-  breakdown: Record<"age" | "language" | "education_group" | "municipality_type", Record<string, BreakdownCell>>;
+  breakdown: Partial<Record<BreakdownDimension, Record<string, BreakdownCell>>>;
   insight_card_id?: string;
 }
 
@@ -155,6 +163,12 @@ export interface SummaryResult {
   sentences: { text: string; fact_ids: string[] }[];
   facts: SummaryFact[];
   source: "live" | "pregenerated" | "cached";
+}
+
+export interface SuggestionsResult {
+  sentences: { text: string; fact_ids: string[] }[];
+  facts: SummaryFact[];
+  source: "ai" | "rules";
 }
 
 export interface DecisionRow {

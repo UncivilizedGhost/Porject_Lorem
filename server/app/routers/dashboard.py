@@ -17,8 +17,12 @@ from app.services.summary_filter import filter_sentences
 
 router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 
-SUPPRESS_BELOW = 5  # "not enough data", no value returned
-SMALL_SAMPLE_BELOW = 20  # value returned with a warning
+SUPPRESS_BELOW = 5      # "not enough data", no value returned
+SMALL_SAMPLE_BELOW = 20 # value returned with a warning
+
+
+def _pct(v: float) -> str:
+    return f"{v:.0f}\u00a0%"
 
 
 def _protect(cell: dict) -> dict:
@@ -40,14 +44,16 @@ async def county(name: str):
     doc = await db.get("counties", county_id(name))
     if doc is None:
         raise HTTPException(status_code=404, detail="unknown county")
-    doc["breakdown"] = {
-        dimension: {label: _protect(cell) for label, cell in cells.items()}
-        for dimension, cells in doc["breakdown"].items()
-    }
     # Stage warning thresholds live with the card fixture (one set for the demo).
     cards = await db.find("insight_cards", limit=1)
-    doc["stage_warning_days"] = cards[0]["stage_warning_days"] if cards else {}
-    return doc
+    return {
+        **doc,
+        "breakdown": {
+            dimension: {label: _protect(cell) for label, cell in cells.items()}
+            for dimension, cells in doc["breakdown"].items()
+        },
+        "stage_warning_days": cards[0]["stage_warning_days"] if cards else {},
+    }
 
 
 @router.get("/actions")
@@ -150,3 +156,104 @@ async def create_decision(body: DecisionBody):
 async def list_decisions(card_id: str):
     """?card_id=… newest first."""
     return await db.find("decisions", {"card_id": card_id}, newest_first=True)
+
+
+SUGGEST_SYSTEM_PROMPT = (
+    "You help a county team explore possible actions for one demographic group. Use only the "
+    "numbered facts you are given. Write at most 3 short sentences in plain English. End every "
+    "sentence with the ids of the facts it uses in square brackets, like [group_pct]. Describe "
+    "options to explore from the Action Library; never recommend, rank or decide. Say that a "
+    "person decides. All figures are synthetic demo data."
+)
+
+DIMENSION_LABEL = {
+    "age": "age group",
+    "language": "language group",
+    "ethnicity": "ethnicity group",
+    "education_group": "education group",
+    "municipality_type": "municipality type",
+}
+
+
+def _suggestion_facts(doc: dict, dimension: str, group: str, cell: dict, actions: list[dict]) -> list[dict]:
+    label = DIMENSION_LABEL.get(dimension, dimension.replace("_", " "))
+    facts = [
+        {"id": "group_pct", "value": cell["pct_within_target"],
+         "text": f"{_pct(cell['pct_within_target'])} of {group} ({label}) in {doc['name']} start treatment within the target (n={cell['n']})"},
+        {"id": "county_pct", "value": doc["pct_within_target"],
+         "text": f"{_pct(doc['pct_within_target'])} of all patients in {doc['name']} start treatment within the target"},
+    ]
+    for cause, share in doc["causes"].get("referral", {}).items():
+        facts.append({"id": f"cause_{cause}", "value": share,
+                      "text": f"{_pct(share * 100)} of delayed referral stages are Cause Code '{cause.replace('_', ' ')}'"})
+    for action in actions:
+        eff = action.get("effect")
+        text = f"{action['title']} (evidence badge: {action['badge']}"
+        if eff:
+            text += f"; evidence shows {eff['low'] * 100:.0f}–{eff['high'] * 100:.0f}\u00a0% fewer missed visits"
+        else:
+            text += "; no effect estimate"
+        fact = {"id": f"action_{action['_id']}", "value": action["badge"], "text": text + ")"}
+        if action["evidence"]:
+            fact["source_url"] = action["evidence"][0]["url"]
+        facts.append(fact)
+    return facts
+
+
+def _rule_sentences(doc: dict, dimension: str, group: str, cell: dict, actions: list[dict]) -> list[dict]:
+    label = DIMENSION_LABEL.get(dimension, dimension.replace("_", " "))
+    sentences = [{
+        "text": (f"Only {_pct(cell['pct_within_target'])} of {group} ({label}) in {doc['name']} start "
+                 f"treatment within the target, against {_pct(doc['pct_within_target'])} county-wide"),
+        "fact_ids": ["group_pct", "county_pct"],
+    }]
+    if actions:
+        sentences.append({
+            "text": "Options to explore in the Action Library: " + "; ".join(a["title"] for a in actions),
+            "fact_ids": [f"action_{a['_id']}" for a in actions],
+        })
+    with_effect = [a for a in actions if a.get("effect")]
+    if with_effect:
+        action, eff = with_effect[0], with_effect[0]["effect"]
+        sentences.append({
+            "text": (f"The evidence for {action['title']} shows "
+                     f"{eff['low'] * 100:.0f}–{eff['high'] * 100:.0f}\u00a0% fewer missed visits"),
+            "fact_ids": [f"action_{action['_id']}"],
+        })
+    return sentences
+
+
+class SuggestBody(BaseModel):
+    county: str
+    dimension: str
+    group: str
+
+
+@router.post("/suggest")
+async def suggest(body: SuggestBody):
+    """Facts-only options for one group. Model unavailable → Action Library rules."""
+    doc = await db.get("counties", county_id(body.county))
+    if doc is None:
+        raise HTTPException(status_code=404, detail="unknown county")
+    cells = doc["breakdown"].get(body.dimension)
+    if cells is None or body.group not in cells:
+        raise HTTPException(status_code=404, detail="unknown group")
+    cell = _protect(cells[body.group])
+    if cell.get("suppressed"):
+        raise HTTPException(status_code=422, detail="not enough data for this group")
+    actions = [a for a in await db.find("actions") if a["gap_pattern"]["phase"] == "referral"]
+    facts = _suggestion_facts(doc, body.dimension, body.group, cell, actions)
+    valid = {f["id"] for f in facts}
+    sentences: list[dict] = []
+    try:
+        reply = await nemotron.complete(SUGGEST_SYSTEM_PROMPT, summary_facts.build_prompt(facts), timeout_s=20)
+        sentences = filter_sentences(reply, valid)
+    except Exception:
+        sentences = []
+    if sentences:
+        return {"sentences": sentences, "facts": facts, "source": "ai"}
+    return {
+        "sentences": _rule_sentences(doc, body.dimension, body.group, cell, actions),
+        "facts": facts,
+        "source": "rules",
+    }

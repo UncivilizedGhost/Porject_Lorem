@@ -5,78 +5,79 @@
       "col": 2,
       "row": 0
     },
-    "pct_within_target": 58.4,
-    "median_days_referral_to_treatment": 58.0,
-    "reach_rate_over_75": 61.0,
-    "pct_outside_fast_track": 34.0,
+    "synthetic": true,
+    "pct_within_target": 43.0,
+    "median_days_referral_to_treatment": 49,
+    "reach_rate_over_75": 60,
+    "pct_outside_fast_track": 26,
     "days_per_phase": {
-      "detection": 32.9,
-      "referral": 14.6,
-      "diagnosis": 18.5,
-      "treatment": 15.4
+      "detection": 31.8,
+      "referral": 18.4,
+      "diagnosis": 30.1,
+      "treatment": 20.2
     },
     "causes": {
       "referral": {
-        "unconfirmed": 0.43,
-        "transport": 0.24,
-        "waiting_for_slot": 0.33
+        "unconfirmed": 0.62,
+        "transport": 0.16,
+        "waiting_for_slot": 0.22
       }
     },
     "breakdown": {
       "age": {
         "under 65": {
-          "pct_within_target": 61.4,
-          "n": 60
+          "pct_within_target": 47.6,
+          "n": 53
         },
         "65-74": {
-          "pct_within_target": 55.4,
-          "n": 90
+          "pct_within_target": 45.6,
+          "n": 71
         },
         "75+": {
-          "pct_within_target": 41.4,
-          "n": 50
+          "pct_within_target": 36.3,
+          "n": 62
         }
       },
       "language": {
         "Finnish": {
-          "pct_within_target": 58.9,
-          "n": 176
+          "pct_within_target": 43.5,
+          "n": 175
         },
         "Swedish": {
-          "pct_within_target": 54.9,
-          "n": 3
+          "suppressed": true
         },
         "Other": {
-          "pct_within_target": 52.4,
-          "n": 10
+          "pct_within_target": 35.8,
+          "n": 10,
+          "small_sample": true
         }
       },
       "education_group": {
         "basic": {
-          "pct_within_target": 50.4,
-          "n": 60
+          "pct_within_target": 40.5,
+          "n": 64
         },
         "upper secondary": {
-          "pct_within_target": 58.9,
-          "n": 80
+          "pct_within_target": 43.0,
+          "n": 65
         },
         "tertiary": {
-          "pct_within_target": 64.4,
-          "n": 60
+          "pct_within_target": 45.7,
+          "n": 57
         }
       },
       "municipality_type": {
         "urban": {
-          "pct_within_target": 61.4,
-          "n": 110
+          "pct_within_target": 45.1,
+          "n": 69
         },
         "semi-urban": {
-          "pct_within_target": 57.4,
-          "n": 50
+          "pct_within_target": 46.9,
+          "n": 45
         },
         "rural": {
-          "pct_within_target": 51.9,
-          "n": 40
+          "pct_within_target": 38.6,
+          "n": 72
         }
       }
     }
@@ -87,78 +88,80 @@
       "col": 1,
       "row": 1
     },
-    "pct_within_target": 66.8,
-    "median_days_referral_to_treatment": 49.0,
-    "reach_rate_over_75": 68.0,
-    "pct_outside_fast_track": 29.0,
+    "synthetic": true,
+    "pct_within_target": 49.3,
+    "median_days_referral_to_treatment": 43,
+    "reach_rate_over_75": 62,
+    "pct_outside_fast_track": 26,
     "days_per_phase": {
-      "detection": 28.3,
-      "referral": 11.6,
-      "diagnosis": 16.0,
-      "treatment": 13.3
+      "detection": 26.5,
+      "referral": 16.8,
+      "diagnosis": 26.6,
+      "treatment": 16.4
     },
     "causes": {
       "referral": {
-        "unconfirmed": 0.38,
-        "transport": 0.23,
+        "unconfirmed": 0.4,
+        "transport": 0.21,
         "waiting_for_slot": 0.39
       }
     },
     "breakdown": {
       "age": {
         "under 65": {
-          "pct_within_target": 69.8,
-          "n": 180
+          "pct_within_target": 59.1,
+          "n": 155
         },
         "65-74": {
-          "pct_within_target": 63.8,
-          "n": 270
+          "pct_within_target": 51.3,
+          "n": 230
         },
         "75+": {
-          "pct_within_target": 49.8,
-          "n": 150
+          "pct_within_target": 40.8,
+          "n": 229
         }
       },
       "language": {
         "Finnish": {
-          "pct_within_target": 67.3,
-          "n": 528
+          "pct_within_target": 49.8,
+          "n": 583
         },
         "Swedish": {
-          "pct_within_target": 63.3,
-          "n": 42
+          "pct_within_target": 56.3,
+          "n": 6,
+          "small_sample": true
         },
         "Other": {
-          "pct_within_target": 60.8,
-          "n": 30
+          "pct_within_target": 36.5,
+          "n": 25
         }
       },
       "education_group": {
         "basic": {
-          "pct_within_target": 58.8,
-          "n": 180
+          "pct_within_target": 45.0,
+          "n": 182
         },
         "upper secondary": {
-          "pct_within_target": 67.3,
-          "n": 240
+          "pct_within_target": 48.6,
+          "n": 244
         },
         "tertiary": {
-          "pct_within_target": 72.8,
-          "n": 180
+          "pct_within_target": 54.4,
+          "n": 188
         }
       },
       "municipality_type": {
         "urban": {
-          "pct_within_target": 69.8,
-          "n": 330
+          "pct_within_target": 53.1,
+          "n": 337
         },
         "semi-urban": {
-          "pct_within_target": 65.8,
-          "n": 150
+          "pct_within_target": 47.9,
+          "n": 136
         },
         "rural": {
-          "pct_within_target": 60.3,
-          "n": 120
+          "pct_within_target": 41.7,
+          "n": 141
         }
       }
     }
@@ -169,78 +172,77 @@
       "col": 3,
       "row": 1
     },
-    "pct_within_target": 55.9,
-    "median_days_referral_to_treatment": 61.0,
-    "reach_rate_over_75": 57.0,
-    "pct_outside_fast_track": 36.0,
+    "synthetic": true,
+    "pct_within_target": 56.4,
+    "median_days_referral_to_treatment": 38,
+    "reach_rate_over_75": 66,
+    "pct_outside_fast_track": 22,
     "days_per_phase": {
-      "detection": 34.3,
-      "referral": 15.4,
-      "diagnosis": 19.2,
-      "treatment": 16.0
+      "detection": 29.6,
+      "referral": 15.0,
+      "diagnosis": 18.3,
+      "treatment": 14.1
     },
     "causes": {
       "referral": {
-        "unconfirmed": 0.44,
-        "transport": 0.25,
-        "waiting_for_slot": 0.31
+        "unconfirmed": 0.2,
+        "transport": 0.21,
+        "waiting_for_slot": 0.59
       }
     },
     "breakdown": {
       "age": {
         "under 65": {
-          "pct_within_target": 58.9,
-          "n": 30
+          "pct_within_target": 64.0,
+          "n": 25
         },
         "65-74": {
-          "pct_within_target": 52.9,
-          "n": 45
+          "pct_within_target": 58.7,
+          "n": 42
         },
         "75+": {
-          "pct_within_target": 38.9,
-          "n": 25
+          "pct_within_target": 47.8,
+          "n": 33
         }
       },
       "language": {
         "Finnish": {
-          "pct_within_target": 56.4,
-          "n": 88
+          "pct_within_target": 56.5,
+          "n": 97
         },
         "Swedish": {
-          "pct_within_target": 52.4,
-          "n": 2
+          "suppressed": true
         },
         "Other": {
-          "pct_within_target": 49.9,
-          "n": 5
+          "suppressed": true
         }
       },
       "education_group": {
         "basic": {
-          "pct_within_target": 47.9,
-          "n": 30
+          "pct_within_target": 50.7,
+          "n": 35
         },
         "upper secondary": {
-          "pct_within_target": 56.4,
-          "n": 40
+          "pct_within_target": 57.1,
+          "n": 41
         },
         "tertiary": {
-          "pct_within_target": 61.9,
-          "n": 30
+          "pct_within_target": 63.7,
+          "n": 24
         }
       },
       "municipality_type": {
         "urban": {
-          "pct_within_target": 58.9,
-          "n": 55
+          "pct_within_target": 59.3,
+          "n": 41
         },
         "semi-urban": {
-          "pct_within_target": 54.9,
-          "n": 25
+          "pct_within_target": 60.2,
+          "n": 21
         },
         "rural": {
-          "pct_within_target": 49.4,
-          "n": 20
+          "pct_within_target": 51.3,
+          "n": 38
         }
       }
     }
@@ -251,78 +253,81 @@
       "col": 0,
       "row": 2
     },
-    "pct_within_target": 72.5,
-    "median_days_referral_to_treatment": 44.0,
-    "reach_rate_over_75": 74.0,
-    "pct_outside_fast_track": 24.0,
+    "synthetic": true,
+    "pct_within_target": 48.4,
+    "median_days_referral_to_treatment": 43,
+    "reach_rate_over_75": 66,
+    "pct_outside_fast_track": 30,
     "days_per_phase": {
-      "detection": 25.1,
-      "referral": 9.6,
-      "diagnosis": 14.2,
-      "treatment": 11.9
+      "detection": 29.0,
+      "referral": 15.4,
+      "diagnosis": 22.4,
+      "treatment": 12.5
     },
     "causes": {
       "referral": {
-        "unconfirmed": 0.34,
-        "transport": 0.22,
-        "waiting_for_slot": 0.44
+        "unconfirmed": 0.41,
+        "transport": 0.18,
+        "waiting_for_slot": 0.41
       }
     },
     "breakdown": {
       "age": {
         "under 65": {
-          "pct_within_target": 75.5,
-          "n": 30
+          "pct_within_target": 57.9,
+          "n": 29
         },
         "65-74": {
-          "pct_within_target": 69.5,
-          "n": 45
+          "pct_within_target": 52.8,
+          "n": 49
         },
         "75+": {
-          "pct_within_target": 55.5,
-          "n": 25
+          "pct_within_target": 34.4,
+          "n": 35
         }
       },
       "language": {
         "Finnish": {
-          "pct_within_target": 73.0,
-          "n": 88
+          "pct_within_target": 48.2,
+          "n": 99
         },
         "Swedish": {
-          "pct_within_target": 69.0,
-          "n": 7
+          "pct_within_target": 52.0,
+          "n": 8,
+          "small_sample": true
         },
         "Other": {
-          "pct_within_target": 66.5,
-          "n": 9
+          "pct_within_target": 45.9,
+          "n": 6,
+          "small_sample": true
         }
       },
       "education_group": {
         "basic": {
-          "pct_within_target": 64.5,
-          "n": 30
+          "pct_within_target": 47.7,
+          "n": 42
         },
         "upper secondary": {
-          "pct_within_target": 73.0,
-          "n": 40
+          "pct_within_target": 44.8,
+          "n": 44
         },
         "tertiary": {
-          "pct_within_target": 78.5,
-          "n": 30
+          "pct_within_target": 54.9,
+          "n": 27
         }
       },
       "municipality_type": {
         "urban": {
-          "pct_within_target": 75.5,
-          "n": 55
+          "pct_within_target": 51.6,
+          "n": 54
         },
         "semi-urban": {
-          "pct_within_target": 71.5,
-          "n": 25
+          "pct_within_target": 48.2,
+          "n": 26
         },
         "rural": {
-          "pct_within_target": 66.0,
-          "n": 20
+          "pct_within_target": 43.0,
+          "n": 33
         }
       }
     }
@@ -333,78 +338,79 @@
       "col": 2,
       "row": 2
     },
-    "pct_within_target": 69.1,
-    "median_days_referral_to_treatment": 47.0,
-    "reach_rate_over_75": 70.0,
-    "pct_outside_fast_track": 27.0,
+    "synthetic": true,
+    "pct_within_target": 42.3,
+    "median_days_referral_to_treatment": 47,
+    "reach_rate_over_75": 69,
+    "pct_outside_fast_track": 27,
     "days_per_phase": {
-      "detection": 27.0,
-      "referral": 10.8,
-      "diagnosis": 15.3,
-      "treatment": 12.7
+      "detection": 34.0,
+      "referral": 14.2,
+      "diagnosis": 23.9,
+      "treatment": 16.0
     },
     "causes": {
       "referral": {
-        "unconfirmed": 0.37,
-        "transport": 0.22,
-        "waiting_for_slot": 0.41
+        "unconfirmed": 0.59,
+        "transport": 0.16,
+        "waiting_for_slot": 0.25
       }
     },
     "breakdown": {
       "age": {
         "under 65": {
-          "pct_within_target": 72.1,
-          "n": 90
+          "pct_within_target": 53.2,
+          "n": 80
         },
         "65-74": {
-          "pct_within_target": 66.1,
-          "n": 135
+          "pct_within_target": 44.4,
+          "n": 122
         },
         "75+": {
-          "pct_within_target": 52.1,
-          "n": 75
+          "pct_within_target": 31.9,
+          "n": 109
         }
       },
       "language": {
         "Finnish": {
-          "pct_within_target": 69.6,
-          "n": 264
+          "pct_within_target": 42.2,
+          "n": 298
         },
         "Swedish": {
-          "pct_within_target": 65.6,
-          "n": 21
+          "suppressed": true
         },
         "Other": {
-          "pct_within_target": 63.1,
-          "n": 15
+          "pct_within_target": 40.3,
+          "n": 11,
+          "small_sample": true
         }
       },
       "education_group": {
         "basic": {
-          "pct_within_target": 61.1,
-          "n": 90
+          "pct_within_target": 36.6,
+          "n": 116
         },
         "upper secondary": {
-          "pct_within_target": 69.6,
-          "n": 120
+          "pct_within_target": 42.8,
+          "n": 100
         },
         "tertiary": {
-          "pct_within_target": 75.1,
-          "n": 90
+          "pct_within_target": 48.3,
+          "n": 95
         }
       },
       "municipality_type": {
         "urban": {
-          "pct_within_target": 72.1,
-          "n": 165
+          "pct_within_target": 45.1,
+          "n": 161
         },
         "semi-urban": {
-          "pct_within_target": 68.1,
-          "n": 75
+          "pct_within_target": 41.9,
+          "n": 72
         },
         "rural": {
-          "pct_within_target": 62.6,
-          "n": 60
+          "pct_within_target": 36.3,
+          "n": 78
         }
       }
     }
@@ -415,78 +421,79 @@
       "col": 3,
       "row": 2
     },
-    "pct_within_target": 61.7,
-    "median_days_referral_to_treatment": 54.0,
-    "reach_rate_over_75": 63.0,
-    "pct_outside_fast_track": 32.0,
+    "synthetic": true,
+    "pct_within_target": 40.6,
+    "median_days_referral_to_treatment": 50,
+    "reach_rate_over_75": 58,
+    "pct_outside_fast_track": 28,
     "days_per_phase": {
-      "detection": 31.1,
-      "referral": 13.4,
-      "diagnosis": 17.5,
-      "treatment": 14.6
+      "detection": 28.4,
+      "referral": 18.1,
+      "diagnosis": 26.7,
+      "treatment": 19.4
     },
     "causes": {
       "referral": {
-        "unconfirmed": 0.41,
-        "transport": 0.24,
-        "waiting_for_slot": 0.35
+        "unconfirmed": 0.3,
+        "transport": 0.16,
+        "waiting_for_slot": 0.54
       }
     },
     "breakdown": {
       "age": {
         "under 65": {
-          "pct_within_target": 64.7,
-          "n": 60
+          "pct_within_target": 48.9,
+          "n": 53
         },
         "65-74": {
-          "pct_within_target": 58.7,
-          "n": 90
+          "pct_within_target": 42.5,
+          "n": 76
         },
         "75+": {
-          "pct_within_target": 44.7,
-          "n": 50
+          "pct_within_target": 31.3,
+          "n": 63
         }
       },
       "language": {
         "Finnish": {
-          "pct_within_target": 62.2,
-          "n": 176
+          "pct_within_target": 40.4,
+          "n": 184
         },
         "Swedish": {
-          "pct_within_target": 58.2,
-          "n": 14
+          "suppressed": true
         },
         "Other": {
-          "pct_within_target": 55.7,
-          "n": 10
+          "pct_within_target": 40.4,
+          "n": 7,
+          "small_sample": true
         }
       },
       "education_group": {
         "basic": {
-          "pct_within_target": 53.7,
-          "n": 60
+          "pct_within_target": 37.6,
+          "n": 67
         },
         "upper secondary": {
-          "pct_within_target": 62.2,
-          "n": 80
+          "pct_within_target": 40.0,
+          "n": 78
         },
         "tertiary": {
-          "pct_within_target": 67.7,
-          "n": 60
+          "pct_within_target": 45.4,
+          "n": 47
         }
       },
       "municipality_type": {
         "urban": {
-          "pct_within_target": 64.7,
-          "n": 110
+          "pct_within_target": 43.0,
+          "n": 93
         },
         "semi-urban": {
-          "pct_within_target": 60.7,
-          "n": 50
+          "pct_within_target": 43.6,
+          "n": 41
         },
         "rural": {
-          "pct_within_target": 55.2,
-          "n": 40
+          "pct_within_target": 34.3,
+          "n": 58
         }
       }
     }
@@ -497,78 +504,78 @@
       "col": 0,
       "row": 3
     },
-    "pct_within_target": 81.6,
-    "median_days_referral_to_treatment": 38.0,
-    "reach_rate_over_75": 83.0,
-    "pct_outside_fast_track": 17.0,
+    "synthetic": true,
+    "pct_within_target": 62.3,
+    "median_days_referral_to_treatment": 34,
+    "reach_rate_over_75": 77,
+    "pct_outside_fast_track": 19,
     "days_per_phase": {
-      "detection": 20.1,
-      "referral": 6.4,
-      "diagnosis": 11.5,
-      "treatment": 9.6
+      "detection": 26.3,
+      "referral": 10.4,
+      "diagnosis": 15.8,
+      "treatment": 16.7
     },
     "causes": {
       "referral": {
-        "unconfirmed": 0.29,
-        "transport": 0.2,
-        "waiting_for_slot": 0.51
+        "unconfirmed": 0.48,
+        "transport": 0.21,
+        "waiting_for_slot": 0.31
       }
     },
     "breakdown": {
       "age": {
         "under 65": {
-          "pct_within_target": 84.6,
-          "n": 45
+          "pct_within_target": 71.4,
+          "n": 35
         },
         "65-74": {
-          "pct_within_target": 78.6,
-          "n": 68
+          "pct_within_target": 62.3,
+          "n": 58
         },
         "75+": {
-          "pct_within_target": 64.6,
-          "n": 38
+          "pct_within_target": 55.6,
+          "n": 47
         }
       },
       "language": {
         "Finnish": {
-          "pct_within_target": 82.1,
-          "n": 132
+          "pct_within_target": 62.6,
+          "n": 108
         },
         "Swedish": {
-          "pct_within_target": 78.1,
-          "n": 11
+          "pct_within_target": 62.8,
+          "n": 29
         },
         "Other": {
-          "pct_within_target": 75.6,
-          "n": 8
+          "suppressed": true
         }
       },
       "education_group": {
         "basic": {
-          "pct_within_target": 73.6,
-          "n": 45
+          "pct_within_target": 58.2,
+          "n": 51
         },
         "upper secondary": {
-          "pct_within_target": 82.1,
-          "n": 60
+          "pct_within_target": 64.0,
+          "n": 43
         },
         "tertiary": {
-          "pct_within_target": 87.6,
-          "n": 45
+          "pct_within_target": 65.8,
+          "n": 46
         }
       },
       "municipality_type": {
         "urban": {
-          "pct_within_target": 84.6,
-          "n": 82
+          "pct_within_target": 64.3,
+          "n": 74
         },
         "semi-urban": {
-          "pct_within_target": 80.6,
-          "n": 38
+          "pct_within_target": 63.7,
+          "n": 32
         },
         "rural": {
-          "pct_within_target": 75.1,
-          "n": 30
+          "pct_within_target": 57.4,
+          "n": 34
         }
       }
     }
@@ -579,78 +586,79 @@
       "col": 1,
       "row": 3
     },
-    "pct_within_target": 71.3,
-    "median_days_referral_to_treatment": 45.0,
-    "reach_rate_over_75": 72.0,
-    "pct_outside_fast_track": 25.0,
+    "synthetic": true,
+    "pct_within_target": 51.2,
+    "median_days_referral_to_treatment": 41,
+    "reach_rate_over_75": 67,
+    "pct_outside_fast_track": 21,
     "days_per_phase": {
-      "detection": 25.8,
-      "referral": 10.0,
-      "diagnosis": 14.6,
-      "treatment": 12.2
+      "detection": 31.0,
+      "referral": 15.9,
+      "diagnosis": 22.9,
+      "treatment": 11.3
     },
     "causes": {
       "referral": {
-        "unconfirmed": 0.35,
-        "transport": 0.22,
-        "waiting_for_slot": 0.43
+        "unconfirmed": 0.29,
+        "transport": 0.15,
+        "waiting_for_slot": 0.56
       }
     },
     "breakdown": {
       "age": {
         "under 65": {
-          "pct_within_target": 74.3,
-          "n": 90
+          "pct_within_target": 59.3,
+          "n": 89
         },
         "65-74": {
-          "pct_within_target": 68.3,
-          "n": 135
+          "pct_within_target": 53.5,
+          "n": 116
         },
         "75+": {
-          "pct_within_target": 54.3,
+          "pct_within_target": 38.2,
           "n": 75
         }
       },
       "language": {
         "Finnish": {
-          "pct_within_target": 71.8,
-          "n": 264
+          "pct_within_target": 51.4,
+          "n": 272
         },
         "Swedish": {
-          "pct_within_target": 67.8,
-          "n": 21
+          "suppressed": true
         },
         "Other": {
-          "pct_within_target": 65.3,
-          "n": 15
+          "pct_within_target": 42.4,
+          "n": 6,
+          "small_sample": true
         }
       },
       "education_group": {
         "basic": {
-          "pct_within_target": 63.3,
-          "n": 90
+          "pct_within_target": 42.8,
+          "n": 109
         },
         "upper secondary": {
-          "pct_within_target": 71.8,
-          "n": 120
+          "pct_within_target": 52.6,
+          "n": 99
         },
         "tertiary": {
-          "pct_within_target": 77.3,
-          "n": 90
+          "pct_within_target": 61.8,
+          "n": 72
         }
       },
       "municipality_type": {
         "urban": {
-          "pct_within_target": 74.3,
-          "n": 165
+          "pct_within_target": 54.6,
+          "n": 152
         },
         "semi-urban": {
-          "pct_within_target": 70.3,
-          "n": 75
+          "pct_within_target": 51.4,
+          "n": 66
         },
         "rural": {
-          "pct_within_target": 64.8,
-          "n": 60
+          "pct_within_target": 42.8,
+          "n": 62
         }
       }
     }
@@ -661,78 +669,79 @@
       "col": 2,
       "row": 3
     },
-    "pct_within_target": 63.2,
-    "median_days_referral_to_treatment": 52.0,
-    "reach_rate_over_75": 64.0,
-    "pct_outside_fast_track": 31.0,
+    "synthetic": true,
+    "pct_within_target": 32.0,
+    "median_days_referral_to_treatment": 56,
+    "reach_rate_over_75": 58,
+    "pct_outside_fast_track": 29,
     "days_per_phase": {
-      "detection": 30.2,
-      "referral": 12.9,
-      "diagnosis": 17.0,
-      "treatment": 14.2
+      "detection": 40.7,
+      "referral": 20.1,
+      "diagnosis": 26.5,
+      "treatment": 22.0
     },
     "causes": {
       "referral": {
-        "unconfirmed": 0.4,
-        "transport": 0.23,
-        "waiting_for_slot": 0.37
+        "unconfirmed": 0.3,
+        "transport": 0.16,
+        "waiting_for_slot": 0.54
       }
     },
     "breakdown": {
       "age": {
         "under 65": {
-          "pct_within_target": 66.2,
-          "n": 45
+          "pct_within_target": 40.7,
+          "n": 46
         },
         "65-74": {
-          "pct_within_target": 60.2,
-          "n": 68
+          "pct_within_target": 30.2,
+          "n": 58
         },
         "75+": {
-          "pct_within_target": 46.2,
-          "n": 38
+          "pct_within_target": 25.4,
+          "n": 45
         }
       },
       "language": {
         "Finnish": {
-          "pct_within_target": 63.7,
-          "n": 132
+          "pct_within_target": 32.5,
+          "n": 142
         },
         "Swedish": {
-          "pct_within_target": 59.7,
-          "n": 11
+          "suppressed": true
         },
         "Other": {
-          "pct_within_target": 57.2,
-          "n": 8
+          "pct_within_target": 15.8,
+          "n": 6,
+          "small_sample": true
         }
       },
       "education_group": {
         "basic": {
-          "pct_within_target": 55.2,
-          "n": 45
+          "pct_within_target": 31.8,
+          "n": 49
         },
         "upper secondary": {
-          "pct_within_target": 63.7,
-          "n": 60
+          "pct_within_target": 28.9,
+          "n": 49
         },
         "tertiary": {
-          "pct_within_target": 69.2,
-          "n": 45
+          "pct_within_target": 34.6,
+          "n": 51
         }
       },
       "municipality_type": {
         "urban": {
-          "pct_within_target": 66.2,
-          "n": 82
+          "pct_within_target": 39.1,
+          "n": 56
         },
         "semi-urban": {
-          "pct_within_target": 62.2,
-          "n": 38
+          "pct_within_target": 30.1,
+          "n": 33
         },
         "rural": {
-          "pct_within_target": 56.7,
-          "n": 30
+          "pct_within_target": 26.3,
+          "n": 60
         }
       }
     }
@@ -743,78 +752,81 @@
       "col": 0,
       "row": 4
     },
-    "pct_within_target": 74.9,
-    "median_days_referral_to_treatment": 42.0,
-    "reach_rate_over_75": 76.0,
-    "pct_outside_fast_track": 23.0,
+    "synthetic": true,
+    "pct_within_target": 71.3,
+    "median_days_referral_to_treatment": 31,
+    "reach_rate_over_75": 72,
+    "pct_outside_fast_track": 20,
     "days_per_phase": {
-      "detection": 23.8,
-      "referral": 8.8,
-      "diagnosis": 13.5,
-      "treatment": 11.3
+      "detection": 27.2,
+      "referral": 9.6,
+      "diagnosis": 15.2,
+      "treatment": 11.1
     },
     "causes": {
       "referral": {
-        "unconfirmed": 0.33,
-        "transport": 0.21,
-        "waiting_for_slot": 0.46
+        "unconfirmed": 0.3,
+        "transport": 0.38,
+        "waiting_for_slot": 0.32
       }
     },
     "breakdown": {
       "age": {
         "under 65": {
           "pct_within_target": 77.9,
-          "n": 60
+          "n": 62
         },
         "65-74": {
-          "pct_within_target": 71.9,
-          "n": 90
+          "pct_within_target": 75.3,
+          "n": 83
         },
         "75+": {
-          "pct_within_target": 57.9,
-          "n": 50
+          "pct_within_target": 60.0,
+          "n": 65
         }
       },
       "language": {
         "Finnish": {
-          "pct_within_target": 75.4,
-          "n": 176
+          "pct_within_target": 71.9,
+          "n": 199
         },
         "Swedish": {
-          "pct_within_target": 71.4,
-          "n": 14
+          "pct_within_target": 56.2,
+          "n": 5,
+          "small_sample": true
         },
         "Other": {
-          "pct_within_target": 68.9,
-          "n": 10
+          "pct_within_target": 78.4,
+          "n": 6,
+          "small_sample": true
         }
       },
       "education_group": {
         "basic": {
-          "pct_within_target": 66.9,
-          "n": 60
+          "pct_within_target": 65.9,
+          "n": 62
         },
         "upper secondary": {
-          "pct_within_target": 75.4,
-          "n": 80
+          "pct_within_target": 72.0,
+          "n": 66
         },
         "tertiary": {
-          "pct_within_target": 80.9,
-          "n": 60
+          "pct_within_target": 75.6,
+          "n": 82
         }
       },
       "municipality_type": {
         "urban": {
-          "pct_within_target": 77.9,
-          "n": 110
+          "pct_within_target": 74.0,
+          "n": 82
         },
         "semi-urban": {
-          "pct_within_target": 73.9,
-          "n": 50
+          "pct_within_target": 70.4,
+          "n": 57
         },
         "rural": {
-          "pct_within_target": 68.4,
-          "n": 40
+          "pct_within_target": 70.2,
+          "n": 71
         }
       }
     }
@@ -825,78 +837,80 @@
       "col": 1,
       "row": 4
     },
-    "pct_within_target": 83.4,
-    "median_days_referral_to_treatment": 36.0,
-    "reach_rate_over_75": 85.0,
-    "pct_outside_fast_track": 15.0,
+    "synthetic": true,
+    "pct_within_target": 43.9,
+    "median_days_referral_to_treatment": 46,
+    "reach_rate_over_75": 70,
+    "pct_outside_fast_track": 24,
     "days_per_phase": {
-      "detection": 19.1,
-      "referral": 5.8,
-      "diagnosis": 11.0,
-      "treatment": 9.1
+      "detection": 35.4,
+      "referral": 16.4,
+      "diagnosis": 23.4,
+      "treatment": 17.4
     },
     "causes": {
       "referral": {
-        "unconfirmed": 0.28,
-        "transport": 0.19,
-        "waiting_for_slot": 0.53
+        "unconfirmed": 0.57,
+        "transport": 0.09,
+        "waiting_for_slot": 0.34
       }
     },
     "breakdown": {
       "age": {
         "under 65": {
-          "pct_within_target": 86.4,
-          "n": 195
+          "pct_within_target": 50.2,
+          "n": 184
         },
         "65-74": {
-          "pct_within_target": 80.4,
-          "n": 292
+          "pct_within_target": 47.0,
+          "n": 247
         },
         "75+": {
-          "pct_within_target": 66.4,
-          "n": 162
+          "pct_within_target": 33.9,
+          "n": 194
         }
       },
       "language": {
         "Finnish": {
-          "pct_within_target": 83.9,
-          "n": 572
+          "pct_within_target": 44.3,
+          "n": 577
         },
         "Swedish": {
-          "pct_within_target": 79.9,
-          "n": 46
+          "pct_within_target": 46.5,
+          "n": 9,
+          "small_sample": true
         },
         "Other": {
-          "pct_within_target": 77.4,
-          "n": 32
+          "pct_within_target": 36.0,
+          "n": 39
         }
       },
       "education_group": {
         "basic": {
-          "pct_within_target": 75.4,
-          "n": 195
+          "pct_within_target": 36.6,
+          "n": 188
         },
         "upper secondary": {
-          "pct_within_target": 83.9,
-          "n": 260
+          "pct_within_target": 42.6,
+          "n": 223
         },
         "tertiary": {
-          "pct_within_target": 89.4,
-          "n": 195
+          "pct_within_target": 51.4,
+          "n": 214
         }
       },
       "municipality_type": {
         "urban": {
-          "pct_within_target": 86.4,
-          "n": 358
+          "pct_within_target": 43.5,
+          "n": 365
         },
         "semi-urban": {
-          "pct_within_target": 82.4,
-          "n": 162
+          "pct_within_target": 44.1,
+          "n": 152
         },
         "rural": {
-          "pct_within_target": 76.9,
-          "n": 130
+          "pct_within_target": 44.2,
+          "n": 108
         }
       }
     }
@@ -907,78 +921,79 @@
       "col": 2,
       "row": 4
     },
-    "pct_within_target": 68.0,
-    "median_days_referral_to_treatment": 48.0,
-    "reach_rate_over_75": 69.0,
-    "pct_outside_fast_track": 28.0,
+    "synthetic": true,
+    "pct_within_target": 54.2,
+    "median_days_referral_to_treatment": 39,
+    "reach_rate_over_75": 70,
+    "pct_outside_fast_track": 16,
     "days_per_phase": {
-      "detection": 27.6,
-      "referral": 11.2,
-      "diagnosis": 15.6,
-      "treatment": 13.0
+      "detection": 24.7,
+      "referral": 13.6,
+      "diagnosis": 21.1,
+      "treatment": 13.6
     },
     "causes": {
       "referral": {
-        "unconfirmed": 0.37,
-        "transport": 0.22,
-        "waiting_for_slot": 0.41
+        "unconfirmed": 0.41,
+        "transport": 0.12,
+        "waiting_for_slot": 0.47
       }
     },
     "breakdown": {
       "age": {
         "under 65": {
-          "pct_within_target": 71.0,
-          "n": 75
+          "pct_within_target": 61.5,
+          "n": 59
         },
         "65-74": {
-          "pct_within_target": 65.0,
-          "n": 112
+          "pct_within_target": 57.3,
+          "n": 102
         },
         "75+": {
-          "pct_within_target": 51.0,
-          "n": 62
+          "pct_within_target": 44.0,
+          "n": 73
         }
       },
       "language": {
         "Finnish": {
-          "pct_within_target": 68.5,
-          "n": 220
+          "pct_within_target": 54.8,
+          "n": 221
         },
         "Swedish": {
-          "pct_within_target": 64.5,
-          "n": 18
+          "suppressed": true
         },
         "Other": {
-          "pct_within_target": 62.0,
-          "n": 12
+          "pct_within_target": 41.9,
+          "n": 11,
+          "small_sample": true
         }
       },
       "education_group": {
         "basic": {
-          "pct_within_target": 60.0,
-          "n": 75
+          "pct_within_target": 49.7,
+          "n": 80
         },
         "upper secondary": {
-          "pct_within_target": 68.5,
-          "n": 100
+          "pct_within_target": 54.1,
+          "n": 97
         },
         "tertiary": {
-          "pct_within_target": 74.0,
-          "n": 75
+          "pct_within_target": 60.8,
+          "n": 57
         }
       },
       "municipality_type": {
         "urban": {
-          "pct_within_target": 71.0,
-          "n": 138
+          "pct_within_target": 57.5,
+          "n": 135
         },
         "semi-urban": {
-          "pct_within_target": 67.0,
-          "n": 62
+          "pct_within_target": 53.5,
+          "n": 64
         },
         "rural": {
-          "pct_within_target": 61.5,
-          "n": 50
+          "pct_within_target": 43.1,
+          "n": 35
         }
       }
     }
@@ -989,78 +1004,79 @@
       "col": 3,
       "row": 4
     },
-    "pct_within_target": 59.6,
-    "median_days_referral_to_treatment": 56.0,
-    "reach_rate_over_75": 60.0,
-    "pct_outside_fast_track": 35.0,
+    "synthetic": true,
+    "pct_within_target": 50.6,
+    "median_days_referral_to_treatment": 41,
+    "reach_rate_over_75": 67,
+    "pct_outside_fast_track": 23,
     "days_per_phase": {
-      "detection": 32.2,
-      "referral": 14.1,
-      "diagnosis": 18.1,
-      "treatment": 15.1
+      "detection": 25.3,
+      "referral": 13.0,
+      "diagnosis": 23.8,
+      "treatment": 22.1
     },
     "causes": {
       "referral": {
-        "unconfirmed": 0.42,
-        "transport": 0.24,
-        "waiting_for_slot": 0.34
+        "unconfirmed": 0.4,
+        "transport": 0.22,
+        "waiting_for_slot": 0.38
       }
     },
     "breakdown": {
       "age": {
         "under 65": {
-          "pct_within_target": 62.6,
-          "n": 45
+          "pct_within_target": 57.8,
+          "n": 46
         },
         "65-74": {
-          "pct_within_target": 56.6,
-          "n": 68
+          "pct_within_target": 52.4,
+          "n": 55
         },
         "75+": {
-          "pct_within_target": 42.6,
-          "n": 38
+          "pct_within_target": 40.8,
+          "n": 43
         }
       },
       "language": {
         "Finnish": {
-          "pct_within_target": 60.1,
-          "n": 132
+          "pct_within_target": 50.7,
+          "n": 134
         },
         "Swedish": {
-          "pct_within_target": 56.1,
-          "n": 11
+          "suppressed": true
         },
         "Other": {
-          "pct_within_target": 53.6,
-          "n": 8
+          "pct_within_target": 49.3,
+          "n": 8,
+          "small_sample": true
         }
       },
       "education_group": {
         "basic": {
-          "pct_within_target": 51.6,
-          "n": 45
+          "pct_within_target": 45.0,
+          "n": 50
         },
         "upper secondary": {
-          "pct_within_target": 60.1,
-          "n": 60
+          "pct_within_target": 51.8,
+          "n": 43
         },
         "tertiary": {
-          "pct_within_target": 65.6,
-          "n": 45
+          "pct_within_target": 55.1,
+          "n": 51
         }
       },
       "municipality_type": {
         "urban": {
-          "pct_within_target": 62.6,
-          "n": 82
+          "pct_within_target": 53.0,
+          "n": 79
         },
         "semi-urban": {
-          "pct_within_target": 58.6,
-          "n": 38
+          "pct_within_target": 49.4,
+          "n": 39
         },
         "rural": {
-          "pct_within_target": 53.1,
-          "n": 30
+          "pct_within_target": 45.5,
+          "n": 26
         }
       }
     }
@@ -1071,78 +1087,79 @@
       "col": 0,
       "row": 5
     },
-    "pct_within_target": 65.3,
-    "median_days_referral_to_treatment": 50.0,
-    "reach_rate_over_75": 66.0,
-    "pct_outside_fast_track": 30.0,
+    "synthetic": true,
+    "pct_within_target": 61.3,
+    "median_days_referral_to_treatment": 34,
+    "reach_rate_over_75": 73,
+    "pct_outside_fast_track": 21,
     "days_per_phase": {
-      "detection": 29.1,
-      "referral": 12.1,
-      "diagnosis": 16.4,
-      "treatment": 13.7
+      "detection": 22.7,
+      "referral": 12.8,
+      "diagnosis": 17.5,
+      "treatment": 13.6
     },
     "causes": {
       "referral": {
-        "unconfirmed": 0.39,
-        "transport": 0.23,
-        "waiting_for_slot": 0.38
+        "unconfirmed": 0.42,
+        "transport": 0.25,
+        "waiting_for_slot": 0.33
       }
     },
     "breakdown": {
       "age": {
         "under 65": {
-          "pct_within_target": 68.3,
-          "n": 75
+          "pct_within_target": 67.1,
+          "n": 72
         },
         "65-74": {
-          "pct_within_target": 62.3,
-          "n": 112
+          "pct_within_target": 65.1,
+          "n": 98
         },
         "75+": {
-          "pct_within_target": 48.3,
-          "n": 62
+          "pct_within_target": 50.7,
+          "n": 76
         }
       },
       "language": {
         "Finnish": {
-          "pct_within_target": 65.8,
-          "n": 220
+          "pct_within_target": 61.7,
+          "n": 237
         },
         "Swedish": {
-          "pct_within_target": 61.8,
-          "n": 18
+          "suppressed": true
         },
         "Other": {
-          "pct_within_target": 59.3,
-          "n": 12
+          "pct_within_target": 53.0,
+          "n": 7,
+          "small_sample": true
         }
       },
       "education_group": {
         "basic": {
-          "pct_within_target": 57.3,
-          "n": 75
+          "pct_within_target": 56.3,
+          "n": 84
         },
         "upper secondary": {
-          "pct_within_target": 65.8,
-          "n": 100
+          "pct_within_target": 62.9,
+          "n": 93
         },
         "tertiary": {
-          "pct_within_target": 71.3,
-          "n": 75
+          "pct_within_target": 65.5,
+          "n": 69
         }
       },
       "municipality_type": {
         "urban": {
-          "pct_within_target": 68.3,
-          "n": 138
+          "pct_within_target": 63.1,
+          "n": 127
         },
         "semi-urban": {
-          "pct_within_target": 64.3,
-          "n": 62
+          "pct_within_target": 63.3,
+          "n": 64
         },
         "rural": {
-          "pct_within_target": 58.8,
-          "n": 50
+          "pct_within_target": 55.0,
+          "n": 55
         }
       }
     }
@@ -1153,78 +1170,79 @@
       "col": 1,
       "row": 5
     },
-    "pct_within_target": 76.2,
-    "median_days_referral_to_treatment": 41.0,
-    "reach_rate_over_75": 77.0,
-    "pct_outside_fast_track": 22.0,
+    "synthetic": true,
+    "pct_within_target": 40.2,
+    "median_days_referral_to_treatment": 50,
+    "reach_rate_over_75": 68,
+    "pct_outside_fast_track": 25,
     "days_per_phase": {
-      "detection": 23.1,
-      "referral": 8.3,
-      "diagnosis": 13.1,
-      "treatment": 10.9
+      "detection": 25.8,
+      "referral": 18.6,
+      "diagnosis": 24.9,
+      "treatment": 22.9
     },
     "causes": {
       "referral": {
-        "unconfirmed": 0.32,
-        "transport": 0.21,
-        "waiting_for_slot": 0.47
+        "unconfirmed": 0.2,
+        "transport": 0.18,
+        "waiting_for_slot": 0.62
       }
     },
     "breakdown": {
       "age": {
         "under 65": {
-          "pct_within_target": 79.2,
-          "n": 60
+          "pct_within_target": 47.6,
+          "n": 58
         },
         "65-74": {
-          "pct_within_target": 73.2,
-          "n": 90
+          "pct_within_target": 39.6,
+          "n": 85
         },
         "75+": {
-          "pct_within_target": 59.2,
-          "n": 50
+          "pct_within_target": 32.8,
+          "n": 51
         }
       },
       "language": {
         "Finnish": {
-          "pct_within_target": 76.7,
-          "n": 176
+          "pct_within_target": 40.3,
+          "n": 186
         },
         "Swedish": {
-          "pct_within_target": 72.7,
-          "n": 14
+          "suppressed": true
         },
         "Other": {
-          "pct_within_target": 70.2,
-          "n": 10
+          "pct_within_target": 32.8,
+          "n": 5,
+          "small_sample": true
         }
       },
       "education_group": {
         "basic": {
-          "pct_within_target": 68.2,
-          "n": 60
+          "pct_within_target": 36.3,
+          "n": 63
         },
         "upper secondary": {
-          "pct_within_target": 76.7,
-          "n": 80
+          "pct_within_target": 38.9,
+          "n": 66
         },
         "tertiary": {
-          "pct_within_target": 82.2,
-          "n": 60
+          "pct_within_target": 45.1,
+          "n": 65
         }
       },
       "municipality_type": {
         "urban": {
-          "pct_within_target": 79.2,
-          "n": 110
+          "pct_within_target": 44.3,
+          "n": 96
         },
         "semi-urban": {
-          "pct_within_target": 75.2,
-          "n": 50
+          "pct_within_target": 37.8,
+          "n": 56
         },
         "rural": {
-          "pct_within_target": 69.7,
-          "n": 40
+          "pct_within_target": 33.7,
+          "n": 42
         }
       }
     }
@@ -1235,78 +1253,81 @@
       "col": 2,
       "row": 5
     },
-    "pct_within_target": 78.8,
-    "median_days_referral_to_treatment": 40.0,
-    "reach_rate_over_75": 80.0,
-    "pct_outside_fast_track": 20.0,
+    "synthetic": true,
+    "pct_within_target": 39.8,
+    "median_days_referral_to_treatment": 52,
+    "reach_rate_over_75": 68,
+    "pct_outside_fast_track": 24,
     "days_per_phase": {
-      "detection": 21.7,
-      "referral": 7.4,
-      "diagnosis": 12.4,
-      "treatment": 10.3
+      "detection": 30.1,
+      "referral": 19.7,
+      "diagnosis": 28.5,
+      "treatment": 25.2
     },
     "causes": {
       "referral": {
-        "unconfirmed": 0.31,
+        "unconfirmed": 0.3,
         "transport": 0.2,
-        "waiting_for_slot": 0.49
+        "waiting_for_slot": 0.5
       }
     },
     "breakdown": {
       "age": {
         "under 65": {
-          "pct_within_target": 81.8,
-          "n": 75
+          "pct_within_target": 50.0,
+          "n": 63
         },
         "65-74": {
-          "pct_within_target": 75.8,
-          "n": 112
+          "pct_within_target": 40.2,
+          "n": 103
         },
         "75+": {
-          "pct_within_target": 61.8,
-          "n": 62
+          "pct_within_target": 32.0,
+          "n": 88
         }
       },
       "language": {
         "Finnish": {
-          "pct_within_target": 79.3,
-          "n": 220
+          "pct_within_target": 40.0,
+          "n": 222
         },
         "Swedish": {
-          "pct_within_target": 75.3,
-          "n": 18
+          "pct_within_target": 35.5,
+          "n": 13,
+          "small_sample": true
         },
         "Other": {
-          "pct_within_target": 72.8,
-          "n": 12
+          "pct_within_target": 37.4,
+          "n": 19,
+          "small_sample": true
         }
       },
       "education_group": {
         "basic": {
-          "pct_within_target": 70.8,
-          "n": 75
+          "pct_within_target": 35.8,
+          "n": 99
         },
         "upper secondary": {
-          "pct_within_target": 79.3,
-          "n": 100
+          "pct_within_target": 41.5,
+          "n": 90
         },
         "tertiary": {
-          "pct_within_target": 84.8,
-          "n": 75
+          "pct_within_target": 42.8,
+          "n": 65
         }
       },
       "municipality_type": {
         "urban": {
-          "pct_within_target": 81.8,
-          "n": 138
+          "pct_within_target": 41.7,
+          "n": 145
         },
         "semi-urban": {
-          "pct_within_target": 77.8,
-          "n": 62
+          "pct_within_target": 37.2,
+          "n": 87
         },
         "rural": {
-          "pct_within_target": 72.3,
-          "n": 50
+          "pct_within_target": 35.5,
+          "n": 22
         }
       }
     }
@@ -1317,78 +1338,79 @@
       "col": 3,
       "row": 5
     },
-    "pct_within_target": 62.4,
-    "median_days_referral_to_treatment": 53.0,
-    "reach_rate_over_75": 62.0,
-    "pct_outside_fast_track": 33.0,
+    "synthetic": true,
+    "pct_within_target": 54.9,
+    "median_days_referral_to_treatment": 38,
+    "reach_rate_over_75": 77,
+    "pct_outside_fast_track": 18,
     "days_per_phase": {
-      "detection": 30.7,
+      "detection": 19.3,
       "referral": 13.2,
-      "diagnosis": 17.3,
-      "treatment": 14.4
+      "diagnosis": 24.5,
+      "treatment": 16.1
     },
     "causes": {
       "referral": {
-        "unconfirmed": 0.41,
-        "transport": 0.24,
-        "waiting_for_slot": 0.35
+        "unconfirmed": 0.58,
+        "transport": 0.18,
+        "waiting_for_slot": 0.24
       }
     },
     "breakdown": {
       "age": {
         "under 65": {
-          "pct_within_target": 65.4,
-          "n": 60
+          "pct_within_target": 60.9,
+          "n": 62
         },
         "65-74": {
-          "pct_within_target": 59.4,
-          "n": 90
+          "pct_within_target": 55.7,
+          "n": 82
         },
         "75+": {
-          "pct_within_target": 45.4,
-          "n": 50
+          "pct_within_target": 47.0,
+          "n": 54
         }
       },
       "language": {
         "Finnish": {
-          "pct_within_target": 62.9,
-          "n": 176
+          "pct_within_target": 55.1,
+          "n": 183
         },
         "Swedish": {
-          "pct_within_target": 58.9,
-          "n": 14
+          "suppressed": true
         },
         "Other": {
-          "pct_within_target": 56.4,
-          "n": 10
+          "pct_within_target": 53.3,
+          "n": 13,
+          "small_sample": true
         }
       },
       "education_group": {
         "basic": {
-          "pct_within_target": 54.4,
-          "n": 60
+          "pct_within_target": 50.2,
+          "n": 63
         },
         "upper secondary": {
-          "pct_within_target": 62.9,
-          "n": 80
+          "pct_within_target": 55.2,
+          "n": 70
         },
         "tertiary": {
-          "pct_within_target": 68.4,
-          "n": 60
+          "pct_within_target": 59.3,
+          "n": 65
         }
       },
       "municipality_type": {
         "urban": {
-          "pct_within_target": 65.4,
-          "n": 110
+          "pct_within_target": 57.3,
+          "n": 109
         },
         "semi-urban": {
-          "pct_within_target": 61.4,
-          "n": 50
+          "pct_within_target": 52.8,
+          "n": 58
         },
         "rural": {
-          "pct_within_target": 55.9,
-          "n": 40
+          "pct_within_target": 51.0,
+          "n": 31
         }
       }
     }
@@ -1399,243 +1421,207 @@
       "col": 0,
       "row": 6
     },
-    "pct_within_target": 73.7,
-    "median_days_referral_to_treatment": 43.0,
-    "reach_rate_over_75": 75.0,
-    "pct_outside_fast_track": 24.0,
+    "synthetic": true,
+    "pct_within_target": 41.2,
+    "median_days_referral_to_treatment": 50,
+    "reach_rate_over_75": 62,
+    "pct_outside_fast_track": 27,
     "days_per_phase": {
-      "detection": 24.5,
-      "referral": 9.2,
-      "diagnosis": 13.9,
-      "treatment": 11.6
+      "detection": 36.3,
+      "referral": 20.6,
+      "diagnosis": 28.3,
+      "treatment": 22.1
     },
     "causes": {
       "referral": {
-        "unconfirmed": 0.34,
-        "transport": 0.21,
-        "waiting_for_slot": 0.45
+        "unconfirmed": 0.56,
+        "transport": 0.1,
+        "waiting_for_slot": 0.34
       }
     },
     "breakdown": {
       "age": {
         "under 65": {
-          "pct_within_target": 76.7,
-          "n": 150
+          "pct_within_target": 44.5,
+          "n": 137
         },
         "65-74": {
-          "pct_within_target": 70.7,
-          "n": 225
+          "pct_within_target": 43.7,
+          "n": 200
         },
         "75+": {
-          "pct_within_target": 56.7,
-          "n": 125
+          "pct_within_target": 34.7,
+          "n": 141
         }
       },
       "language": {
         "Finnish": {
-          "pct_within_target": 74.2,
-          "n": 440
+          "pct_within_target": 41.2,
+          "n": 424
         },
         "Swedish": {
-          "pct_within_target": 70.2,
-          "n": 35
+          "pct_within_target": 44.0,
+          "n": 27
         },
         "Other": {
-          "pct_within_target": 67.7,
-          "n": 25
+          "pct_within_target": 37.7,
+          "n": 27
         }
       },
       "education_group": {
         "basic": {
-          "pct_within_target": 65.7,
-          "n": 150
+          "pct_within_target": 35.2,
+          "n": 148
         },
         "upper secondary": {
-          "pct_within_target": 74.2,
-          "n": 200
+          "pct_within_target": 41.7,
+          "n": 157
         },
         "tertiary": {
-          "pct_within_target": 79.7,
-          "n": 150
+          "pct_within_target": 46.0,
+          "n": 173
         }
       },
       "municipality_type": {
         "urban": {
-          "pct_within_target": 76.7,
-          "n": 275
+          "pct_within_target": 44.2,
+          "n": 250
         },
         "semi-urban": {
-          "pct_within_target": 72.7,
-          "n": 125
+          "pct_within_target": 38.7,
+          "n": 136
         },
         "rural": {
-          "pct_within_target": 67.2,
-          "n": 100
+          "pct_within_target": 36.7,
+          "n": 92
         }
       }
     }
   },
   {
-    "name": "Western Uusimaa",
-    "tile": {
-      "col": 1,
-      "row": 6
+  "name": "Western Uusimaa",
+  "tile": { "col": 1, "row": 6 },
+  "synthetic": true,
+  "pct_within_target": 53.6,
+  "median_days_referral_to_treatment": 39,
+  "reach_rate_over_75": 70,
+  "pct_outside_fast_track": 21,
+  "days_per_phase": { "detection": 23.9, "referral": 13.1, "diagnosis": 22.4, "treatment": 15.3 },
+  "causes": { "referral": { "unconfirmed": 0.21, "transport": 0.24, "waiting_for_slot": 0.55 } },
+  "breakdown": {
+    "age": {
+      "18-39": { "pct_within_target": 72.4, "n": 14 },
+      "40-49": { "pct_within_target": 68.1, "n": 104 },
+      "50-59": { "pct_within_target": 64.0, "n": 76 },
+      "60-64": { "pct_within_target": 59.0, "n": 43 },
+      "65-74": { "pct_within_target": 60.4, "n": 321 },
+      "75-84": { "pct_within_target": 38.8, "n": 168 },
+      "85+": { "pct_within_target": 29.7, "n": 105 }
     },
-    "pct_within_target": 64.2,
-    "median_days_referral_to_treatment": 51.0,
-    "reach_rate_over_75": 52.0,
-    "pct_outside_fast_track": 31.0,
-    "days_per_phase": {
-      "detection": 31.0,
-      "referral": 14.0,
-      "diagnosis": 17.0,
-      "treatment": 12.0
+    "language": {
+      "Finnish": { "pct_within_target": 54.1, "n": 724 },
+      "Swedish": { "pct_within_target": 59.2, "n": 33 },
+      "Russian": { "pct_within_target": 39.8, "n": 38 },
+      "Estonian": { "pct_within_target": 44.4, "n": 18, "small_sample": true },
+      "Ukrainian": { "pct_within_target": 43.8, "n": 8, "small_sample": true },
+      "Arabic": { "pct_within_target": 36.5, "n": 7, "small_sample": true },
+      "Other": { "pct_within_target": 50.0, "n": 3 }
     },
-    "causes": {
-      "referral": {
-        "unconfirmed": 0.46,
-        "transport": 0.21,
-        "waiting_for_slot": 0.33
-      }
+    "ethnicity": {
+      "Finnish-born": { "pct_within_target": 56.4, "n": 655 },
+      "Foreign-born (EU/EEA)": { "pct_within_target": 45.6, "n": 54 },
+      "Foreign-born (non-EU)": { "pct_within_target": 39.8, "n": 104 },
+      "Not recorded": { "pct_within_target": 47.2, "n": 18, "small_sample": true }
     },
-    "breakdown": {
-      "age": {
-        "under 65": {
-          "pct_within_target": 67.2,
-          "n": 240
-        },
-        "65-74": {
-          "pct_within_target": 61.2,
-          "n": 360
-        },
-        "75+": {
-          "pct_within_target": 46.0,
-          "n": 186
-        }
-      },
-      "language": {
-        "Finnish": {
-          "pct_within_target": 64.7,
-          "n": 704
-        },
-        "Swedish": {
-          "pct_within_target": 60.7,
-          "n": 14
-        },
-        "Other": {
-          "pct_within_target": 58.2,
-          "n": 4
-        }
-      },
-      "education_group": {
-        "basic": {
-          "pct_within_target": 56.2,
-          "n": 240
-        },
-        "upper secondary": {
-          "pct_within_target": 64.7,
-          "n": 320
-        },
-        "tertiary": {
-          "pct_within_target": 70.2,
-          "n": 240
-        }
-      },
-      "municipality_type": {
-        "urban": {
-          "pct_within_target": 67.2,
-          "n": 440
-        },
-        "semi-urban": {
-          "pct_within_target": 63.2,
-          "n": 200
-        },
-        "rural": {
-          "pct_within_target": 57.7,
-          "n": 160
-        }
-      }
+    "education_group": {
+      "basic": { "pct_within_target": 48.2, "n": 269 },
+      "upper secondary": { "pct_within_target": 55.5, "n": 347 },
+      "tertiary": { "pct_within_target": 57.5, "n": 215 }
     },
-    "insight_card_id": "western-uusimaa/missed-first-visits-75"
+    "municipality_type": {
+      "urban": { "pct_within_target": 55.0, "n": 526 },
+      "semi-urban": { "pct_within_target": 52.5, "n": 264 },
+      "rural": { "pct_within_target": 43.4, "n": 41 }
+    }
   },
+  "insight_card_id": "western-uusimaa/missed-first-visits-75"
+},
   {
     "name": "Vantaa-Kerava",
     "tile": {
       "col": 2,
       "row": 6
     },
-    "pct_within_target": 70.4,
-    "median_days_referral_to_treatment": 46.0,
-    "reach_rate_over_75": 71.0,
-    "pct_outside_fast_track": 26.0,
+    "synthetic": true,
+    "pct_within_target": 45.0,
+    "median_days_referral_to_treatment": 45,
+    "reach_rate_over_75": 72,
+    "pct_outside_fast_track": 20,
     "days_per_phase": {
-      "detection": 26.3,
-      "referral": 10.4,
-      "diagnosis": 14.9,
-      "treatment": 12.4
+      "detection": 20.0,
+      "referral": 14.5,
+      "diagnosis": 20.8,
+      "treatment": 19.6
     },
     "causes": {
       "referral": {
-        "unconfirmed": 0.36,
-        "transport": 0.22,
-        "waiting_for_slot": 0.42
+        "unconfirmed": 0.48,
+        "transport": 0.29,
+        "waiting_for_slot": 0.23
       }
     },
     "breakdown": {
       "age": {
         "under 65": {
-          "pct_within_target": 73.4,
-          "n": 120
+          "pct_within_target": 55.7,
+          "n": 130
         },
         "65-74": {
-          "pct_within_target": 67.4,
-          "n": 180
+          "pct_within_target": 45.1,
+          "n": 161
         },
         "75+": {
-          "pct_within_target": 53.4,
-          "n": 100
+          "pct_within_target": 35.0,
+          "n": 139
         }
       },
       "language": {
         "Finnish": {
-          "pct_within_target": 70.9,
-          "n": 352
+          "pct_within_target": 47.9,
+          "n": 362
         },
         "Swedish": {
-          "pct_within_target": 66.9,
-          "n": 28
+          "pct_within_target": 45.6,
+          "n": 5,
+          "small_sample": true
         },
         "Other": {
-          "pct_within_target": 64.4,
-          "n": 20
+          "pct_within_target": 29.0,
+          "n": 63
         }
       },
       "education_group": {
         "basic": {
-          "pct_within_target": 62.4,
-          "n": 120
+          "pct_within_target": 39.5,
+          "n": 165
         },
         "upper secondary": {
-          "pct_within_target": 70.9,
-          "n": 160
+          "pct_within_target": 45.9,
+          "n": 143
         },
         "tertiary": {
-          "pct_within_target": 76.4,
-          "n": 120
+          "pct_within_target": 51.4,
+          "n": 122
         }
       },
       "municipality_type": {
         "urban": {
-          "pct_within_target": 73.4,
-          "n": 220
+          "pct_within_target": 45.6,
+          "n": 378
         },
         "semi-urban": {
-          "pct_within_target": 69.4,
-          "n": 100
-        },
-        "rural": {
-          "pct_within_target": 63.9,
-          "n": 80
+          "pct_within_target": 40.0,
+          "n": 52
         }
       }
     }
@@ -1646,78 +1632,81 @@
       "col": 3,
       "row": 6
     },
-    "pct_within_target": 67.3,
-    "median_days_referral_to_treatment": 49.0,
-    "reach_rate_over_75": 66.0,
-    "pct_outside_fast_track": 29.0,
+    "synthetic": true,
+    "pct_within_target": 49.4,
+    "median_days_referral_to_treatment": 42,
+    "reach_rate_over_75": 63,
+    "pct_outside_fast_track": 26,
     "days_per_phase": {
-      "detection": 28.0,
-      "referral": 11.4,
-      "diagnosis": 15.8,
-      "treatment": 13.2
+      "detection": 27.7,
+      "referral": 12.7,
+      "diagnosis": 20.7,
+      "treatment": 17.0
     },
     "causes": {
       "referral": {
-        "unconfirmed": 0.38,
-        "transport": 0.23,
-        "waiting_for_slot": 0.39
+        "unconfirmed": 0.55,
+        "transport": 0.1,
+        "waiting_for_slot": 0.35
       }
     },
     "breakdown": {
       "age": {
         "under 65": {
-          "pct_within_target": 70.3,
-          "n": 45
+          "pct_within_target": 57.2,
+          "n": 51
         },
         "65-74": {
-          "pct_within_target": 64.3,
-          "n": 68
+          "pct_within_target": 49.3,
+          "n": 64
         },
         "75+": {
-          "pct_within_target": 50.3,
-          "n": 38
+          "pct_within_target": 39.1,
+          "n": 39
         }
       },
       "language": {
         "Finnish": {
-          "pct_within_target": 67.8,
-          "n": 132
+          "pct_within_target": 49.0,
+          "n": 140
         },
         "Swedish": {
-          "pct_within_target": 63.8,
-          "n": 11
+          "pct_within_target": 57.8,
+          "n": 8,
+          "small_sample": true
         },
         "Other": {
-          "pct_within_target": 61.3,
-          "n": 8
+          "pct_within_target": 45.8,
+          "n": 6,
+          "small_sample": true
         }
       },
       "education_group": {
         "basic": {
-          "pct_within_target": 59.3,
-          "n": 45
+          "pct_within_target": 41.1,
+          "n": 53
         },
         "upper secondary": {
-          "pct_within_target": 67.8,
-          "n": 60
+          "pct_within_target": 53.4,
+          "n": 50
         },
         "tertiary": {
-          "pct_within_target": 73.3,
-          "n": 45
+          "pct_within_target": 53.9,
+          "n": 51
         }
       },
       "municipality_type": {
         "urban": {
-          "pct_within_target": 70.3,
-          "n": 82
+          "pct_within_target": 55.8,
+          "n": 72
         },
         "semi-urban": {
-          "pct_within_target": 66.3,
-          "n": 38
+          "pct_within_target": 46.6,
+          "n": 46
         },
         "rural": {
-          "pct_within_target": 60.8,
-          "n": 30
+          "pct_within_target": 40.1,
+          "n": 36
         }
       }
     }
@@ -1728,78 +1717,71 @@
       "col": 2,
       "row": 7
     },
-    "pct_within_target": 80.9,
-    "median_days_referral_to_treatment": 37.0,
-    "reach_rate_over_75": 82.0,
-    "pct_outside_fast_track": 18.0,
+    "synthetic": true,
+    "pct_within_target": 54.9,
+    "median_days_referral_to_treatment": 39,
+    "reach_rate_over_75": 78,
+    "pct_outside_fast_track": 17,
     "days_per_phase": {
-      "detection": 20.5,
-      "referral": 6.7,
-      "diagnosis": 11.7,
-      "treatment": 9.8
+      "detection": 26.2,
+      "referral": 12.0,
+      "diagnosis": 20.8,
+      "treatment": 16.6
     },
     "causes": {
       "referral": {
-        "unconfirmed": 0.29,
-        "transport": 0.2,
-        "waiting_for_slot": 0.51
+        "unconfirmed": 0.52,
+        "transport": 0.35,
+        "waiting_for_slot": 0.13
       }
     },
     "breakdown": {
       "age": {
         "under 65": {
-          "pct_within_target": 83.9,
-          "n": 225
+          "pct_within_target": 60.6,
+          "n": 252
         },
         "65-74": {
-          "pct_within_target": 77.9,
-          "n": 338
+          "pct_within_target": 56.8,
+          "n": 301
         },
         "75+": {
-          "pct_within_target": 63.9,
-          "n": 188
+          "pct_within_target": 46.1,
+          "n": 228
         }
       },
       "language": {
         "Finnish": {
-          "pct_within_target": 81.4,
-          "n": 660
+          "pct_within_target": 56.0,
+          "n": 675
         },
         "Swedish": {
-          "pct_within_target": 77.4,
-          "n": 53
+          "pct_within_target": 62.9,
+          "n": 34
         },
         "Other": {
-          "pct_within_target": 74.9,
-          "n": 38
+          "pct_within_target": 41.0,
+          "n": 72
         }
       },
       "education_group": {
         "basic": {
-          "pct_within_target": 72.9,
-          "n": 225
+          "pct_within_target": 53.6,
+          "n": 260
         },
         "upper secondary": {
-          "pct_within_target": 81.4,
-          "n": 300
+          "pct_within_target": 51.8,
+          "n": 247
         },
         "tertiary": {
-          "pct_within_target": 86.9,
-          "n": 225
+          "pct_within_target": 59.1,
+          "n": 274
         }
       },
       "municipality_type": {
         "urban": {
-          "pct_within_target": 83.9,
-          "n": 413
-        },
-        "semi-urban": {
-          "pct_within_target": 79.9,
-          "n": 188
-        },
-        "rural": {
-          "pct_within_target": 74.4,
-          "n": 150
+          "pct_within_target": 54.9,
+          "n": 781
         }
       }
     }
