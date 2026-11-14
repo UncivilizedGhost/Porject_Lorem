@@ -88,6 +88,16 @@ async def identities() -> dict[str, Any]:
     }
 
 
+async def start_treatment(patient_id: str | None = None) -> dict[str, Any] | None:
+    """Demo shim (ADR-0004): there is no real treatment-start event in the build."""
+    if patient_id is None:
+        latest = await db.find("patients", newest_first=True, limit=1)
+        patient_id = latest[0]["_id"] if latest else None
+    if patient_id is None:
+        return None
+    return await db.update("patients", patient_id, {"phase": "treatment"})
+
+
 async def reset() -> dict[str, Any]:
     await db.truncate(db.RUNTIME_TABLES + ["clock_state", "coordinators"])
     await ensure_clock_and_coordinator()

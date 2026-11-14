@@ -47,6 +47,7 @@ async def promote(contact_id: str, coordinator_id: str | None = None) -> str:
         accessibility=contact.get("accessibility", {}),
         display_name=contact.get("display_name"),
         phone=contact.get("phone"),
+        recipient_type=contact.get("recipient_type", "digital"),
     )
     patient_id = await db.insert("patients", patient.model_dump(mode="json"))
     for index, rung, offset in LADDER:

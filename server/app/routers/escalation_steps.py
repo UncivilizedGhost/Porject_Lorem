@@ -5,7 +5,7 @@ from typing import Literal
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-from app.services import promotion
+from app.services import promotion, worklist
 
 router = APIRouter(prefix="/escalation-steps", tags=["escalation-steps"])
 
@@ -14,6 +14,10 @@ class ConfirmBody(BaseModel):
     actor: Literal["self", "trusted_person"] = "self"
     trusted_person_name: str | None = None
     input: Literal["touch", "voice"] = "touch"
+
+
+class HandledBody(BaseModel):
+    outcome: str | None = None
 
 
 @router.post("/{step_id}/confirm")
@@ -26,6 +30,9 @@ async def confirm(step_id: str, body: ConfirmBody):
 
 
 @router.post("/{step_id}/handled")
-async def handled():
-    """'Mark handled' on an Escalation Step row."""
-    raise HTTPException(status_code=501, detail="not implemented")
+async def handled(step_id: str, body: HandledBody | None = None):
+    """'Mark handled' on an Escalation Step row. Optional body { outcome: rebook | handed_to_trusted_person | ... }."""
+    step = await worklist.mark_step_handled(step_id, body.outcome if body else None)
+    if step is None:
+        raise HTTPException(status_code=404, detail="escalation step not found")
+    return step

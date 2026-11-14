@@ -15,7 +15,7 @@ Own Words are accepted as an argument and ignored by grading.
 
 RULES_VERSION = "0.1"
 
-from app.rules.catalogue import catalogue  # noqa: E402, F401
+from app.rules.catalogue import catalogue, describe_answers  # noqa: E402, F401
 from app.rules.grading import (  # noqa: E402, F401
     grade_checkin,
     grade_symptom_report,

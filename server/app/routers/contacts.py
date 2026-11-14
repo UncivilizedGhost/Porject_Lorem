@@ -5,18 +5,29 @@ person 3 for warning-sign-tap, promote and callback-handled (`app/services/promo
 `app/rules`). Specs: .scratch/patient-companion/spec.md, .scratch/coordinator-worklist/spec.md
 """
 
+from typing import Literal
+
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 from app import db
 from app.models import Contact
-from app.services import promotion
+from app.services import promotion, reporting, worklist
 
 router = APIRouter(prefix="/contacts", tags=["contacts"])
 
 
 class PromoteBody(BaseModel):
     coordinator_id: str | None = None
+
+
+class TapBody(BaseModel):
+    symptom: str
+    input: Literal["touch", "voice"] = "touch"
+
+
+class CallbackBody(BaseModel):
+    status: Literal["handled", "booked"] = "handled"
 
 
 @router.post("")
@@ -46,9 +57,14 @@ async def patch_accessibility():
 
 
 @router.post("/{contact_id}/warning-sign-tap")
-async def warning_sign_tap():
+async def warning_sign_tap(contact_id: str, body: TapBody):
     """person 3: record tap, write event, grade (coughing up blood → red Alert, else call-back pending), send simulated SMS. Returns { grade, advice }."""
-    raise HTTPException(status_code=501, detail="not implemented")
+    try:
+        return await reporting.tap_warning_sign(contact_id, body.symptom, body.input)
+    except reporting.NotFound:
+        raise HTTPException(status_code=404, detail="contact not found") from None
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from None
 
 
 @router.post("/{contact_id}/promote")
@@ -62,6 +78,9 @@ async def promote(contact_id: str, body: PromoteBody | None = None):
 
 
 @router.post("/{contact_id}/callback-handled")
-async def callback_handled():
-    """person 3: 'Mark handled' on a call-back row."""
-    raise HTTPException(status_code=501, detail="not implemented")
+async def callback_handled(contact_id: str, body: CallbackBody | None = None):
+    """person 3: 'Mark handled' on a call-back row. Body { status: handled | booked } (booked = health station and X-ray booked)."""
+    contact = await worklist.close_callback(contact_id, body.status if body else "handled")
+    if contact is None:
+        raise HTTPException(status_code=404, detail="no call-back for this contact")
+    return {"id": contact_id, "callback": contact["callback"]}

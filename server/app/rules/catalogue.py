@@ -256,6 +256,23 @@ def catalogue() -> dict:
     }
 
 
+def describe_answers(symptom: str, answers: dict[str, Any]) -> list[dict[str, str]]:
+    """Structured answers in plain words for the Coordinator's card: [{question, answer}]."""
+    defs = {s["id"]: s["questions"] for s in _SYMPTOM_DEFS}
+    defs["other"] = _OTHER_DEFS
+    out: list[dict[str, str]] = []
+    for q in defs.get(symptom, []):
+        if q["id"] not in answers:
+            continue
+        value = answers[q["id"]]
+        if q["kind"] == "number":
+            text = f"{float(value):.1f}".replace(".", ",") + f" {q['unit']}"
+        else:
+            text = next((o["label"] for o in q["options"] if o["id"] == value), str(value))
+        out.append({"question": q["prompt"], "answer": text})
+    return out
+
+
 def all_option_ids() -> list[str]:
     """Every choice option in the public catalogue as `scope.question.option`; used to check
     that each one has a grade."""
