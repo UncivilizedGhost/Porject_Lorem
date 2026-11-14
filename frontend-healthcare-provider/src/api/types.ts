@@ -154,7 +154,7 @@ export interface SummaryFact { id: string; text: string; value: number | string;
 export interface SummaryResult {
   sentences: { text: string; fact_ids: string[] }[];
   facts: SummaryFact[];
-  source: "live" | "cached";
+  source: "live" | "pregenerated" | "cached";
 }
 
 export interface DecisionRow {

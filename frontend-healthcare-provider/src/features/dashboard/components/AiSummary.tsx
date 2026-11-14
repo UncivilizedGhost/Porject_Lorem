@@ -14,7 +14,9 @@ export function AiSummary({ summary }: { summary: SummaryResult | null }) {
           <p className="muted">
             {summary.source === "live"
               ? "Written by an AI model from the facts below. It explains; it does not decide."
-              : "Pre-written summary shown because the AI service was not available. It uses the same facts."}
+              : summary.source === "pregenerated"
+                ? "Written by an AI model ahead of time from the facts below. It explains; it does not decide."
+                : "Pre-written summary shown because the AI service was not available. It uses the same facts."}
           </p>
           <p>
             {summary.sentences.map((s) => (

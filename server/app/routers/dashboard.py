@@ -97,11 +97,15 @@ class SummaryBody(BaseModel):
 
 @router.post("/summary")
 async def summary(body: SummaryBody):
-    """Body { card_id }. Facts with ids (suppressed cells skipped) → Nemotron → sentences without a valid id dropped. Timeout/error → cached summary."""
+    """Body { card_id }. Facts with ids (suppressed cells skipped) → pregenerated summary if present, else Nemotron → sentences without a valid id dropped. Timeout/error → cached summary."""
     card, matched = await _card_with_matches(body.card_id)
     county = await db.get("counties", county_id(card["where"]))
     facts = summary_facts.build_facts(card, county, matched)
     valid = {f["id"] for f in facts}
+    # Written ahead by scripts/pregenerate_answers.py: the shared endpoint is too slow to call live.
+    ready = [s for s in card.get("pregenerated_summary") or [] if set(s["fact_ids"]) <= valid]
+    if ready:
+        return {"sentences": ready, "facts": facts, "source": "pregenerated"}
     sentences: list[dict] = []
     try:
         reply = await nemotron.complete(summary_facts.SYSTEM_PROMPT, summary_facts.build_prompt(facts))

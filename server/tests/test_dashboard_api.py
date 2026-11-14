@@ -116,6 +116,19 @@ async def test_summary_falls_back_to_the_cached_text_when_the_model_times_out(cl
     assert all(set(s["fact_ids"]) <= fact_ids for s in body["sentences"])
 
 
+async def test_pregenerated_summary_is_served_without_calling_the_model(client, model):
+    from app import db
+
+    await db.update("insight_cards", CARD, {"pregenerated_summary": [
+        {"text": "Over-75s start late", "fact_ids": ["group_pct"]},
+        {"text": "This one cites a fact that no longer exists", "fact_ids": ["gone"]},
+    ]})
+    body = (await client.post("/dashboard/summary", json={"card_id": CARD})).json()
+    assert body["source"] == "pregenerated"
+    assert body["sentences"] == [{"text": "Over-75s start late", "fact_ids": ["group_pct"]}]
+    assert model.prompts == []
+
+
 async def test_summary_falls_back_to_cached_when_no_sentence_survives_the_filter(client, model):
     model.reply = "Entirely uncited. Also uncited [made_up_id]."
     body = (await client.post("/dashboard/summary", json={"card_id": CARD})).json()

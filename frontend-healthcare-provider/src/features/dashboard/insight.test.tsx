@@ -96,11 +96,11 @@ const COUNTY = {
   causes: { referral: { unconfirmed: 0.46, transport: 0.21, waiting_for_slot: 0.33 } },
 } as unknown as CountyDetail;
 
-function renderCard() {
+function renderCard(summary: SummaryResult = SUMMARY) {
   mocked.insight.mockResolvedValue(CARD);
   mocked.county.mockResolvedValue(COUNTY);
   mocked.simulate.mockResolvedValue(SIM);
-  mocked.summary.mockResolvedValue(SUMMARY);
+  mocked.summary.mockResolvedValue(summary);
   mocked.decisions.mockResolvedValue([]);
   return render(
     <MemoryRouter initialEntries={["/dashboard/county/Western%20Uusimaa/insight/missed-first-visits-75"]}>
@@ -210,6 +210,13 @@ describe("insight card", () => {
     const links = await within(summary).findAllByRole("link");
     expect(links.map((l) => l.getAttribute("href"))).toEqual(["#fact-group_pct", "https://example.org/43"]);
     expect(within(summary).getByText(/pre-written/i)).toBeInTheDocument(); // cached source is disclosed
+  });
+
+  test("a summary the AI model wrote ahead of time says so", async () => {
+    renderCard({ ...SUMMARY, source: "pregenerated" });
+    const summary = await screen.findByRole("region", { name: /AI summary/i });
+    expect(await within(summary).findByText(/AI model.*ahead of time/i)).toBeInTheDocument();
+    expect(within(summary).queryByText(/not available/i)).not.toBeInTheDocument();
   });
 
   test("lays out summary, actions, results, decision form and log in the agreed order", async () => {
