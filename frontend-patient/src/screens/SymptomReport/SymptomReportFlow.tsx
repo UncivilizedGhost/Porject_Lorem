@@ -57,6 +57,9 @@ export function SymptomReportFlow() {
   const [draft, setDraft] = useState<ReportDraft>(initialDraft);
   const [pending, setPending] = useState<Record<string, string | number>>({});
   const [error, setError] = useState<string>();
+  // R5 is reached from "That is all" on the more screen, and straight from the pick page when the
+  // person taps "Something else". Back has to know which one it was.
+  const [ownFrom, setOwnFrom] = useState<"more" | "pick">("more");
 
   useEffect(() => {
     api.rules().then(setRules).catch(() => setError(t("report.loadError")));
@@ -87,7 +90,10 @@ export function SymptomReportFlow() {
   // The red tile on Pick a symptom: same fixed behaviour as a Safety Check tap, no grading.
   const urgent = useCallback(() => setStep({ screen: "R2", reason: t("report.urgent") }), [t]);
   const more = useCallback(() => setStep({ screen: "R3" }), []);
-  const done = useCallback(() => setStep({ screen: "R5" }), []);
+  const done = useCallback(() => {
+    setOwnFrom("more");
+    setStep({ screen: "R5" });
+  }, []);
 
   // The header's Back undoes one step of the report; null (pick page, sent page) leaves the flow.
   const back = useMemo<(() => void) | null>(() => {
@@ -96,10 +102,23 @@ export function SymptomReportFlow() {
         ? () => setStep({ screen: "R4", symptom: step.symptom, questionIndex: step.questionIndex - 1 })
         : () => { setPending({}); setStep({ screen: "R3" }); };
     }
-    if (step.screen === "R5") return () => setStep({ screen: "more" });
+    if (step.screen === "R5") {
+      // Back from "Something else" returns to the picker and drops the empty entry it added, so
+      // picking another symptom afterwards cannot send a stray "other" to the server.
+      return ownFrom === "pick"
+        ? () => {
+            setDraft((d) => {
+              const symptoms = [...d.symptoms];
+              if (symptoms.length > 0 && symptoms[symptoms.length - 1].symptom === "other") symptoms.pop();
+              return { ...d, symptoms };
+            });
+            setStep({ screen: "R3" });
+          }
+        : () => setStep({ screen: "more" });
+    }
     if (step.screen === "more" || step.screen === "R2") return () => setStep({ screen: "R3" });
     return null;
-  }, [step]);
+  }, [step, ownFrom]);
   useFlowBack(back);
 
   if (error && !rules) return <p role="alert">{error}</p>;
@@ -145,7 +164,13 @@ export function SymptomReportFlow() {
           onUrgent={urgent}
           onPick={(symptom) => {
             const qs = questionsFor(rules, symptom);
-            if (qs.length === 0) {
+            if (symptom === "other") {
+              // The artboard sends "Something else" straight to "in your own words" — there are no
+              // guided questions for it, the words are the report.
+              setDraft((d) => ({ ...d, symptoms: [...d.symptoms, { symptom, answers: {} }] }));
+              setOwnFrom("pick");
+              setStep({ screen: "R5" });
+            } else if (qs.length === 0) {
               setDraft((d) => ({ ...d, symptoms: [...d.symptoms, { symptom, answers: {} }] }));
               setStep({ screen: "more" });
             } else {
