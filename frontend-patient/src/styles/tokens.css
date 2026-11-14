@@ -1,15 +1,36 @@
-/* Design tokens from the wireframe canvas's design-system note ("ds").
-   Text-size and high-contrast settings switch these variables (data attributes on <html>). */
+/* Design tokens from the artboards (frontend-patient/app/assets/app.css) and the wireframe
+   canvas design-system note. Text-size and high-contrast settings switch these variables
+   (data attributes on <html>), so every screen inherits them. */
 :root {
   --ground: #f6f4f0;
+  --chrome: #e9e6df;   /* behind the phone frame on a wide screen */
   --ink: #1d2a2e;
   --secondary: #4b575b;
+  --border: #e2ddd5;
   --teal: #0a6670;     /* actions only */
+  --teal-dark: #074d55;
   --apricot: #f5e6d8;  /* people */
   --amber: #e6a23c;    /* waiting */
   --red: #b02a20;      /* urgent only */
   --card: #ffffff;
   --on-action: #ffffff; /* text on teal or red */
+
+  /* Chips: waiting is amber-tinted, confirmed is teal-tinted. */
+  --chip-wait-bg: #fbefd9;
+  --chip-wait-ink: #7a4d00;
+  --chip-teal-bg: #ddeeec;
+
+  /* Tiles */
+  --tile-apricot: #f5e6d8;
+  --tile-apricot-ink: #5a3a22;
+  --icon-apricot: #6b3511;
+  --check-off: #a59d91; /* unchecked radio / checkbox ring */
+  --border-strong: #cfc8bd; /* secondary buttons on a card */
+  --chip-taken-bg: #e3f2ea; /* a logged dose: calm green, never a success alarm */
+  --chip-taken-ink: #17613f;
+  --danger-soft-bg: #f8e3e0;   /* a skipped dose: a light red, not the urgent red */
+  --danger-soft-ink: #8f2a21;
+  --danger-soft-border: #e7c3bd;
 
   --font: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, sans-serif;
   --text-body: 17px;
@@ -20,14 +41,40 @@
   --target-primary: 56px;
   --radius-button: 14px;
   --radius-card: 20px;
+  --radius-tile: 18px;
+  --radius-pill: 999px;
+  --radius-frame: 26px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+
+  --focus: 3px solid #0a6670;
+  --shadow-frame: 0 18px 60px rgba(29, 42, 46, 0.18), 0 2px 6px rgba(29, 42, 46, 0.08);
 }
 
 :root[data-text-size="l"] { --text-body: 19px; --text-small: 17px; }
 :root[data-text-size="xl"] { --text-body: 22px; --text-small: 19px; }
 
+/* High contrast: black on white, visible borders, no translucent tints. */
 :root[data-contrast="high"] {
   --ground: #ffffff;
+  --chrome: #ffffff;
   --ink: #000000;
-  --secondary: #1d2a2e;
+  --secondary: #000000;
+  --border: #000000;
   --card: #ffffff;
+  --apricot: #ffffff;
+  --tile-apricot: #ffffff;
+  --tile-apricot-ink: #000000;
+  --chip-wait-bg: #ffffff;
+  --chip-wait-ink: #000000;
+  --chip-teal-bg: #ffffff;
+  --shadow-frame: none;
+  --danger-soft-bg: #ffffff;
+  --danger-soft-ink: #000000;
+  --danger-soft-border: #000000;
 }

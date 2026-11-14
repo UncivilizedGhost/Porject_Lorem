@@ -1,11 +1,14 @@
-// Owner: person 2 — .scratch/patient-companion/spec.md (artboard "8 · Medication")
-// Generic labels, no drug names; taken / skipped / side effect one tap →
-// POST /patients/{id}/medication-log. A time-critical medicine uses the alarm-style slider.
-import { useMemo, useState } from "react";
+// Owner: person 2 — design port of app/medication.html (artboard "8 · Medication").
+// "Medicines today": one card per dose, generic labels only, no drug or brand names.
+// I took it / I skipped it / Side effect each POST once to /patients/{id}/medication-log.
+// Like the artboard, every dose is the same one-tap card: no slider, and once a dose is logged
+// the card shows "Taken at 8.05" in place of the buttons.
+// The logged choice lives here rather than in the card, so a poll or "Advance one day" (which
+// briefly reloads the patient) cannot wipe what the person just tapped.
+import { useEffect, useMemo, useState } from "react";
 
 import { api } from "../../api/client";
 import type { Medicine } from "../../api/types";
-import { SlideToConfirm } from "../../components/SlideToConfirm";
 import { actorFields, getSession } from "../../lib/session";
 import { usePatient } from "../../lib/usePatient";
 import { NoPathwayYet } from "../../components/NoPathwayYet";
@@ -13,27 +16,86 @@ import { useReadable } from "../../voice/useReadable";
 import { useVoiceActions } from "../../voice/useVoiceActions";
 
 type Status = "taken" | "skipped" | "side_effect";
+type Logged = { status: Status; at: string };
+// Card memory only: what was tapped in this page view. Nothing is stored, so a reload shows the
+// buttons again.
 
-function MedicineRow({ medicine, onLog }: { medicine: Medicine; onLog: (id: string, s: Status) => Promise<boolean> }) {
-  const [saved, setSaved] = useState(false);
-  const [failed, setFailed] = useState(false);
-  const log = async (status: Status) => {
-    const ok = await onLog(medicine.id, status);
-    setSaved(ok);
-    setFailed(!ok);
-  };
+/** Where the dose sits in the day, from the generic label the server sends. The artboard shows a
+ * clock time per card; the contract has no dose time, so the two dosed slots use the demo times
+ * the artboard uses and an as-needed medicine shows none. */
+function scheduleFor(medicine: Medicine): { line: string; time: string | null } {
+  const label = medicine.label.toLowerCase();
+  if (label.includes("morning")) return { line: "With breakfast", time: "8.00" };
+  if (label.includes("evening")) return { line: "With dinner", time: "18.00" };
+  return { line: "When needed", time: null };
+}
+
+function clockNow(): string {
+  const d = new Date();
+  return `${d.getHours()}.${String(d.getMinutes()).padStart(2, "0")}`;
+}
+
+function PillIcon() {
   return (
-    <li className="card">
-      <p><strong>{medicine.label}</strong></p>
-      {medicine.time_critical ? (
-        <SlideToConfirm label={`${medicine.label} taken`} onConfirm={() => log("taken")} />
+    <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true" focusable="false">
+      <rect x="4" y="11" width="22" height="9" rx="4.5" fill="none" stroke="currentColor" strokeWidth="2" transform="rotate(-35 15 15.5)" />
+      <path d="M11.5 10.5l7 9" stroke="currentColor" strokeWidth="2" />
+    </svg>
+  );
+}
+
+const LOGGED: Record<Status, string> = {
+  taken: "Taken",
+  skipped: "Skipped",
+  side_effect: "Side effect noted",
+};
+
+function MedicineCard({
+  medicine,
+  logged,
+  failed,
+  onLog,
+}: {
+  medicine: Medicine;
+  logged?: Logged;
+  failed: boolean;
+  onLog: (id: string, s: Status) => Promise<boolean>;
+}) {
+  const schedule = scheduleFor(medicine);
+
+  return (
+    <li className="card medicine-card">
+      <div className="med-head">
+        <span className="med-icon"><PillIcon /></span>
+        <span className="med-text">
+          <span className="med-title">{medicine.label}</span>
+          <span className="med-schedule">{schedule.line}</span>
+        </span>
+        {schedule.time && <span className="med-time">{schedule.time}</span>}
+      </div>
+
+      {logged ? (
+        <p className="med-logged" data-status={logged.status} role="status">
+          {LOGGED[logged.status]} at {logged.at}
+          <span className="sr-only"> Saved</span>
+        </p>
       ) : (
-        <button type="button" className="primary" onClick={() => log("taken")}>Taken</button>
+        <>
+          <button type="button" className="primary med-primary" onClick={() => { void onLog(medicine.id, "taken"); }}>
+            I took it
+          </button>
+          <div className="med-actions">
+            <button type="button" className="med-skip" onClick={() => { void onLog(medicine.id, "skipped"); }}>
+              I skipped it
+            </button>
+            <button type="button" onClick={() => { void onLog(medicine.id, "side_effect"); }}>
+              Side effect
+            </button>
+          </div>
+        </>
       )}
-      <button type="button" onClick={() => log("skipped")}>Skipped</button>
-      <button type="button" onClick={() => log("side_effect")}>Side effect</button>
-      {saved && <p role="status">Saved</p>}
-      {failed && <p role="alert">Could not save. Please try again.</p>}
+
+      {failed && <p className="error" role="alert">Could not save. Please try again.</p>}
     </li>
   );
 }
@@ -41,12 +103,30 @@ function MedicineRow({ medicine, onLog }: { medicine: Medicine; onLog: (id: stri
 export function MedicinesScreen() {
   const patient = usePatient();
   const patientId = getSession()?.patientId ?? "";
+  const [logged, setLogged] = useState<Record<string, Logged>>({});
+  const [failed, setFailed] = useState<Record<string, boolean>>({});
+
+  // "Advance one day" starts a new day of doses: drop what was tapped in the previous day and let
+  // the polling refetch the list (usePatient already re-runs on the same event).
+  useEffect(() => {
+    const refresh = () => {
+      setLogged({});
+      setFailed({});
+    };
+    window.addEventListener("demo-day-advanced", refresh);
+    return () => window.removeEventListener("demo-day-advanced", refresh);
+  }, []);
+
   const readable = useMemo(
-    () => ({ heading: "Your medicines", body: "Tap Taken, Skipped or Side effect for each one." }),
+    () => ({
+      heading: "Medicines today",
+      body: "From your prescriptions in Kanta (FHIR mock-up). For each medicine: I took it, I skipped it or Side effect.",
+    }),
     [],
   );
   useReadable(readable);
-  const log = useMemo(
+
+  const send = useMemo(
     () => async (medicine_id: string, status: Status) => {
       try {
         await api.medicationLog(patientId, { medicine_id, status, ...actorFields() });
@@ -57,27 +137,53 @@ export function MedicinesScreen() {
     },
     [patientId],
   );
+
+  const log = useMemo(
+    () => async (id: string, status: Status) => {
+      const ok = await send(id, status);
+      if (ok) setLogged((prev) => ({ ...prev, [id]: { status, at: clockNow() } }));
+      setFailed((prev) => ({ ...prev, [id]: !ok }));
+      return ok;
+    },
+    [send],
+  );
+
   const actions = useMemo(
     () =>
       (patient?.medicines ?? []).flatMap((m) => [
-        { id: `med:${m.id}:taken`, label: `${m.label} taken`, run: () => { void log(m.id, "taken"); } },
-        { id: `med:${m.id}:skipped`, label: `${m.label} skipped`, run: () => { void log(m.id, "skipped"); } },
+        { id: `med:${m.id}:taken`, label: `${m.label}: I took it`, run: () => { void log(m.id, "taken"); } },
+        { id: `med:${m.id}:skipped`, label: `${m.label}: I skipped it`, run: () => { void log(m.id, "skipped"); } },
+        { id: `med:${m.id}:side_effect`, label: `${m.label}: side effect`, run: () => { void log(m.id, "side_effect"); } },
       ]),
     [patient, log],
   );
   useVoiceActions(actions);
 
   if (patient === null) return <NoPathwayYet />;
-  if (!patient) return <p>Loading…</p>;
+  if (!patient) return <p className="muted">Loading…</p>;
+
   return (
-    <section>
-      <h1>Your medicines</h1>
-      <p className="source-chip">From Kanta (FHIR mock-up)</p>
-      <ul className="medicine-list">
-        {patient.medicines.map((m) => (
-          <MedicineRow key={m.id} medicine={m} onLog={log} />
-        ))}
-      </ul>
+    <section className="medicines">
+      <div className="screen-heading">
+        <h1>Medicines today</h1>
+        <span className="screen-sub">From your prescriptions in Kanta (FHIR mock-up)</span>
+      </div>
+
+      {patient.medicines.length === 0 ? (
+        <p className="muted">No medicines right now.</p>
+      ) : (
+        <ul className="medicine-list">
+          {patient.medicines.map((m) => (
+            <MedicineCard
+              key={m.id}
+              medicine={m}
+              logged={logged[m.id]}
+              failed={!!failed[m.id]}
+              onLog={log}
+            />
+          ))}
+        </ul>
+      )}
     </section>
   );
 }

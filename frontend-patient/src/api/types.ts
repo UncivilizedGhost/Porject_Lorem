@@ -98,6 +98,8 @@ export interface TrustedPerson {
 export interface PatientView {
   _id: string;
   county: string;
+  /** Contact's name, when the record has one; the greeting falls back without it. */
+  display_name?: string | null;
   language: Language;
   status: "on_track" | "running_late";
   accessibility: Accessibility;
