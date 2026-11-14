@@ -20,6 +20,16 @@ curl http://localhost:8000/health                    # {"status":"ok","db":true,
 Against Aiven instead of the local container: set `DATABASE_URL` to the service URI from the
 Aiven console (it already carries `?sslmode=require`). Nothing else changes.
 
+## Hello world
+
+```bash
+cd server
+python hello_pg.py
+```
+
+Connects through `app.config.DATABASE_URL`, creates the `hello_world` table, upserts one row,
+and prints it back. Safe to run repeatedly against either database.
+
 ## Test
 
 ```bash
