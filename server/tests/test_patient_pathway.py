@@ -134,5 +134,42 @@ async def test_medicines_are_generic_labels_without_drug_names(client):
     assert all(set(m) >= {"id", "label", "time_critical"} for m in medicines)
 
 
+async def test_trusted_view_has_appointments_and_confirmations_but_no_clinical_content(client):
+    pid = await make_patient()
+    step = await db.insert("escalation_steps", {
+        "patient_id": pid, "step_index": 0, "rung": "message_sms", "due_demo_day": 0,
+        "fired_at": "2026-11-14T08:00:00+00:00", "confirmed_at": None,
+    })
+    await db.insert("appointments", {
+        "patient_id": pid, "what": "Chest CT", "at": "2026-11-21T09:30:00+00:00",
+        "where": "Jorvi Hospital, Espoo",
+    })
+    for etype, payload in [
+        ("checkin", {"answers": {"temperature": 38.6}, "grade": "red"}),
+        ("symptom_report", {"symptoms": [{"symptom": "pain", "answers": {"where": "chest"}}],
+                            "own_words": {"text": "it hurts at night", "source": "typed"}}),
+    ]:
+        await db.insert("events", {"subject_type": "patient", "subject_id": pid, "type": etype,
+                                   "payload": payload, "actor": "self", "input": "touch", "demo_day": 0})
+
+    res = await client.get(f"/patients/{pid}/trusted-view")
+    assert res.status_code == 200
+    body = res.json()
+    assert body["trusted_people"] == TRUSTED
+    assert [a["what"] for a in body["appointments"]] == ["Chest CT"]
+    assert body["next_step"]["pending_confirmation"] == {"id": step, "kind": "appointment"}
+    text = res.text
+    for forbidden in ("events", "answers", "own_words", "38.6", "it hurts", "symptom_report"):
+        assert forbidden not in text
+
+
+async def test_patient_accessibility_patch_is_partial(client):
+    pid = await make_patient()
+    res = await client.patch(f"/patients/{pid}/accessibility", json={"text_size": "xl"})
+    assert res.status_code == 200
+    got = (await client.get(f"/patients/{pid}")).json()
+    assert got["accessibility"] == {**ACCESS, "text_size": "xl"}
+
+
 async def test_unknown_patient_is_404(client):
     assert (await client.get("/patients/nope")).status_code == 404
