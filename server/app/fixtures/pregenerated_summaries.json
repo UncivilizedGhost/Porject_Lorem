@@ -1,0 +1,24 @@
+{
+  "western-uusimaa/missed-first-visits-75": [
+    {
+      "text": "People aged 75 and over start treatment within the target at 46%, compared with 64% for all patients in Western Uusimaa",
+      "fact_ids": [
+        "group_pct",
+        "county_pct"
+      ]
+    },
+    {
+      "text": "About 12% of this older group start late because they miss the first visit, and each missed visit costs about 14 days",
+      "fact_ids": [
+        "missed_share",
+        "days_lost"
+      ]
+    },
+    {
+      "text": "Even if no first visits were missed, only 58% of this group would reach the target",
+      "fact_ids": [
+        "max_achievable"
+      ]
+    }
+  ]
+}

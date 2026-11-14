@@ -1,0 +1,202 @@
+[
+  {
+    "question": "What is a bronchoscopy?",
+    "language": "en",
+    "passage_ids": [
+      "bronchoscopy_en",
+      "needle_biopsy_en",
+      "six_week_goal_en"
+    ],
+    "text": "A bronchoscopy is an examination of your airways. A doctor passes a thin, flexible tube with a small camera through your nose or mouth and down into your windpipe and lungs. The doctor can look at the airways and take small tissue samples, called biopsies, to be studied in a laboratory. You are usually given medicine to numb your throat, and sometimes medicine to help you relax. The test is not usually painful, but it can make you cough.",
+    "model": "nemotron-3.5-super-vl",
+    "generated_at": "2026-11-14T12:56:49+00:00"
+  },
+  {
+    "question": "What is a CT scan?",
+    "language": "en",
+    "passage_ids": [
+      "ct_en",
+      "needle_biopsy_en",
+      "xray_en"
+    ],
+    "text": "A CT scan takes many X-ray pictures of your body from different angles and puts them together into detailed images. For a chest CT, you lie on a table that slides through a large ring. The scan takes only a few minutes and does not hurt. You may be given a contrast agent through a vein, which can feel warm for a moment. The images show the lungs and the lymph nodes. Tell the staff if you are pregnant, have an allergy, or have kidney problems.",
+    "model": "nemotron-3.5-super-vl",
+    "generated_at": "2026-11-14T12:56:49+00:00"
+  },
+  {
+    "question": "What is a chest X-ray?",
+    "language": "en",
+    "passage_ids": [
+      "xray_en",
+      "ct_en",
+      "warning_signs_en"
+    ],
+    "text": "A chest X-ray is a quick picture of your lungs and heart. It is usually the first imaging test. You stand in front of the machine and hold your breath for a few seconds. It does not hurt. It can show changes in the lungs, but small changes can be missed. The doctor may ask for a CT scan or other tests afterwards. That does not by itself mean something is wrong.",
+    "model": "nemotron-3.5-super-vl",
+    "generated_at": "2026-11-14T12:56:49+00:00"
+  },
+  {
+    "question": "What are the warning signs?",
+    "language": "en",
+    "passage_ids": [
+      "warning_signs_en"
+    ],
+    "text": "A cough that does not go away or gets worse\nCoughing up blood\nShortness of breath\nChest pain\nA hoarse voice\nRepeated chest infections\nTiredness\nWeight loss without a reason",
+    "model": "nemotron-3.5-super-vl",
+    "generated_at": "2026-11-14T12:56:49+00:00"
+  },
+  {
+    "question": "What is the 6-week goal?",
+    "language": "en",
+    "passage_ids": [
+      "six_week_goal_en"
+    ],
+    "text": "The goal is for cancer to be diagnosed and treatment to start within about six weeks of the referral being received. This is a goal for the care system, not a promise for your own case.",
+    "model": "nemotron-3.5-super-vl",
+    "generated_at": "2026-11-14T12:56:49+00:00"
+  },
+  {
+    "question": "Can Kela pay for my taxi?",
+    "language": "en",
+    "passage_ids": [
+      "kela_travel_en"
+    ],
+    "text": "Yes, Kela can reimburse part of the cost of a taxi to examinations and treatment if your health makes it hard to use other transport or if public transport is not possible. You can order a taxi with a Kela card or apply for reimbursement afterwards. Ask your nurse or Kela if you are unsure what applies to you.",
+    "model": "nemotron-3.5-super-vl",
+    "generated_at": "2026-11-14T12:56:49+00:00"
+  },
+  {
+    "question": "Mikä on bronkoskopia?",
+    "language": "fi",
+    "passage_ids": [
+      "bronchoscopy_fi",
+      "needle_biopsy_fi",
+      "six_week_goal_fi"
+    ],
+    "text": "Bronkoskopia on keuhkoputkien tähystys. Lääkäri katsoo hengitysteitä ohuella, taipuisalla putkella, jonka päässä on kamera. Putki viedään nenän tai suun kautta henkitorveen ja keuhkoputkiin. Lääkäri voi ottaa pieniä kudosnäytteitä. Kurkku puudutetaan, ja tarvittaessa saat rauhoittavaa lääkettä. Tutkimus ei yleensä satu, mutta se voi aiheuttaa yskimistä.",
+    "model": "nemotron-3.5-super-vl",
+    "generated_at": "2026-11-14T12:56:49+00:00"
+  },
+  {
+    "question": "Mikä on TT-kuvaus?",
+    "language": "fi",
+    "passage_ids": [
+      "ct_fi",
+      "xray_fi",
+      "needle_biopsy_fi"
+    ],
+    "text": "TT-kuvaus ottaa monta röntgenkuvaa kehostasi eri suunnista ja yhdistää ne tarkoiksi kuviksi. Keuhkojen TT-kuvauksessa makaat pöydällä, joka liukuu suuren renkaan läpi. Kuvaus kestää vain muutaman minuutin eikä satu. Sinulle voidaan antaa suoneen varjoainetta, joka voi tuntua hetken lämpimältä. Kuvista nähdään keuhkot ja imusolmukkeet.",
+    "model": "nemotron-3.5-super-vl",
+    "generated_at": "2026-11-14T12:56:49+00:00"
+  },
+  {
+    "question": "Mikä on keuhkokuva?",
+    "language": "fi",
+    "passage_ids": [
+      "xray_fi",
+      "lung_function_fi",
+      "warning_signs_fi"
+    ],
+    "text": "Keuhkokuva on nopea röntgenkuva keuhkoista ja sydämestä. Se on yleensä ensimmäinen kuvantamistutkimus. Seisot laitteen edessä ja pidätät hengitystä muutaman sekunnin ajan. Kuvaus ei satu. Kuvassa voi näkyä muutoksia keuhkoissa, mutta pieniä muutoksia voi jäädä huomaamatta. Lääkäri voi pyytää sen jälkeen muita tutkimuksia. Kuva ei yksinään tarkoita, että jokin olisi vialla.",
+    "model": "nemotron-3.5-super-vl",
+    "generated_at": "2026-11-14T12:56:49+00:00"
+  },
+  {
+    "question": "Mitkä ovat keuhkosyövän varoitusmerkit?",
+    "language": "fi",
+    "passage_ids": [
+      "warning_signs_fi",
+      "lung_function_fi",
+      "xray_fi"
+    ],
+    "text": "Keuhkosyövän varoitusmerkkejä ovat:\n\n- yskä, joka ei mene ohi tai pahenee\n- veriyskä\n- hengenahdistus\n- rintakipu\n- käheä ääni\n- toistuvat keuhkoinfektiot\n- väsymys\n- selittämätön painon lasku\n\nNäille oireille on monia muitakin syitä, eikä useimmilla niistä kärsivillä ole syöpää. Ota yhteys hoitajaan tai lääkäriin, jos yskä kestää yli muutaman viikon tai jos oire on sinulle uusi. Jos yskit verta tai sinun on vaikea hengittää, hakeudu heti hoitoon.",
+    "model": "nemotron-3.5-super-vl",
+    "generated_at": "2026-11-14T12:56:49+00:00"
+  },
+  {
+    "question": "Mikä on kuuden viikon tavoite?",
+    "language": "fi",
+    "passage_ids": [
+      "six_week_goal_fi",
+      "warning_signs_fi"
+    ],
+    "text": "Tavoite on, että syöpä diagnosoidaan ja hoito aloitetaan noin kuuden viikon kuluessa lähetteen saapumisesta. Tämä on hoitojärjestelmän tavoite, ei lupaus omasta tilanteestasi.",
+    "model": "nemotron-3.5-super-vl",
+    "generated_at": "2026-11-14T12:56:49+00:00"
+  },
+  {
+    "question": "Korvaako Kela taksimatkan?",
+    "language": "fi",
+    "passage_ids": [
+      "kela_travel_fi"
+    ],
+    "text": "Kyllä, Kela voi korvata osan taksimatkasta, jos terveydentilasi vuoksi muun kulkuneuvon käyttö on vaikeaa tai julkinen liikenne ei ole mahdollista.",
+    "model": "nemotron-3.5-super-vl",
+    "generated_at": "2026-11-14T12:56:49+00:00"
+  },
+  {
+    "question": "Vad är en bronkoskopi?",
+    "language": "sv",
+    "passage_ids": [
+      "bronchoscopy_sv",
+      "needle_biopsy_sv",
+      "six_week_goal_sv"
+    ],
+    "text": "En bronkoskopi är en undersökning av luftvägarna. En läkare för in en tunn, böjlig slang med en kamera genom näsan eller munnen ner i luftstrupen och lungorna. Läkaren kan också ta små vävnadsprover. Halsen bedövas och du kan få lugnande medicin. Undersökningen gör oftast inte ont, men du kan hosta.",
+    "model": "nemotron-3.5-super-vl",
+    "generated_at": "2026-11-14T12:56:49+00:00"
+  },
+  {
+    "question": "Vad är en datortomografi?",
+    "language": "sv",
+    "passage_ids": [
+      "ct_sv",
+      "needle_biopsy_sv",
+      "xray_sv"
+    ],
+    "text": "En datortomografi tar många röntgenbilder av kroppen från olika håll och sätter ihop dem till detaljerade bilder. Vid en undersökning av lungorna ligger du på en brits som glider genom en stor ring. Undersökningen tar bara några minuter och gör inte ont. Du kan få kontrastmedel i en ven, som kan kännas varmt en stund. Bilderna visar lungorna och lymfkörtlarna. Berätta för personalen om du är gravid, har en allergi eller njurproblem.",
+    "model": "nemotron-3.5-super-vl",
+    "generated_at": "2026-11-14T12:56:49+00:00"
+  },
+  {
+    "question": "Vad är en lungröntgen?",
+    "language": "sv",
+    "passage_ids": [
+      "xray_sv"
+    ],
+    "text": "En lungröntgen är en snabb bild av lungorna och hjärtat. Du står framför apparaten och håller andan några sekunder. Det gör inte ont. Små förändringar kan missas, och då kan fler undersökningar behövas. Det betyder inte att något är fel.",
+    "model": "nemotron-3.5-super-vl",
+    "generated_at": "2026-11-14T12:56:49+00:00"
+  },
+  {
+    "question": "Vilka är varningstecknen för lungcancer?",
+    "language": "sv",
+    "passage_ids": [
+      "warning_signs_sv",
+      "lung_function_sv"
+    ],
+    "text": "Här är varningstecknen för lungcancer:\n\n* Hosta som inte går över eller blir värre\n* Blodiga upphostningar\n* Andfåddhet\n* Bröstsmärta\n* Hes röst\n* Återkommande luftvägsinfektioner\n* Trötthet\n* Viktnedgång utan känd orsak\n\nDessa tecken kan ha många andra orsaker, och de flesta som har dem har inte cancer. Kontakta en sjuksköterska eller läkare om en hosta varar i mer än några veckor, eller om något av tecknen är nytt för dig. Sök hjälp genast om du hostar blod eller har svårt att andas.",
+    "model": "nemotron-3.5-super-vl",
+    "generated_at": "2026-11-14T12:56:49+00:00"
+  },
+  {
+    "question": "Vad är sexveckorsmålet?",
+    "language": "sv",
+    "passage_ids": [
+      "six_week_goal_sv"
+    ],
+    "text": "Det är ett nationellt mål i Finland att cancer ska diagnostiseras och behandlingen ska börja inom ungefär sex veckor efter att remissen kommit in. Det är ett mål för vårdsystemet, inte ett löfte för just ditt fall. Vårdteamet kan behöva mer tid om din situation kräver det.",
+    "model": "nemotron-3.5-super-vl",
+    "generated_at": "2026-11-14T12:56:49+00:00"
+  },
+  {
+    "question": "Ersätter Fpa taxiresor?",
+    "language": "sv",
+    "passage_ids": [
+      "kela_travel_sv"
+    ],
+    "text": "Ja, Fpa kan ersätta en del av kostnaderna för taxiresor till undersökningar och vård.",
+    "model": "nemotron-3.5-super-vl",
+    "generated_at": "2026-11-14T12:56:49+00:00"
+  }
+]
