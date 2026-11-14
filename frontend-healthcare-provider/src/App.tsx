@@ -13,8 +13,8 @@ import { LoginScreen } from "./shell/LoginScreen";
 export function App() {
   return (
     <Routes>
-      <Route path="/" element={<LoginScreen />} />
       <Route element={<AppShell />}>
+        <Route path="/" element={<LoginScreen />} />
         {/* person 3 */}
         <Route path="/worklist" element={<WorklistScreen />} />
         <Route path="/worklist/alerts/:alertId" element={<SymptomReportCard />} />

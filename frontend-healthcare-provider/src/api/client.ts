@@ -1,4 +1,14 @@
 // One API client wrapping fetch. Tests mock this module.
+import type {
+  CountyDetail,
+  CountySummary,
+  DashboardAction,
+  DecisionInput,
+  DecisionRow,
+  InsightCardDoc,
+  SimulationResult,
+  SummaryResult,
+} from "./types";
 
 const BASE = "/api";
 
@@ -34,14 +44,16 @@ export const api = {
   book: (body: object) => request<unknown>("POST", "/appointments", body),
 
   // person 1: dashboard
-  counties: () => request<unknown[]>("GET", "/dashboard/counties"),
-  county: (name: string) => request<unknown>("GET", `/dashboard/counties/${encodeURIComponent(name)}`),
-  actions: () => request<unknown[]>("GET", "/dashboard/actions"),
-  insight: (cardId: string) => request<unknown>("GET", `/dashboard/insight/${cardId}`),
-  simulate: (body: { card_id: string; dials: Record<string, number> }) => request<unknown>("POST", "/dashboard/simulate", body),
-  summary: (cardId: string) => request<unknown>("POST", "/dashboard/summary", { card_id: cardId }),
-  createDecision: (body: object) => request<unknown>("POST", "/dashboard/decisions", body),
-  decisions: (cardId: string) => request<unknown[]>("GET", `/dashboard/decisions?card_id=${encodeURIComponent(cardId)}`),
+  counties: () => request<CountySummary[]>("GET", "/dashboard/counties"),
+  county: (name: string) => request<CountyDetail>("GET", `/dashboard/counties/${encodeURIComponent(name)}`),
+  actions: () => request<DashboardAction[]>("GET", "/dashboard/actions"),
+  insight: (cardId: string) => request<InsightCardDoc>("GET", `/dashboard/insight/${cardId}`),
+  simulate: (body: { card_id: string; dials: Record<string, number> }) =>
+    request<SimulationResult>("POST", "/dashboard/simulate", body),
+  summary: (cardId: string) => request<SummaryResult>("POST", "/dashboard/summary", { card_id: cardId }),
+  createDecision: (body: DecisionInput) => request<DecisionRow>("POST", "/dashboard/decisions", body),
+  decisions: (cardId: string) =>
+    request<DecisionRow[]>("GET", `/dashboard/decisions?card_id=${encodeURIComponent(cardId)}`),
 
   // person 4: sim log
   simLog: (limit = 50) => request<unknown[]>("GET", `/sim/log?limit=${limit}`),
