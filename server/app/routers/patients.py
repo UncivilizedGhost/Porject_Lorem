@@ -5,15 +5,28 @@ person 3 for checkin / symptom-report / medication-log (`app/rules`, `app/servic
 person 4 for kanta-medicines (`app/services/messaging.py`).
 """
 
+from typing import Any
+
 from fastapi import APIRouter, HTTPException
+
+from app import db
+from app.services import accessibility, pathway
 
 router = APIRouter(prefix="/patients", tags=["patients"])
 
 
+async def _patient_or_404(patient_id: str) -> dict[str, Any]:
+    patient = await db.get("patients", patient_id)
+    if patient is None:
+        raise HTTPException(status_code=404, detail="patient not found")
+    return patient
+
+
 @router.get("/{patient_id}")
-async def get_patient():
+async def get_patient(patient_id: str):
     """person 2: Patient + derived pathway_steps, status, next_step (with pending_confirmation), medicines."""
-    raise HTTPException(status_code=501, detail="not implemented")
+    patient = await _patient_or_404(patient_id)
+    return {**patient, "pathway_steps": pathway.pathway_steps(patient)}
 
 
 @router.get("/{patient_id}/trusted-view")
