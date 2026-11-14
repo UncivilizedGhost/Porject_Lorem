@@ -1,5 +1,5 @@
 // Owner: person 2 — .scratch/patient-companion/spec.md (artboard "R1–R6")
-// Drives machine.ts; renders R1–R6; one submit at the end → POST /patients/{id}/symptom-report;
+// Drives machine.ts; renders R2–R6; one submit at the end → POST /patients/{id}/symptom-report;
 // R2 for call_now, R6 for nurse_review / self_care. A Safety Check tap goes to R2 straight away
 // (fixed behaviour, not grading) and the report is still submitted so the Worklist gets a row.
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -11,7 +11,6 @@ import { actorFields, getSession } from "../../lib/session";
 import { useFlowBack } from "../../shell/FlowBack";
 import { useVoiceActions } from "../../voice/useVoiceActions";
 import { initialDraft, type ReportDraft, type Step } from "./machine";
-import { R1SafetyCheck } from "./R1SafetyCheck";
 import { R2CallNow } from "./R2CallNow";
 import { R3PickSymptom } from "./R3PickSymptom";
 import { R4GuidedQuestion } from "./R4GuidedQuestion";
@@ -78,17 +77,18 @@ export function SymptomReportFlow() {
     [patientId],
   );
 
-  const tick = useCallback(
-    (item: { id: string; label: string }) => {
-      const d = { ...initialDraft, ticked: [item.id] };
-      setStep({ screen: "R2", reason: item.label });
-      submit(d).catch(() => setError(t("report.callError")));
-    },
-    [submit],
-  );
-  const none = useCallback(() => setStep({ screen: "R3" }), []);
-  // The red tile on Pick a symptom: same fixed behaviour as a Safety Check tap, no grading.
-  const urgent = useCallback(() => setStep({ screen: "R2", reason: t("report.urgent") }), [t]);
+  // The red tile on Pick a symptom goes to R2 straight away (fixed behaviour, no grading). The
+  // report is still submitted, ticking the first Safety Check item as the demo bar's alarm does,
+  // so the Worklist gets the Alert that R2 says Nurse Aino was told about.
+  const urgent = useCallback(() => {
+    setStep({ screen: "R2", reason: t("report.urgent") });
+    const ticked = rules?.safety_check_items[0]?.id;
+    if (!ticked) {
+      setError(t("report.callError"));
+      return;
+    }
+    submit({ ...initialDraft, ticked: [ticked] }).catch(() => setError(t("report.callError")));
+  }, [rules, submit, t]);
   const more = useCallback(() => setStep({ screen: "R3" }), []);
   const done = useCallback(() => {
     setOwnFrom("more");
@@ -156,7 +156,6 @@ export function SymptomReportFlow() {
   return (
     <>
       {error && <p role="alert">{error}</p>}
-      {step.screen === "R1" && <R1SafetyCheck items={rules.safety_check_items} onTick={tick} onNone={none} />}
       {step.screen === "R2" && <R2CallNow reason={step.reason || null} />}
       {step.screen === "R3" && (
         <R3PickSymptom

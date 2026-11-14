@@ -66,6 +66,14 @@ export function TrustedPersonView() {
         </a>
       </div>
 
+      <Link className="row-link" to="/check-in">
+        <span>
+          <span className="row-link-title">{t("trusted.checkin")}</span>
+          <span className="row-link-sub">{t("trusted.reportSub")}</span>
+        </span>
+        <Icon name="chevron-right" size={20} />
+      </Link>
+
       <p className="trusted-note">{t("trusted.privacy")}</p>
     </section>
   );

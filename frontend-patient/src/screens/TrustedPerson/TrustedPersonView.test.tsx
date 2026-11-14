@@ -44,8 +44,8 @@ test("lists the appointments and the pending Confirmation with a way to confirm"
 
 test("offers Check-in and Symptom Report on the Patient's behalf and says it is logged", async () => {
   renderView();
-  expect(await screen.findByRole("link", { name: /check in for them/i })).toHaveAttribute("href", "/check-in");
-  expect(screen.getByRole("link", { name: /report a symptom for them/i })).toHaveAttribute("href", "/report");
+  expect(await screen.findByRole("link", { name: /check in for him/i })).toHaveAttribute("href", "/check-in");
+  expect(screen.getByRole("link", { name: /report a symptom for him/i })).toHaveAttribute("href", "/report");
   expect(screen.getByText(/shown to the nurse with your name/i)).toBeInTheDocument();
 });
 

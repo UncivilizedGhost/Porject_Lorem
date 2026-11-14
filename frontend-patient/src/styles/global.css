@@ -861,7 +861,13 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 }
 .role-name { display: block; font-size: 1.55em; font-weight: 700; }
 .role-tile svg { flex: none; }
-a.role-tile { box-sizing: border-box; margin-top: 10px; text-decoration: none; font-size: 1.1em; }
+.provider-link {
+  align-self: center; display: inline-flex; align-items: center; gap: 4px;
+  min-height: var(--target-min); padding: 0 12px;
+  color: var(--teal-dark); font-size: 0.94em; font-weight: 600; text-decoration: none;
+}
+.provider-link:hover { text-decoration: underline; }
+.provider-link svg { flex: none; }
 .role-tile:disabled { opacity: 0.55; }
 .login-note { font-size: 0.88em; line-height: 1.35; color: var(--secondary); }
 

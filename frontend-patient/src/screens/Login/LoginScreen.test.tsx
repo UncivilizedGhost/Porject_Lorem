@@ -32,9 +32,9 @@ beforeEach(() => {
   sessionStorage.clear();
 });
 
-test("is a neutral mocked strong identification with no Suomi.fi or Omapolku branding", () => {
+test("is a neutral role choice with no Suomi.fi or Omapolku branding", () => {
   renderLogin();
-  expect(screen.getByText(/strong identification \(mocked\)/i)).toBeInTheDocument();
+  expect(screen.getByRole("heading", { name: /who is using the app/i })).toBeInTheDocument();
   expect(document.body.textContent).not.toMatch(/suomi\.fi|omapolku/i);
 });
 
@@ -42,7 +42,7 @@ test("Patient with no Contact starts the risk check", async () => {
   mockApi.identities.mockResolvedValue({ contact_id: null, patient_id: null });
   const user = userEvent.setup();
   renderLogin();
-  await user.click(screen.getByRole("button", { name: /i am the patient/i }));
+  await user.click(screen.getByRole("button", { name: "Patient" }));
   await waitFor(() => expect(screen.getByTestId("where")).toHaveTextContent("/risk-check"));
 });
 
@@ -50,7 +50,7 @@ test("Patient who has been promoted still retakes the risk check on login", asyn
   mockApi.identities.mockResolvedValue({ contact_id: "c1", patient_id: "p1" });
   const user = userEvent.setup();
   renderLogin();
-  await user.click(screen.getByRole("button", { name: /i am the patient/i }));
+  await user.click(screen.getByRole("button", { name: "Patient" }));
   await waitFor(() => expect(screen.getByTestId("where")).toHaveTextContent("/risk-check"));
   expect(getSession()).toMatchObject({ role: "patient", patientId: "p1", contactId: "c1" });
 });
@@ -59,7 +59,7 @@ test("Contact who is not yet a Patient retakes the risk check on login", async (
   mockApi.identities.mockResolvedValue({ contact_id: "c1", patient_id: null });
   const user = userEvent.setup();
   renderLogin();
-  await user.click(screen.getByRole("button", { name: /i am the patient/i }));
+  await user.click(screen.getByRole("button", { name: "Patient" }));
   await waitFor(() => expect(screen.getByTestId("where")).toHaveTextContent("/risk-check"));
 });
 
@@ -71,7 +71,7 @@ test("Trusted Person goes to the trusted view for the most recent Patient", asyn
   });
   const user = userEvent.setup();
   renderLogin();
-  await user.click(screen.getByRole("button", { name: /someone you trust/i }));
+  await user.click(screen.getByRole("button", { name: "Support person" }));
   await waitFor(() => expect(screen.getByTestId("where")).toHaveTextContent("/trusted"));
   expect(getSession()).toMatchObject({ role: "trusted_person", patientId: "p1", trustedPersonName: "Liisa K." });
 });
@@ -80,6 +80,6 @@ test("a server that cannot be reached shows a plain message", async () => {
   mockApi.identities.mockRejectedValue(new Error("down"));
   const user = userEvent.setup();
   renderLogin();
-  await user.click(screen.getByRole("button", { name: /i am the patient/i }));
+  await user.click(screen.getByRole("button", { name: "Patient" }));
   expect(await screen.findByRole("alert")).toHaveTextContent(/could not connect/i);
 });

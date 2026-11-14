@@ -46,9 +46,9 @@ test("lists every step with whether it is done, next or coming", async () => {
 test("future dates are marked as estimates, done dates are not", async () => {
   renderPathway();
   const items = await screen.findAllByRole("listitem");
-  expect(within(items[0]).getByText("14.11.")).toBeInTheDocument();
-  expect(within(items[1]).getByText(/about 18\.11\./i)).toBeInTheDocument();
-  expect(within(items[2]).getByText(/about 25\.11\./i)).toBeInTheDocument();
+  expect(within(items[0]).getByText(/14\.11\./)).toBeInTheDocument();
+  expect(within(items[1]).getByText(/usually 18\.11\./i)).toBeInTheDocument();
+  expect(within(items[2]).getByText(/usually 25\.11\./i)).toBeInTheDocument();
 });
 
 test("a Contact the nurse has not called yet sees that, not an endless loading screen", async () => {

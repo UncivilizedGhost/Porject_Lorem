@@ -143,11 +143,14 @@ test("a Trusted Person's report says who reported it", async () => {
   expect(await screen.findByText("reported by Liisa K., trusted person")).toBeInTheDocument();
 });
 
-test("the workload line uses Finnish formats", async () => {
+test("the workload line shows today's alert count", async () => {
   respond([]);
   renderScreen();
-  expect(await screen.findByText(/Alerts today: 4/)).toHaveTextContent("False alarms: 25 %");
+  expect(await screen.findByText(/alerts today/)).toHaveTextContent("4 alerts today");
 });
+
+// Spec story 17: the redesigned header no longer shows the false-alarm share.
+test.todo("the workload line shows the false-alarm share in Finnish format");
 
 const card: AlertCard = {
   _id: "a1",

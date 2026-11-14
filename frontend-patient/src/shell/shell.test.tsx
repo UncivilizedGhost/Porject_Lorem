@@ -40,6 +40,7 @@ beforeEach(() => {
   mockApi.health.mockResolvedValue({ status: "ok", db: true, current_demo_day: 3 });
   mockApi.advanceDay.mockResolvedValue({ current_demo_day: 4 });
   mockApi.rules.mockResolvedValue(rules);
+  mockApi.identities.mockResolvedValue({ contact_id: null, patient_id: null });
   mockApi.getPatient.mockResolvedValue(patient);
   mockApi.trustedView.mockResolvedValue({
     _id: "p1", status: "on_track", next_step: patient.next_step, appointments: [], trusted_people: [],

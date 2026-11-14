@@ -75,6 +75,7 @@ export function PathwayScreen() {
                 tabIndex={s.state === "next" ? -1 : undefined}
               >
                 {s.state === "next" && <span className="chip-next">{t("pathway.next")}</span>}
+                {s.state !== "next" && <span className="sr-only">{t(`pathway.state.${s.state}`)}. </span>}
                 <span className="path-title">{s.label}</span>
                 <span className="path-meta">
                   {s.date_is_estimate

@@ -82,6 +82,8 @@ export const MESSAGES = {
   "pathway.allDone": ["All steps done", "Kaikki vaiheet tehty", "Alla steg klara"],
   "pathway.usually": ["Usually {date}", "Yleensä {date}", "Vanligen {date}"],
   "pathway.next": ["Next", "Seuraava", "Nästa"],
+  "pathway.state.done": ["Done", "Tehty", "Klart"],
+  "pathway.state.later": ["Coming", "Tulossa", "Kommer"],
   "pathway.goal": [
     "If you need treatment, it starts within 6 weeks of your referral.",
     "Jos tarvitset hoitoa, se alkaa 6 viikon kuluessa lähetteestäsi.",
@@ -283,22 +285,11 @@ export const MESSAGES = {
     "Ilmoitusta ei voitu lähettää, mutta voit silti soittaa heti.",
     "Rapporten kunde inte skickas, men du kan fortfarande ringa nu.",
   ],
-  "report.r1Heading": [
-    "Is any of this happening right now?",
-    "Tapahtuuko jokin näistä juuri nyt?",
-    "Händer något av detta just nu?",
-  ],
-  "report.r1Body": [
-    "Tap what is happening, or None of these.",
-    "Napauta sitä, mitä tapahtuu, tai Ei mikään näistä.",
-    "Tryck på det som händer, eller Inget av dessa.",
-  ],
   "report.r1Notice": [
     "This is not an emergency service. A nurse replies within 1–2 working days. For urgent help phone 116 117 or 112.",
     "Tämä ei ole hätäpalvelu. Hoitaja vastaa 1–2 arkipäivässä. Kiireellisessä asiassa soita 116 117 tai 112.",
     "Detta är inte en akuttjänst. En sjuksköterska svarar inom 1–2 vardagar. Vid brådskande behov ring 116 117 eller 112.",
   ],
-  "report.none": ["None of these", "Ei mikään näistä", "Inget av dessa"],
   "report.ownEyebrow": ["Almost done", "Melkein valmis", "Nästan klar"],
   "report.ownTitle": [
     "Anything to add in your own words?",
@@ -436,6 +427,11 @@ export const MESSAGES = {
     "Saved as reported by you",
     "Tallennetaan sinun ilmoittamanasi",
     "Sparas som rapporterat av dig",
+  ],
+  "trusted.checkin": [
+    "Check in for him",
+    "Täytä viikkotarkistus hänen puolestaan",
+    "Gör veckokollen för hen",
   ],
   "trusted.callSub": [
     "His nurse, weekdays 8–16",
@@ -608,16 +604,6 @@ export const MESSAGES = {
     "Report a symptom for them",
     "Ilmoita oireesta hänen puolestaan",
     "Rapportera ett symtom för hen",
-  ],
-  "report.r1Heading.trusted": [
-    "Is any of this happening to them right now?",
-    "Tapahtuuko jokin näistä hänelle juuri nyt?",
-    "Händer något av detta med hen just nu?",
-  ],
-  "report.r1Body.trusted": [
-    "Tap what is happening to them, or None of these.",
-    "Napauta sitä, mitä hänelle tapahtuu, tai Ei mikään näistä.",
-    "Tryck på det som händer hen, eller Inget av dessa.",
   ],
   "report.pickHeading.trusted": [
     "What would you like to tell Nurse Aino about them?",

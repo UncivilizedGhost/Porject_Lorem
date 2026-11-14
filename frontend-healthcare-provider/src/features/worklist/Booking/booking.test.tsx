@@ -2,7 +2,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { beforeEach, vi } from "vitest";
+import { afterEach, beforeEach, vi } from "vitest";
 
 import { api } from "../../../api/client";
 import { BookingScreen } from "./BookingScreen";
@@ -14,6 +14,9 @@ const mocked = vi.mocked(api);
 
 beforeEach(() => {
   vi.clearAllMocks();
+  // The calendar greys out days before today, so pin the clock to keep the fixture dates bookable.
+  vi.useFakeTimers({ toFake: ["Date"] });
+  vi.setSystemTime(new Date("2026-11-15T09:00:00"));
   mocked.worklist.mockResolvedValue({
     rows: [
       {
@@ -25,7 +28,7 @@ beforeEach(() => {
     current_demo_day: 0,
   } as never);
   mocked.clinicians.mockResolvedValue([
-    { id: "k1", name: "Dr. Helena Virtanen (synthetic)", types: ["xray_ct"], location: "Jorvi Hospital", working_days: [1], hours: { start: "08:00", end: "15:00" } },
+    { id: "k1", name: "Dr. Helena Virtanen (synthetic)", types: ["xray_ct"], location: "Jorvi Hospital", working_days: [1], hours: { start: "08:00", end: "15:00" }, slot_minutes: 30 },
   ] as never);
   mocked.availability.mockResolvedValue({
     clinician_id: "k1",
@@ -34,6 +37,8 @@ beforeEach(() => {
   } as never);
   mocked.book.mockResolvedValue({ id: "ap1" } as never);
 });
+
+afterEach(() => vi.useRealTimers());
 
 function renderScreen() {
   return render(
@@ -47,11 +52,11 @@ function renderScreen() {
 
 test("books the chosen slot for the row's person after picking type, clinician and day", async () => {
   renderScreen();
-  await userEvent.selectOptions(await screen.findByLabelText("Appointment type"), "xray_ct");
+  await userEvent.click(await screen.findByRole("button", { name: "X-ray and low-dose CT" }));
   expect(mocked.clinicians).toHaveBeenCalledWith("xray_ct");
   await userEvent.click(await screen.findByRole("button", { name: /Helena Virtanen/ }));
-  await userEvent.click(await screen.findByRole("button", { name: "16.11." }));
-  await userEvent.click(screen.getByRole("button", { name: "8.30" }));
+  await userEvent.click(await screen.findByRole("button", { name: /^16\.11\./ }));
+  await userEvent.click(screen.getByRole("button", { name: /^8\.30/ }));
   await userEvent.click(screen.getByRole("button", { name: "Confirm booking" }));
   expect(mocked.book).toHaveBeenCalledWith({
     subject_type: "contact",

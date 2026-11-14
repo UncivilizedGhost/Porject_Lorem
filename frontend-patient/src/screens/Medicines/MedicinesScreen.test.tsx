@@ -36,7 +36,7 @@ test("lists medicines by their generic label and says where the list comes from"
   expect(screen.getByText(/kanta \(fhir mock-up\)/i)).toBeInTheDocument();
 });
 
-test("a side effect or a skipped dose is logged in one tap", async () => {
+test("a skipped dose or a side effect is logged in one tap", async () => {
   const user = userEvent.setup();
   renderScreen();
   const nausea = (await screen.findByText("Medicine for nausea, when needed")).closest("li")!;
@@ -46,36 +46,26 @@ test("a side effect or a skipped dose is logged in one tap", async () => {
       medicine_id: "med_nausea", status: "skipped", actor: "self",
     }),
   );
-  await user.click(within(nausea).getByRole("button", { name: "Side effect" }));
+  // A medicine is logged once, so the side effect goes on the other card. It then hands over
+  // to the Symptom Report, where a nurse can act on it.
+  const morning = (await screen.findByText("Cancer medicine, tablets, morning")).closest("li")!;
+  await user.click(within(morning).getByRole("button", { name: "Side effect" }));
   await waitFor(() =>
     expect(mockApi.medicationLog).toHaveBeenCalledWith("p1", {
-      medicine_id: "med_nausea", status: "side_effect", actor: "self",
+      medicine_id: "med_morning", status: "side_effect", actor: "self",
     }),
   );
 });
 
-test("a time-critical medicine is confirmed with the slider or its tap fallback", async () => {
+test("a medicine is confirmed with one tap on I took it", async () => {
   const user = userEvent.setup();
   renderScreen();
   const morning = (await screen.findByText("Cancer medicine, tablets, morning")).closest("li")!;
-  expect(within(morning).getByRole("slider")).toBeInTheDocument();
-  await user.click(within(morning).getByRole("button", { name: "Or tap here to confirm" }));
+  await user.click(within(morning).getByRole("button", { name: "I took it" }));
   await waitFor(() =>
     expect(mockApi.medicationLog).toHaveBeenCalledWith("p1", {
       medicine_id: "med_morning", status: "taken", actor: "self",
     }),
   );
   expect(await within(morning).findByText(/saved/i)).toBeInTheDocument();
-});
-
-test("a plain medicine has a one-tap Taken button", async () => {
-  const user = userEvent.setup();
-  renderScreen();
-  const nausea = (await screen.findByText("Medicine for nausea, when needed")).closest("li")!;
-  await user.click(within(nausea).getByRole("button", { name: "I took it" }));
-  await waitFor(() =>
-    expect(mockApi.medicationLog).toHaveBeenCalledWith("p1", {
-      medicine_id: "med_nausea", status: "taken", actor: "self",
-    }),
-  );
 });

@@ -72,9 +72,9 @@ export function LoginScreen() {
           </button>
         </div>
 
-        <a className="role-tile" href={PROVIDER_URL}>
+        <a className="provider-link" href={PROVIDER_URL}>
           {t("demo.providerApp")}
-          <Icon name="chevron-right" size={28} />
+          <Icon name="chevron-right" size={18} />
         </a>
 
         {error && <p role="alert">{t("login.error")}</p>}

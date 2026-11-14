@@ -31,8 +31,8 @@ function renderFlow() {
 }
 
 async function answerAll(user: ReturnType<typeof userEvent.setup>, temperature: string[]) {
-  await user.click(await screen.findByRole("button", { name: "A lot" }));
-  await user.click(screen.getByRole("button", { name: "Next" }));
+  await user.click(await screen.findByRole("radio", { name: "A lot" }));
+  await user.click(screen.getByRole("button", { name: "Next question" }));
   for (const k of temperature) await user.click(await screen.findByRole("button", { name: k }));
   await user.click(screen.getByRole("button", { name: "Send check-in" }));
 }
@@ -40,16 +40,16 @@ async function answerAll(user: ReturnType<typeof userEvent.setup>, temperature: 
 test("shows one item per screen with progress and Previous / Next", async () => {
   const user = userEvent.setup();
   renderFlow();
-  expect(await screen.findByRole("progressbar", { name: "Question 1 of 2" })).toBeInTheDocument();
-  expect(screen.getByRole("heading", { name: /cough bother you/i })).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: "Next" })).toBeDisabled();
-  await user.click(screen.getByRole("button", { name: "A lot" }));
-  await user.click(screen.getByRole("button", { name: "Next" }));
-  expect(await screen.findByRole("progressbar", { name: "Question 2 of 2" })).toBeInTheDocument();
-  expect(screen.getByRole("heading", { name: /temperature today/i })).toBeInTheDocument();
+  expect(await screen.findByText("1 of 2")).toBeInTheDocument();
+  expect(screen.getByRole("group", { name: /cough bother you/i })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Next question" })).toBeDisabled();
+  await user.click(screen.getByRole("radio", { name: "A lot" }));
+  await user.click(screen.getByRole("button", { name: "Next question" }));
+  expect(await screen.findByText("2 of 2")).toBeInTheDocument();
+  expect(screen.getByRole("group", { name: /current temperature/i })).toBeInTheDocument();
   await user.click(screen.getByRole("button", { name: "Previous" }));
-  expect(await screen.findByRole("heading", { name: /cough bother you/i })).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: "A lot" })).toHaveAttribute("aria-pressed", "true");
+  expect(await screen.findByRole("group", { name: /cough bother you/i })).toBeInTheDocument();
+  expect(screen.getByRole("radio", { name: "A lot" })).toBeChecked();
 });
 
 test("sends the answers, with the temperature as a number, once at the end", async () => {
@@ -66,7 +66,7 @@ test("sends the answers, with the temperature as a number, once at the end", asy
   expect(await screen.findByRole("heading", { name: /thank you/i })).toBeInTheDocument();
 });
 
-test("a red result shows Call now with 116 117, 112 and that Nurse Aino was told", async () => {
+test("a red result shows Call now with 116 117, 112 and that Nurse Aino was told too", async () => {
   mockApi.checkin.mockResolvedValue({ grade: "red", advice_shown: "call_now" });
   const user = userEvent.setup();
   renderFlow();
@@ -74,7 +74,7 @@ test("a red result shows Call now with 116 117, 112 and that Nurse Aino was told
   expect(await screen.findByRole("heading", { name: /call now/i })).toBeInTheDocument();
   expect(screen.getByRole("link", { name: /call 116 117/i })).toBeInTheDocument();
   expect(screen.getByRole("link", { name: /call 112/i })).toBeInTheDocument();
-  expect(screen.getByText(/nurse aino was told/i)).toBeInTheDocument();
+  expect(screen.getByText(/we have told nurse aino too/i)).toBeInTheDocument();
 });
 
 test("a Trusted Person's check-in is sent as trusted_person", async () => {

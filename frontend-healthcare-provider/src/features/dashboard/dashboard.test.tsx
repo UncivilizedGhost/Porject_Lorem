@@ -118,18 +118,20 @@ function renderCounty() {
 describe("county pathway view", () => {
   test("a suppressed cell says 'not enough data' and shows no figure", async () => {
     renderCounty();
-    const row = (await screen.findByText("Other")).closest("tr")!;
+    await userEvent.click(await screen.findByRole("button", { name: "Language" }));
+    const row = within(screen.getByRole("table")).getByText("Other").closest("tr")!;
     expect(within(row).getByText("not enough data")).toBeInTheDocument();
     expect(row.textContent).not.toMatch(/\d/);
   });
 
   test("a cell under 20 people carries a small-sample warning; larger cells do not", async () => {
     renderCounty();
-    const swedish = (await screen.findByText("Swedish")).closest("tr")!;
-    expect(within(swedish).getByText(/small sample/i)).toBeInTheDocument();
-    const older = screen.getByText("75+").closest("tr")!;
+    const older = (await within(await screen.findByRole("table")).findByText("75+")).closest("tr")!;
     expect(within(older).queryByText(/small sample/i)).not.toBeInTheDocument();
     expect(older).toHaveTextContent("46 %");
+    await userEvent.click(screen.getByRole("button", { name: "Language" }));
+    const swedish = within(screen.getByRole("table")).getByText("Swedish").closest("tr")!;
+    expect(within(swedish).getByText(/small sample/i)).toBeInTheDocument();
   });
 
   test("colours a phase only when its days exceed the stage warning", async () => {

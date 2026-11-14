@@ -5,10 +5,10 @@ import { MemoryRouter } from "react-router-dom";
 import { beforeEach, vi } from "vitest";
 
 import { setSession } from "../../lib/session";
-import { patient } from "../../test/fixtures";
+import { patient, rules } from "../../test/fixtures";
 import { HomeScreen } from "./HomeScreen";
 
-vi.mock("../../api/client", () => ({ api: { getPatient: vi.fn() } }));
+vi.mock("../../api/client", () => ({ api: { getPatient: vi.fn(), rules: vi.fn() } }));
 import { api } from "../../api/client";
 
 const mockApi = vi.mocked(api, true);
@@ -26,6 +26,7 @@ beforeEach(() => {
   sessionStorage.clear();
   setSession({ role: "patient", patientId: "p1" });
   mockApi.getPatient.mockResolvedValue(patient);
+  mockApi.rules.mockResolvedValue(rules);
 });
 
 test("on track shows the calm status line", async () => {
@@ -63,22 +64,20 @@ test("with nothing to confirm there is no Confirm appointment action", async () 
   expect(screen.queryByRole("link", { name: "Confirm appointment" })).not.toBeInTheDocument();
 });
 
-test("practical help: how to get there and what to bring", async () => {
+test("practical help: how to get there and what to bring opens the pathway", async () => {
   renderHome();
-  const details = await screen.findByText("How to get there and what to bring");
-  expect(details).toBeInTheDocument();
-  const text = document.body.textContent ?? "";
-  for (const word of ["HSL", "Kela card", "taxi", "Suomi.fi Messages"]) expect(text).toContain(word);
+  const link = await screen.findByRole("link", { name: "How to get there and what to bring" });
+  expect(link).toHaveAttribute("href", "/pathway");
 });
 
 test("Nurse Aino's card has a call button and Report a symptom is one tap away", async () => {
   renderHome();
   expect(await screen.findByRole("link", { name: /call nurse aino/i })).toHaveAttribute("href", expect.stringMatching(/^tel:/));
-  expect(screen.getByRole("link", { name: "Report a symptom" })).toHaveAttribute("href", "/report");
+  expect(screen.getByRole("link", { name: /^Report a symptom/ })).toHaveAttribute("href", "/report");
 });
 
 test("shows no phase names and no day counter", async () => {
   renderHome();
   await screen.findByRole("heading", { name: "Chest CT" });
-  expect(document.body.textContent).not.toMatch(/phase|suspected|day \d|\d+ days/i);
+  expect(document.body.textContent).not.toMatch(/phase|suspected|day \d|\d+ days/i);
 });
