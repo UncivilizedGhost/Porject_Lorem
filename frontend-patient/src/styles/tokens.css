@@ -26,6 +26,7 @@
   --icon-apricot: #6b3511;
   --check-off: #a59d91; /* unchecked radio / checkbox ring */
   --border-strong: #cfc8bd; /* secondary buttons on a card */
+  --input-border: #8f9a9d;  /* the question box in Learn */
   --chip-taken-bg: #e3f2ea; /* a logged dose: calm green, never a success alarm */
   --chip-taken-ink: #17613f;
   --danger-soft-bg: #f8e3e0;   /* a skipped dose: a light red, not the urgent red */
@@ -77,4 +78,5 @@
   --danger-soft-bg: #ffffff;
   --danger-soft-ink: #000000;
   --danger-soft-border: #000000;
+  --input-border: #000000;
 }
