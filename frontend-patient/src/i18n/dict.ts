@@ -305,6 +305,7 @@ export const MESSAGES = {
     "Skriv här eller tryck på mikrofonen",
   ],
   "report.speak": ["Tap to speak", "Puhu napauttamalla", "Tala genom att trycka"],
+  "report.speakStop": ["Release to stop", "Irrota lopettaaksesi", "Släpp för att stoppa"],
   "report.listening": ["Listening…", "Kuuntelen…", "Lyssnar…"],
   "report.speakSub": [
     "Or tap the text to type",
