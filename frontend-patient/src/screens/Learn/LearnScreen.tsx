@@ -1,8 +1,9 @@
 // Owner: person 4 — design port of app/learn.html (artboard "9 · Learn" / "Ask about your care").
-// A labelled question row with Ask, answer-language tiles (Selkosuomi / Svenska / English), the
-// answer card with its reviewed source, and the "answers only come from reviewed sources" note.
-// Answers come only from the reviewed corpus on the server → POST /learn/ask. Safety and
-// "ask your nurse" replies are fixed text and never pretend to be an explanation.
+// A labelled question row with Ask, the answer card with its reviewed source, and the "answers
+// only come from reviewed sources" note. The page copy and the answer language both follow
+// Settings → Language; there is no language selector here. Answers come only from the reviewed
+// corpus on the server → POST /learn/ask. Safety and "ask your nurse" replies are fixed text and
+// never pretend to be an explanation.
 import { useMemo, useState } from "react";
 
 import { api } from "../../api/client";
@@ -23,12 +24,6 @@ interface LearnResult {
   text: string;
   sources: Source[];
 }
-
-const LANGUAGES: { code: Language; label: string }[] = [
-  { code: "fi", label: "Selkosuomi" },
-  { code: "sv", label: "Svenska" },
-  { code: "en", label: "English" },
-];
 
 const SUGGESTED: Record<Language, string[]> = {
   en: [
@@ -69,7 +64,6 @@ const TEXT: Record<Language, Record<string, string>> = {
     source: "Source",
     readAnswer: "Read answer",
     failure: "I could not reach the answer service. Please ask your nurse.",
-    languageGroup: "Answer language",
     note: "Answers come only from reviewed Finnish sources. For your own results, ask Nurse Aino.",
   },
   fi: {
@@ -83,7 +77,6 @@ const TEXT: Record<Language, Record<string, string>> = {
     source: "Lähde",
     readAnswer: "Lue vastaus",
     failure: "Vastauspalveluun ei saatu yhteyttä. Kysy hoitajalta.",
-    languageGroup: "Vastauksen kieli",
     note: "Vastaukset tulevat vain tarkistetuista suomalaisista lähteistä. Omista tuloksistasi kysy hoitaja Ainolta.",
   },
   sv: {
@@ -97,68 +90,19 @@ const TEXT: Record<Language, Record<string, string>> = {
     source: "Källa",
     readAnswer: "Läs svaret",
     failure: "Jag nådde inte svarstjänsten. Fråga din sjuksköterska.",
-    languageGroup: "Svarens språk",
     note: "Svaren kommer bara från granskade finländska källor. Fråga din egen sjuksköterska om dina resultat.",
   },
 };
 
-/** Small SVG flags instead of emoji: flag emoji do not render on Windows. */
-function FlagIcon({ code }: { code: Language }) {
-  if (code === "fi") {
-    return (
-      <svg viewBox="0 0 30 20" width="30" height="20" aria-hidden="true" focusable="false">
-        <rect width="30" height="20" fill="#ffffff" />
-        <rect x="9" y="0" width="4" height="20" fill="#002F6C" />
-        <rect x="0" y="8" width="30" height="4" fill="#002F6C" />
-      </svg>
-    );
-  }
-  if (code === "sv") {
-    return (
-      <svg viewBox="0 0 30 20" width="30" height="20" aria-hidden="true" focusable="false">
-        <rect width="30" height="20" fill="#006AA7" />
-        <rect x="9" y="0" width="4" height="20" fill="#FECC02" />
-        <rect x="0" y="8" width="30" height="4" fill="#FECC02" />
-      </svg>
-    );
-  }
-  return (
-    <svg viewBox="0 0 30 20" width="30" height="20" aria-hidden="true" focusable="false">
-      <rect width="30" height="20" fill="#012169" />
-      <path d="M0 0l30 20M30 0L0 20" stroke="#ffffff" strokeWidth="4" />
-      <path d="M0 0l30 20M30 0L0 20" stroke="#C8102E" strokeWidth="2" />
-      <rect x="12" y="0" width="6" height="20" fill="#ffffff" />
-      <rect x="0" y="7" width="30" height="6" fill="#ffffff" />
-      <rect x="13.5" y="0" width="3" height="20" fill="#C8102E" />
-      <rect x="0" y="8.5" width="30" height="3" fill="#C8102E" />
-    </svg>
-  );
-}
-
-function CheckDot({ on }: { on: boolean }) {
-  return on ? (
-    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <circle cx="12" cy="12" r="11" fill="currentColor" />
-      <path d="M7 12.5l3.5 3.5 6.5-7" fill="none" stroke="#ffffff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  ) : (
-    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="2" />
-    </svg>
-  );
-}
-
 export function LearnScreen() {
-  const { settings, dictate, readPage } = useVoice();
-  // The page language (Settings → Language) drives the screen's copy; the tiles below only
-  // choose the language the answer comes back in.
-  const { language: uiLanguage } = useI18n();
-  const [answerLanguage, setAnswerLanguage] = useState<Language>(settings.language);
+  const { dictate, readPage } = useVoice();
+  // Settings → Language drives both the copy and the language of the answer.
+  const { language } = useI18n();
   const [question, setQuestion] = useState("");
   const [result, setResult] = useState<LearnResult | null>(null);
   const [failed, setFailed] = useState(false);
   const [busy, setBusy] = useState(false);
-  const t = TEXT[uiLanguage];
+  const t = TEXT[language];
 
   const submit = async (q: string) => {
     const text = q.trim();
@@ -167,7 +111,7 @@ export function LearnScreen() {
     setBusy(true);
     setFailed(false);
     try {
-      setResult((await api.learnAsk({ question: text, language: answerLanguage })) as LearnResult);
+      setResult((await api.learnAsk({ question: text, language })) as LearnResult);
     } catch {
       setResult(null);
       setFailed(true);
@@ -183,20 +127,20 @@ export function LearnScreen() {
 
   const actions = useMemo<VoiceAction[]>(
     () => [
-      ...SUGGESTED[answerLanguage].map((q) => ({ id: `learn_q_${q}`, label: q, run: () => submit(q) })),
+      ...SUGGESTED[language].map((q) => ({ id: `learn_q_${q}`, label: q, run: () => submit(q) })),
       {
         id: "learn_ask",
-        label: TEXT[uiLanguage].ask,
-        synonyms: [TEXT[uiLanguage].askVoice],
-        confirm_text: `${TEXT[uiLanguage].askVoice}?`,
+        label: TEXT[language].ask,
+        synonyms: [TEXT[language].askVoice],
+        confirm_text: `${TEXT[language].askVoice}?`,
         run: () => {
           void dictateAndAsk(); // not awaited: it waits for the next spoken turns
         },
       },
-      { id: "learn_read_answer", label: TEXT[uiLanguage].readAnswer, run: () => readPage() },
+      { id: "learn_read_answer", label: TEXT[language].readAnswer, run: () => readPage() },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [answerLanguage, uiLanguage, readPage, dictate],
+    [language, readPage, dictate],
   );
   useVoiceActions(actions);
 
@@ -233,31 +177,10 @@ export function LearnScreen() {
         </label>
       </form>
 
-      <fieldset className="opt-fieldset">
-        <legend>{t.languageGroup}</legend>
-        <div className="opt-grid cols-3">
-          {LANGUAGES.map((l) => (
-            <label key={l.code} className="opt answer-language" data-selected={answerLanguage === l.code}>
-              <input
-                type="radio"
-                name="answer-language"
-                checked={answerLanguage === l.code}
-                onChange={() => setAnswerLanguage(l.code)}
-              />
-              <span className="opt-icons">
-                <span className="opt-icon opt-flag"><FlagIcon code={l.code} /></span>
-                <span className="opt-check"><CheckDot on={answerLanguage === l.code} /></span>
-              </span>
-              <span className="opt-label">{l.label}</span>
-            </label>
-          ))}
-        </div>
-      </fieldset>
-
       <section className="ask-suggestions-wrap" aria-labelledby="suggested-label">
         <p className="ask-suggestions-label" id="suggested-label">{t.suggested}</p>
         <div className="ask-suggestions">
-          {SUGGESTED[answerLanguage].map((q) => (
+          {SUGGESTED[language].map((q) => (
             <button key={q} type="button" className="ask-chip" onClick={() => void submit(q)}>
               {q}
             </button>

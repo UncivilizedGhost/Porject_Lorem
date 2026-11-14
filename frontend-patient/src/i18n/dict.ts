@@ -131,7 +131,6 @@ export const MESSAGES = {
     "Vastauspalveluun ei saatu yhteyttä. Kysy hoitajalta.",
     "Jag nådde inte svarstjänsten. Fråga din sjuksköterska.",
   ],
-  "learn.languageGroup": ["Answer language", "Vastauksen kieli", "Svarens språk"],
   "learn.note": [
     "Answers come only from reviewed Finnish sources. For your own results, ask Nurse Aino.",
     "Vastaukset tulevat vain tarkistetuista suomalaisista lähteistä. Omista tuloksistasi kysy hoitaja Ainolta.",
