@@ -18,6 +18,20 @@ export function formatDecimal(value: number, digits = 1): string {
   return value.toFixed(digits).replace(".", ",");
 }
 
+// Finnish style: a space before the percent sign. Whole numbers, e.g. "64 %".
+export function formatPercent(value: number, digits = 0): string {
+  return `${formatDecimal(value, digits)} %`;
+}
+
+// A range of fractions as percent: 0.215, 0.43 → "21,5–43 %". Whole numbers stay whole.
+export function formatFractionRange(low: number, high: number): string {
+  const part = (f: number) => {
+    const p = Math.round(f * 1000) / 10;
+    return Number.isInteger(p) ? String(p) : formatDecimal(p, 1);
+  };
+  return `${part(low)}–${part(high)} %`;
+}
+
 export function formatTemperature(celsius: number): string {
   return `${formatDecimal(celsius)} °C`;
 }

@@ -29,6 +29,7 @@ async def complete(system: str, user: str, *, timeout_s: float | None = None) ->
             {"role": "user", "content": user},
         ],
         "temperature": 0.2,
+        "max_tokens": 400,
     }
     url = config.NEMOTRON_BASE_URL.rstrip("/") + "/chat/completions"
     async with httpx.AsyncClient(timeout=timeout_s, transport=_transport) as http:

@@ -1,6 +1,52 @@
 // Owner: person 1 — .scratch/equity-dashboard/spec.md
-// TODO: POST /dashboard/summary; render sentences with fact ids as links to the number anchor or evidence URL; show live / cached.
+// Renders POST /dashboard/summary: every sentence carries links to the facts it cites (the evidence
+// URL when the fact has one, else an anchor to the fact list below). Says when the text is pre-written.
+import type { SummaryResult } from "../../../api/types";
 
-export function AiSummary() {
-  return <h1>AiSummary</h1>;
+export function AiSummary({ summary }: { summary: SummaryResult | null }) {
+  return (
+    <section aria-label="AI summary" className="card">
+      <h2>AI summary</h2>
+      {!summary ? (
+        <p>Writing the summary…</p>
+      ) : (
+        <>
+          <p className="muted">
+            {summary.source === "live"
+              ? "Written by an AI model from the facts below. It explains; it does not decide."
+              : "Pre-written summary shown because the AI service was not available. It uses the same facts."}
+          </p>
+          <p>
+            {summary.sentences.map((s) => (
+              <span key={s.text} className="summary-sentence">
+                {s.text}.{" "}
+                {s.fact_ids.map((id) => {
+                  const fact = summary.facts.find((f) => f.id === id);
+                  const n = summary.facts.findIndex((f) => f.id === id) + 1;
+                  return (
+                    <a
+                      key={id}
+                      href={fact?.source_url ?? `#fact-${id}`}
+                      {...(fact?.source_url ? { target: "_blank", rel: "noreferrer" } : {})}
+                      aria-label={`Source: ${fact?.text ?? id}`}
+                    >
+                      [{n}]
+                    </a>
+                  );
+                })}{" "}
+              </span>
+            ))}
+          </p>
+          <details>
+            <summary>Facts the summary can use</summary>
+            <ol>
+              {summary.facts.map((f) => (
+                <li key={f.id} id={`fact-${f.id}`}>{f.text}</li>
+              ))}
+            </ol>
+          </details>
+        </>
+      )}
+    </section>
+  );
 }

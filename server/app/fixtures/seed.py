@@ -20,6 +20,10 @@ def load(name: str) -> list[dict]:
 COORDINATOR_ID = "coordinator-aino"
 
 
+def county_id(name: str) -> str:
+    return name.lower().replace(" ", "-")
+
+
 async def ensure_clock_and_coordinator() -> None:
     await db.upsert("clock_state", "demo", {"current_demo_day": 0}, overwrite=False)
     await db.upsert(
@@ -28,7 +32,13 @@ async def ensure_clock_and_coordinator() -> None:
 
 
 async def ensure_fixtures() -> None:
-    # TODO(person 1): db.upsert(...) counties.json, actions.json, insight_cards.json by name / _id.
+    # Person 1: counties by name, actions and insight cards by _id. Idempotent upserts.
+    for doc in load("counties.json"):
+        await db.upsert("counties", county_id(doc["name"]), doc)
+    for doc in load("actions.json"):
+        await db.upsert("actions", doc["_id"], doc)
+    for doc in load("insight_cards.json"):
+        await db.upsert("insight_cards", doc["_id"], doc)
     for clinician in load("clinicians.json"):
         await db.upsert("clinicians", clinician["_id"], clinician)
 

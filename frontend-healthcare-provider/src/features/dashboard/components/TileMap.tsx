@@ -1,6 +1,34 @@
 // Owner: person 1 — .scratch/equity-dashboard/spec.md
-// TODO: one tile per county (22, real names) at fixture tile { col, row }, coloured by bands.ts, Western Uusimaa outlined, click → /dashboard/county/:name.
+// One tile per county (22, real names) at the fixture tile { col, row }, coloured by bands.ts,
+// Western Uusimaa outlined, click → /dashboard/county/:name. The % is printed on each tile.
+import { Link } from "react-router-dom";
 
-export function TileMap() {
-  return <h1>TileMap</h1>;
+import type { CountySummary } from "../../../api/types";
+import { formatPercent } from "../../../lib/format";
+import { band } from "../bands";
+import { BandLegend } from "./BandLegend";
+
+export const DEMO_COUNTY = "Western Uusimaa";
+
+export function TileMap({ counties }: { counties: CountySummary[] }) {
+  return (
+    <div className="tile-map-wrap">
+      <div className="tile-map">
+        {counties.map((c) => (
+          <Link
+            key={c.name}
+            to={`/dashboard/county/${encodeURIComponent(c.name)}`}
+            className="tile"
+            data-band={band(c.pct_within_target)}
+            data-demo-county={c.name === DEMO_COUNTY ? "true" : undefined}
+            style={{ gridColumn: c.tile.col + 1, gridRow: c.tile.row + 1 }}
+          >
+            <span className="tile-name">{c.name}</span>
+            <span className="tile-pct">{formatPercent(c.pct_within_target)}</span>
+          </Link>
+        ))}
+      </div>
+      <BandLegend />
+    </div>
+  );
 }

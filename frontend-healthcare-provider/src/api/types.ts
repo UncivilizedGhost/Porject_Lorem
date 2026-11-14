@@ -92,6 +92,96 @@ export type BreakdownCell =
   | { suppressed: true }
   | { pct_within_target: number; n: number; small_sample: boolean };
 
+export type Phase = "detection" | "referral" | "diagnosis" | "treatment";
+
+export interface CountyDetail extends CountySummary {
+  pct_outside_fast_track: number;
+  days_per_phase: Record<Phase, number>;
+  stage_warning_days: Record<Phase, number>;
+  causes: Record<string, Record<string, number>>;
+  breakdown: Record<"age" | "language" | "education_group" | "municipality_type", Record<string, BreakdownCell>>;
+  insight_card_id?: string;
+}
+
+export type Badge = "trial_review" | "registry_evaluation" | "nordic_policy" | "single_site";
+
+export interface DashboardAction {
+  _id: string;
+  title: string;
+  roadmap_action: string | null;
+  evidence: { ref: number; label: string; url: string }[];
+  badge: Badge;
+  lever: string | null;
+  effect: { published: number; low: number; high: number; range_rule: "ci" | "half_to_full" } | null;
+}
+
+export interface InsightCardDoc {
+  card_id: string;
+  what: string;
+  where: string;
+  who: string;
+  stage: Phase;
+  cause: string;
+  group: string;
+  baseline: { pct_within_target: number; n: number; missed_visit_share: number; days_lost_to_missed_visits: number };
+  matched_actions: DashboardAction[];
+}
+
+export interface Range { low: number; high: number }
+
+export type ActionSimulation =
+  | { simulated: false }
+  | { simulated: true; assumed_effect: number; days_saved: Range; extra_within_target: Range };
+
+export interface SimulationResult {
+  actions: Record<string, ActionSimulation>;
+  combined: {
+    pct_within_target: Range | null;
+    lever_rule_applied: { lever: string; counted: string; not_counted: string[] }[] | null;
+  };
+  target_gap: {
+    needed_for_70: number;
+    needed_for_80: number;
+    reachable_70: boolean;
+    reachable_80: boolean;
+    evidence_max_effect: number | null;
+    max_achievable_pct: number;
+  };
+}
+
+export interface SummaryFact { id: string; text: string; value: number | string; source_url?: string }
+
+export interface SummaryResult {
+  sentences: { text: string; fact_ids: string[] }[];
+  facts: SummaryFact[];
+  source: "live" | "cached";
+}
+
+export interface DecisionRow {
+  _id: string;
+  card_id: string;
+  action_ids: string[];
+  verdict: "approve" | "adapt" | "reject";
+  reason: string;
+  owner: string;
+  due: string;
+  decided_by: string;
+  demo_day: number;
+  created_at: string;
+  snapshot: Record<string, unknown>;
+}
+
+export interface DecisionInput {
+  card_id: string;
+  action_ids: string[];
+  verdict: DecisionRow["verdict"];
+  reason: string;
+  owner: string;
+  due: string;
+  decided_by: string;
+  snapshot: Record<string, unknown>;
+}
+
 export interface SimLogRow {
   _id: string;
   type: "sms_sent" | "fhir_sync";
