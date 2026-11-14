@@ -4,7 +4,8 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
 import { api } from "../../api/client";
-import type { CountySummary } from "../../api/types";
+import type { CountyDetail, CountySummary } from "../../api/types";
+import { CountyView } from "./CountyView";
 import { NationalOverview } from "./NationalOverview";
 import { TileMap } from "./components/TileMap";
 
@@ -82,6 +83,89 @@ describe("tile map", () => {
     expect(legend).toHaveTextContent("under 60%");
     expect(legend).toHaveTextContent("70–79% meets Norway");
     expect(legend).toHaveTextContent("80%+ meets Sweden");
+  });
+});
+
+const WU: CountyDetail = {
+  ...county("Western Uusimaa", 64.2, 1, 6),
+  pct_outside_fast_track: 31,
+  days_per_phase: { detection: 31, referral: 14, diagnosis: 17, treatment: 12 },
+  stage_warning_days: { detection: 28, referral: 10, diagnosis: 21, treatment: 14 },
+  causes: { referral: { unconfirmed: 0.46, transport: 0.21, waiting_for_slot: 0.33 } },
+  breakdown: {
+    age: { "75+": { pct_within_target: 46, n: 186, small_sample: false } },
+    language: {
+      Swedish: { pct_within_target: 60.5, n: 14, small_sample: true },
+      Other: { suppressed: true },
+    },
+    education_group: { basic: { pct_within_target: 56, n: 150, small_sample: false } },
+    municipality_type: { rural: { pct_within_target: 58, n: 100, small_sample: false } },
+  },
+  insight_card_id: "western-uusimaa/missed-first-visits-75",
+};
+
+function renderCounty() {
+  mocked.county.mockResolvedValue(WU);
+  return render(
+    <MemoryRouter initialEntries={["/dashboard/county/Western%20Uusimaa"]}>
+      <Routes>
+        <Route path="/dashboard" element={<p>overview page</p>} />
+        <Route path="/dashboard/county/:name" element={<CountyView />} />
+        <Route path="/dashboard/county/:name/insight/:cardSlug" element={<p>card page</p>} />
+      </Routes>
+    </MemoryRouter>,
+  );
+}
+
+describe("county pathway view", () => {
+  test("a suppressed cell says 'not enough data' and shows no figure", async () => {
+    renderCounty();
+    const row = (await screen.findByText("Other")).closest("tr")!;
+    expect(within(row).getByText("not enough data")).toBeInTheDocument();
+    expect(row.textContent).not.toMatch(/\d/);
+  });
+
+  test("a cell under 20 people carries a small-sample warning; larger cells do not", async () => {
+    renderCounty();
+    const swedish = (await screen.findByText("Swedish")).closest("tr")!;
+    expect(within(swedish).getByText(/small sample/i)).toBeInTheDocument();
+    const older = screen.getByText("75+").closest("tr")!;
+    expect(within(older).queryByText(/small sample/i)).not.toBeInTheDocument();
+    expect(older).toHaveTextContent("46 %");
+  });
+
+  test("colours a phase only when its days exceed the stage warning", async () => {
+    renderCounty();
+    await screen.findByRole("group", { name: /days per phase/i });
+    const phase = (name: string) => screen.getByTestId(`phase-${name}`);
+    expect(phase("detection")).toHaveAttribute("data-exceeded", "true"); // 31 > 28
+    expect(phase("referral")).toHaveAttribute("data-exceeded", "true"); // 14 > 10
+    expect(phase("diagnosis")).toHaveAttribute("data-exceeded", "false"); // 17 <= 21
+    expect(phase("treatment")).toHaveAttribute("data-exceeded", "false"); // 12 <= 14
+  });
+
+  test("shows the share of lung cancers diagnosed outside the fast-track", async () => {
+    renderCounty();
+    expect(await screen.findByRole("group", { name: /outside the fast-track/i })).toHaveTextContent("31 %");
+  });
+
+  test("labels the pathway bar, breakdown and fast-track share as synthetic", async () => {
+    renderCounty();
+    for (const name of [/days per phase/i, /equity breakdown/i, /outside the fast-track/i]) {
+      expect(within(await screen.findByRole("group", { name })).getByText("Synthetic")).toBeInTheDocument();
+    }
+  });
+
+  test("links the over-75 gap to its Insight Card and back to the overview", async () => {
+    renderCounty();
+    await userEvent.click(await screen.findByRole("link", { name: /Insight Card/i }));
+    expect(await screen.findByText("card page")).toBeInTheDocument();
+  });
+
+  test("has a way back to the national overview", async () => {
+    renderCounty();
+    await userEvent.click(await screen.findByRole("link", { name: /national overview/i }));
+    expect(await screen.findByText("overview page")).toBeInTheDocument();
   });
 });
 
