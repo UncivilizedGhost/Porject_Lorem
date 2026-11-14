@@ -28,7 +28,13 @@ async def get_patient(patient_id: str):
     patient = await _patient_or_404(patient_id)
     steps = pathway.pathway_steps(patient)
     ladder = await db.find("escalation_steps", {"patient_id": patient_id})
-    return {**patient, "pathway_steps": steps, "status": pathway.pathway_status(patient, steps, ladder)}
+    return {
+        **patient,
+        "pathway_steps": steps,
+        "status": pathway.pathway_status(patient, steps, ladder),
+        "next_step": pathway.next_step(steps, ladder, patient),
+        "medicines": pathway.medicines(),
+    }
 
 
 @router.get("/{patient_id}/trusted-view")

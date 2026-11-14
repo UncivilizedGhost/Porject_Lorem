@@ -98,5 +98,41 @@ async def test_an_unconfirmed_fired_escalation_step_means_running_late(client):
     assert (await client.get(f"/patients/{pid}")).json()["status"] == "running_late"
 
 
+async def test_next_step_says_what_when_where_and_what_to_bring(client):
+    pid = await make_patient()
+    next_step = (await client.get(f"/patients/{pid}")).json()["next_step"]
+    assert next_step["what"] == "Chest CT"
+    assert next_step["where"] == "Jorvi Hospital, Espoo (HUS imaging)"
+    assert next_step["date"].startswith("2026-11-21")
+    assert next_step["time"] == "09.30"
+    assert "Kela card" in next_step["what_to_bring"]
+    assert next_step["pending_confirmation"] is None
+
+
+async def test_next_step_exposes_the_open_confirmation(client):
+    pid = await make_patient(day=0)
+    await db.insert("escalation_steps", {
+        "patient_id": pid, "step_index": 1, "rung": "auto_call", "due_demo_day": 2,
+        "fired_at": None, "confirmed_at": None,
+    })
+    step0 = await db.insert("escalation_steps", {
+        "patient_id": pid, "step_index": 0, "rung": "message_sms", "due_demo_day": 0,
+        "fired_at": "2026-11-14T08:00:00+00:00", "confirmed_at": None,
+    })
+    pending = (await client.get(f"/patients/{pid}")).json()["next_step"]["pending_confirmation"]
+    assert pending == {"id": step0, "kind": "appointment"}
+
+    await db.update("escalation_steps", step0, {"confirmed_at": "2026-11-14T09:00:00+00:00"})
+    pending = (await client.get(f"/patients/{pid}")).json()["next_step"]["pending_confirmation"]
+    assert pending is None  # step 1 is not due until day 2
+
+
+async def test_medicines_are_generic_labels_without_drug_names(client):
+    pid = await make_patient()
+    medicines = (await client.get(f"/patients/{pid}")).json()["medicines"]
+    assert [m["label"] for m in medicines][0] == "Cancer medicine, tablets, morning"
+    assert all(set(m) >= {"id", "label", "time_critical"} for m in medicines)
+
+
 async def test_unknown_patient_is_404(client):
     assert (await client.get("/patients/nope")).status_code == 404

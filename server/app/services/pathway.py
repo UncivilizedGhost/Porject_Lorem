@@ -41,6 +41,41 @@ def pathway_status(
     return "on_track"
 
 
+WHAT_TO_BRING = ["Kela card", "A list of your medicines"]
+
+
+def pending_confirmation(patient: dict[str, Any], escalation_steps: list[dict[str, Any]]) -> dict[str, str] | None:
+    """The earliest Escalation Step that is due and not yet confirmed. The ladder confirms the
+    next appointment, so its kind is `appointment`."""
+    day = patient["pathway_clock"]["current_demo_day"]
+    due = [e for e in escalation_steps if not e.get("confirmed_at") and e["due_demo_day"] <= day]
+    if not due:
+        return None
+    first = min(due, key=lambda e: e["step_index"])
+    return {"id": first["_id"], "kind": "appointment"}
+
+
+def next_step(
+    steps: list[dict[str, Any]], escalation_steps: list[dict[str, Any]], patient: dict[str, Any]
+) -> dict[str, Any] | None:
+    current = next((s for s in steps if s["state"] == "next"), None)
+    if current is None:
+        return None
+    return {
+        "id": current["id"],
+        "what": current["label"],
+        "date": current["date"],
+        "time": current["time"],
+        "where": current["location"],
+        "what_to_bring": WHAT_TO_BRING,
+        "pending_confirmation": pending_confirmation(patient, escalation_steps),
+    }
+
+
+def medicines() -> list[dict[str, Any]]:
+    return _load("medicines.json")
+
+
 def pathway_steps(patient: dict[str, Any]) -> list[dict[str, Any]]:
     clock = patient["pathway_clock"]
     elapsed = clock["current_demo_day"] - clock["started_demo_day"]
