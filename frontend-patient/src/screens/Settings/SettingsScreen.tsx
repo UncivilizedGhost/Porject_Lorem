@@ -104,9 +104,9 @@ export function SettingsScreen() {
   // The Language tiles are the app-wide switch: they set the page language (and the voice
   // layer's language) immediately, then save the choice to the record.
   const { language, setLanguage, t } = useI18n();
-  const { updateSettings } = useVoice();
+  const { settings: voiceSettings, updateSettings } = useVoice();
   const [settings, setSettings] = useState<Accessibility>(DEFAULTS);
-  const [readingSpeed, setReadingSpeed] = useState<ReadingSpeed>("slow");
+  const [readingSpeed, setReadingSpeed] = useState<ReadingSpeed>(voiceSettings.speed);
   const [error, setError] = useState(false);
 
   const readable = useMemo(
@@ -233,7 +233,10 @@ export function SettingsScreen() {
                 type="radio"
                 name="reading-speed"
                 checked={readingSpeed === s.id}
-                onChange={() => setReadingSpeed(s.id)}
+                onChange={() => {
+                  setReadingSpeed(s.id);
+                  updateSettings({ speed: s.id });
+                }}
               />
               <span className="opt-icons">
                 <span className="opt-icon">{s.icon}</span>
