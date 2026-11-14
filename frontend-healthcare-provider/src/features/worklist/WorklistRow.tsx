@@ -9,7 +9,9 @@ import { formatDecimal } from "../../lib/format";
 
 export type RowAction =
   | "acknowledge"
+  | "book_appointment"
   | "book_health_station_xray"
+  | "escalate"
   | "flag_referral"
   | "mark_handled"
   | "mark_done"
@@ -18,7 +20,9 @@ export type RowAction =
 
 const BUTTONS: Record<RowAction, string> = {
   acknowledge: "Acknowledge",
+  book_appointment: "Book appointment",
   book_health_station_xray: "Book health station and X-ray",
+  escalate: "Escalate",
   flag_referral: "Flag referral",
   mark_handled: "Mark handled",
   mark_done: "Mark done",
@@ -133,7 +137,7 @@ export function WorklistRow({ row, onAction }: Props) {
             </span>
           ))}
         {others.map((a) =>
-          a === "rebook" ? (
+          a === "rebook" || a === "book_appointment" ? (
             <Link key={a} className="wl-btn wl-btn-link" to={`/worklist/book/${encodeURIComponent(row.row_id)}`}>
               <svg
                 width="16"
