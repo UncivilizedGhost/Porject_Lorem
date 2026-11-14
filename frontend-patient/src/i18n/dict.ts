@@ -134,6 +134,16 @@ export const MESSAGES = {
     "Vastaukset tulevat vain tarkistetuista suomalaisista lähteistä. Omista tuloksistasi kysy hoitaja Ainolta.",
     "Svaren kommer bara från granskade finländska källor. Fråga din egen sjuksköterska om dina resultat.",
   ],
+  "voice.assistantOn": [
+    "Voice assistant on. tap and hold anywhere on the screen to have it read out loud.",
+    "Ääniavustaja päällä, pidä painettuna missä tahansa ruudulla saadaksesi sen luettavaksi ääneen.",
+    "Röstassistenten är på, håll nedtryckt var som helst på skärmen för att få det läst högt.",
+  ],
+  "voice.assistantOff": [
+    "Voice assistant off.",
+    "Ääniavustaja pois käytöstä.",
+    "Röstassistenten är avstängd.",
+  ],
 
   "settings.title": ["Make it easier to use", "Helpota käyttöä", "Gör det lättare att använda"],
   "settings.readBody": [

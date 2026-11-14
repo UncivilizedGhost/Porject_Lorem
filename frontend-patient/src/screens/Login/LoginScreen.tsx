@@ -86,7 +86,6 @@ export function LoginScreen() {
           </button>
         </div>
 
-        <p className="login-note">{t("login.note")}</p>
         {error && <p role="alert">{t("login.error")}</p>}
       </main>
     </div>

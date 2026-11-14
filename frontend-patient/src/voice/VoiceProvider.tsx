@@ -25,6 +25,7 @@ export interface VoiceSettings {
   language: "fi" | "sv" | "en";
   read_aloud: boolean;
   voice_mode: boolean;
+  voice_assistant: boolean;
   speed: "normal" | "slow";
 }
 
@@ -40,9 +41,13 @@ interface VoiceContextValue {
   handleTranscript: (transcript: string) => Promise<void>;
   /** Tell the person (aloud) that speech input failed, so they use the buttons. */
   reportVoiceUnavailable: () => Promise<void>;
+  /** Toggle voice assistant mode on/off. */
+  toggleVoiceAssistant: () => Promise<void>;
+  /** Read a single element's text aloud. */
+  speakElementText: (text: string) => Promise<void>;
 }
 
-const DEFAULT_SETTINGS: VoiceSettings = { language: "en", read_aloud: false, voice_mode: false, speed: "normal" };
+const DEFAULT_SETTINGS: VoiceSettings = { language: "en", read_aloud: false, voice_mode: false, voice_assistant: false, speed: "normal" };
 
 const noop: VoiceContextValue = {
   registerActions: () => () => undefined,
@@ -53,6 +58,8 @@ const noop: VoiceContextValue = {
   updateSettings: () => undefined,
   handleTranscript: async () => undefined,
   reportVoiceUnavailable: async () => undefined,
+  toggleVoiceAssistant: async () => undefined,
+  speakElementText: async () => undefined,
 };
 
 const VoiceContext = createContext<VoiceContextValue>(noop);
@@ -267,6 +274,89 @@ export function VoiceProvider({
     await say(t.unavailable);
   }, [say]);
 
+  const toggleVoiceAssistant = useCallback(async () => {
+    const t = STRINGS[settingsRef.current.language] ?? STRINGS.en;
+    setSettings((s) => {
+      const next = { ...s, voice_assistant: !s.voice_assistant };
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+    const next = !settings.voice_assistant;
+    if (next) {
+      await say(t.voiceAssistantOn);
+    } else {
+      await say(t.voiceAssistantOff);
+    }
+  }, [say, settings.voice_assistant]);
+
+  const speakElementText = useCallback(async (text: string) => {
+    await say(text);
+  }, [say]);
+
+  // Global hold-to-read: when voice assistant is on, holding on any element reads it aloud.
+  const holdTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const holdTargetRef = useRef<HTMLElement | null>(null);
+
+  const startHold = useCallback((target: HTMLElement) => {
+    if (!settings.voice_assistant) return;
+    holdTargetRef.current = target;
+    holdTimerRef.current = setTimeout(() => {
+      // For buttons, prioritize aria-label (what the button does) over text content
+      const text = target.tagName === "BUTTON"
+        ? target.getAttribute("aria-label") || target.textContent?.trim() || ""
+        : target.textContent?.trim() || target.getAttribute("aria-label") || target.getAttribute("aria-valuetext") || "";
+      if (text) {
+        void say(text);
+      }
+    }, 400);
+  }, [settings.voice_assistant, say]);
+
+  const endHold = useCallback(() => {
+    if (holdTimerRef.current) {
+      clearTimeout(holdTimerRef.current);
+      holdTimerRef.current = null;
+    }
+    holdTargetRef.current = null;
+  }, []);
+
+  useEffect(() => {
+    if (!settings.voice_assistant) return;
+    document.addEventListener("mousedown", handleMouseDown);
+    document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("touchstart", handleTouchStart, { passive: false });
+    document.addEventListener("touchend", handleTouchEnd, { passive: false });
+    return () => {
+      document.removeEventListener("mousedown", handleMouseDown);
+      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("touchstart", handleTouchStart);
+      document.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [settings.voice_assistant]);
+
+  const handleMouseDown = useCallback((e: MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.closest("input, textarea, select, button")) return; // let form controls work normally
+    startHold(target);
+  }, [startHold]);
+
+  const handleMouseUp = useCallback(() => {
+    endHold();
+  }, [endHold]);
+
+  const handleTouchStart = useCallback((e: TouchEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.closest("input, textarea, select, button")) return;
+    startHold(target);
+  }, [startHold]);
+
+  const handleTouchEnd = useCallback(() => {
+    endHold();
+  }, [endHold]);
+
   useEffect(
     () => () => {
       if (clearTimer.current) clearTimeout(clearTimer.current);
@@ -284,8 +374,10 @@ export function VoiceProvider({
       updateSettings,
       handleTranscript,
       reportVoiceUnavailable,
+      toggleVoiceAssistant,
+      speakElementText,
     }),
-    [registerActions, setReadable, readPage, dictate, settings, updateSettings, handleTranscript, reportVoiceUnavailable],
+    [registerActions, setReadable, readPage, dictate, settings, updateSettings, handleTranscript, reportVoiceUnavailable, toggleVoiceAssistant, speakElementText],
   );
 
   return <VoiceContext.Provider value={value}>{children}</VoiceContext.Provider>;

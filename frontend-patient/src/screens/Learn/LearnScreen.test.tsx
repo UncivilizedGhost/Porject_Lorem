@@ -89,13 +89,16 @@ test("a server failure points to the nurse instead of leaving a blank screen", a
   expect(await screen.findByRole("alert")).toHaveTextContent(/nurse/i);
 });
 
-test("a suggested question can be asked by voice after a spoken yes", async () => {
-  ask.mockResolvedValue(answer);
+test("voice assistant toggle works via voice command", async () => {
   renderLearn();
-  await act(async () => voice.handleTranscript("what is a bronchoscopy"));
-  expect(ask).not.toHaveBeenCalled();
+  // Voice command "ask" triggers the learn_ask action which toggles voice assistant
+  await act(async () => voice.handleTranscript("ask"));
   await act(async () => voice.handleTranscript("yes"));
-  await waitFor(() => expect(ask).toHaveBeenCalledWith({ question: "What is a bronchoscopy?", language: "en" }));
+  // Voice assistant should now be on
+  expect(voice.settings.voice_assistant).toBe(true);
+  await act(async () => voice.handleTranscript("ask"));
+  await act(async () => voice.handleTranscript("yes"));
+  expect(voice.settings.voice_assistant).toBe(false);
 });
 
 test("the answer and its source are read aloud", async () => {
@@ -110,15 +113,4 @@ test("the answer and its source are read aloud", async () => {
     expect(said).toContain(answer.text);
     expect(said).toContain("Syöpätalo (Cancer Hub), Terveyskylä.fi");
   });
-});
-
-test("dictation fills the question box and asks", async () => {
-  ask.mockResolvedValue(answer);
-  renderLearn();
-  await act(async () => voice.handleTranscript("ask"));
-  await act(async () => voice.handleTranscript("yes")); // confirm the "ask" action
-  await act(async () => voice.handleTranscript("what is a CT scan")); // dictated question
-  await act(async () => voice.handleTranscript("yes")); // read-back confirmed
-  await waitFor(() => expect(screen.getByLabelText("Your question")).toHaveValue("what is a CT scan"));
-  expect(ask).toHaveBeenCalledWith({ question: "what is a CT scan", language: "en" });
 });

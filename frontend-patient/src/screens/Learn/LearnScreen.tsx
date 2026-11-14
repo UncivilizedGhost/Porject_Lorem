@@ -1,8 +1,10 @@
 // Owner: person 4 — design port of app/learn.html (artboard "9 · Learn" / "Ask about care").
-// A labelled question row with Ask, the answer card with its reviewed source, and the "answers
-// only come from reviewed sources" note. Answers come only from the reviewed corpus on the server
-// → POST /learn/ask. Safety and "ask your nurse" replies are fixed text and never pretend to be
-// an explanation.
+// A labelled question row with Ask, answer-language tiles (Selkosuomi / Svenska / English), the
+// answer card with its reviewed source, and the "answers only come from reviewed sources" note.
+// Answers come only from the reviewed corpus on the server → POST /learn/ask. Safety and
+// "ask your nurse" replies are fixed text and never pretend to be an explanation.
+// The microphone button toggles Voice Assistant mode: when on, holding anywhere on screen reads
+// that element aloud; holding a button names it.
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { api } from "../../api/client";
@@ -109,20 +111,18 @@ function MicIcon() {
 }
 
 export function LearnScreen() {
-  const { settings, dictate, readPage } = useVoice();
+  const { settings, toggleVoiceAssistant, readPage } = useVoice();
   // Settings → Language drives both the copy and the language of the answer.
   const language = settings.language;
   const [question, setQuestion] = useState("");
   const [result, setResult] = useState<LearnResult | null>(null);
   const [failed, setFailed] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [dictating, setDictating] = useState(false);
+  const voiceAssistant = settings.voice_assistant;
   const t = TEXT[language];
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
-  const audioChunksRef = useRef<Blob[]>([]);
-  const isRecordingRef = useRef(false);
 
   const submit = async (q: string) => {
     const text = q.trim();
@@ -140,62 +140,8 @@ export function LearnScreen() {
     }
   };
 
-  const startRecording = async () => {
-    if (isRecordingRef.current || !navigator.mediaDevices?.getUserMedia) return;
-    isRecordingRef.current = true;
-    audioChunksRef.current = [];
-    setDictating(true);
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      streamRef.current = stream;
-      if (!isRecordingRef.current) {
-        stream.getTracks().forEach((t) => t.stop());
-        streamRef.current = null;
-        setDictating(false);
-        return;
-      }
-      const rec = new MediaRecorder(stream);
-      mediaRecorderRef.current = rec;
-      rec.ondataavailable = (e) => {
-        if (e.data.size > 0) audioChunksRef.current.push(e.data);
-      };
-      rec.onstop = async () => {
-        stream.getTracks().forEach((track) => track.stop());
-        streamRef.current = null;
-        mediaRecorderRef.current = null;
-        isRecordingRef.current = false;
-        const blob = new Blob(audioChunksRef.current, { type: "audio/webm" });
-        const form = new FormData();
-        form.append("audio", blob, "recording.webm");
-        try {
-          const res = await api.stt(form);
-          const data = await res.json();
-          if (data.transcript) {
-            setQuestion(data.transcript);
-          }
-        } catch {
-          // STT failed — leave the textbox unchanged.
-        } finally {
-          setDictating(false);
-        }
-      };
-      rec.start();
-    } catch {
-      isRecordingRef.current = false;
-      setDictating(false);
-    }
-  };
-
-  const stopRecording = () => {
-    if (!isRecordingRef.current) return;
-    if (mediaRecorderRef.current) {
-      mediaRecorderRef.current.stop();
-    } else if (streamRef.current) {
-      streamRef.current.getTracks().forEach((t) => t.stop());
-      streamRef.current = null;
-      isRecordingRef.current = false;
-      setDictating(false);
-    }
+  const toggleVoiceAssistantMode = async () => {
+    await toggleVoiceAssistant();
   };
 
   const actions = useMemo<VoiceAction[]>(
@@ -207,16 +153,17 @@ export function LearnScreen() {
         synonyms: [TEXT[language].askVoice],
         confirm_text: `${TEXT[language].askVoice}?`,
         run: () => {
-          void (async () => {
-            const heard = await dictate({ prompt: t.prompt });
-            if (heard) await submit(heard);
-          })();
+          void toggleVoiceAssistantMode();
         },
       },
-      { id: "learn_read_answer", label: TEXT[language].readAnswer, run: () => readPage() },
+      {
+        id: "learn_read_answer",
+        label: TEXT[language].readAnswer,
+        run: () => readPage(),
+      },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [language, readPage, dictate],
+    [language, readPage, toggleVoiceAssistantMode],
   );
   useVoiceActions(actions);
 
@@ -262,20 +209,10 @@ export function LearnScreen() {
             <button
               type="button"
               className="ask-mic"
-              onMouseDown={startRecording}
-              onMouseUp={stopRecording}
-              onMouseLeave={stopRecording}
-              onTouchStart={(e) => {
-                e.preventDefault();
-                void startRecording();
-              }}
-              onTouchEnd={(e) => {
-                e.preventDefault();
-                stopRecording();
-              }}
+              onClick={toggleVoiceAssistantMode}
               disabled={busy}
-              aria-label={dictating ? t.listeningStop : t.listening}
-              aria-pressed={dictating}
+              aria-label={voiceAssistant ? t.listeningStop : t.listening}
+              aria-pressed={voiceAssistant}
             >
               <MicIcon />
             </button>
