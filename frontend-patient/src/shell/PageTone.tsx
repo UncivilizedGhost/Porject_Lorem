@@ -2,7 +2,7 @@
 // A screen declares its tone; the shell paints the frame and restyles the header chrome.
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
-type Tone = "alert" | "dark" | null;
+type Tone = "alert" | "dark" | "alarm" | null;
 
 const ToneContext = createContext<{ tone: Tone; setTone: (t: Tone) => void }>({
   tone: null,

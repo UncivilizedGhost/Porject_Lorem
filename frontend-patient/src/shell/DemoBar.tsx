@@ -35,7 +35,7 @@ export function DemoBar() {
   };
   const alarm = async () => {
     setAlarmFailed(false);
-    navigate("/alarm");
+    navigate("/alarm?alarm=1");
     try {
       const patientId = getSession()?.patientId ?? (await api.identities()).patient_id;
       if (!patientId) throw new Error("no patient");

@@ -1,11 +1,11 @@
 // Owner: person 2 — design port of app/confirm.html (artboard "5 · Alarm-style confirmation").
 // The dark screen, the appointment facts, the escalation note and the slide. POST
 // /escalation-steps/{id}/confirm with actorFields(). Voice replaces the slide with a read-back.
-// `alarm` is the demo trigger: the same screen with a deepening red shade and a rising tone.
-// The demo patient has no appointment left after day 57, so the alarm falls back to the exact
-// fixture in app/confirm.html instead of showing "Loading…".
+// `/alarm?alarm=1` is the demo trigger: the same screen with a frame-wide red shade and a rising
+// tone. The flag is stripped on mount, so refreshing /alarm resets the red alarm instead of
+// replaying it; the demo bar can request it again.
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import { api } from "../../api/client";
 import { Icon } from "../../components/Icon";
@@ -20,16 +20,23 @@ import { useTonePage } from "../../shell/PageTone";
 import { useReadable } from "../../voice/useReadable";
 import { useVoiceActions } from "../../voice/useVoiceActions";
 
-/** app/confirm.html's own appointment, used by the alarm when there is no live next step. */
+/** app/confirm.html's own appointment, used by the alarm route when there is no live next step. */
 const CONFIRM_SAMPLE = {
   what: "Chest CT scan",
   when: "Wednesday 18.11. at 9.30",
   where: "Jorvi Hospital, Espoo",
 };
 
-export function ConfirmationScreen({ alarm = false }: { alarm?: boolean }) {
+export function ConfirmationScreen() {
   const { stepId: routeStepId } = useParams();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const [searchParams] = useSearchParams();
+  const isAlarmRoute = pathname === "/alarm";
+  // The demo button opens /alarm?alarm=1. Keep the alarm in state, then drop the flag from the
+  // URL: a refresh of /alarm has no flag, so the red shade and tone start off.
+  const requested = isAlarmRoute && searchParams.get("alarm") === "1";
+  const [alarmActive, setAlarmActive] = useState(requested);
   const { language, t } = useI18n();
   const isTrusted = getSession()?.role === "trusted_person";
   const next = useNextStepView()?.next_step ?? null;
@@ -37,13 +44,19 @@ export function ConfirmationScreen({ alarm = false }: { alarm?: boolean }) {
   const stepId = routeStepId ?? next?.pending_confirmation?.id ?? "";
   const [done, setDone] = useState(false);
   const [failed, setFailed] = useState(false);
-  useTonePage("dark");
+  useTonePage(alarmActive ? "alarm" : "dark");
 
   useEffect(() => {
-    if (!alarm) return;
+    if (!requested) return;
+    setAlarmActive(true);
+    navigate("/alarm", { replace: true });
+  }, [requested, navigate]);
+
+  useEffect(() => {
+    if (!alarmActive) return;
     startAlarm();
     return stopAlarm;
-  }, [alarm]);
+  }, [alarmActive]);
 
   const view = next
     ? {
@@ -51,14 +64,14 @@ export function ConfirmationScreen({ alarm = false }: { alarm?: boolean }) {
         when: `${formatWeekday(next.date, language)} ${formatDate(next.date)} at ${formatClock(next.time)}`,
         where: next.where,
       }
-    : alarm
+    : isAlarmRoute
       ? CONFIRM_SAMPLE
       : null;
 
   const confirm = async () => {
     if (!stepId) {
       // The confirm.html fixture has nothing to post: sliding it goes home, as in the artboard.
-      if (alarm) {
+      if (isAlarmRoute) {
         stopAlarm();
         navigate("/home");
       }
@@ -68,7 +81,7 @@ export function ConfirmationScreen({ alarm = false }: { alarm?: boolean }) {
       await api.confirm(stepId, actorFields());
       setFailed(false);
       setDone(true);
-      if (alarm) stopAlarm();
+      stopAlarm();
     } catch {
       setFailed(true);
     }
@@ -112,7 +125,7 @@ export function ConfirmationScreen({ alarm = false }: { alarm?: boolean }) {
   if (!view) return <p>{t("common.loading")}</p>;
 
   return (
-    <section className={alarm ? "confirm-page alarm-page" : "confirm-page"}>
+    <section className={alarmActive ? "confirm-page alarm-page" : "confirm-page"}>
       <div className="confirm-meta">
         <span className="confirm-eyebrow">{t("confirm.eyebrow")}</span>
         <h1>{view.what}</h1>

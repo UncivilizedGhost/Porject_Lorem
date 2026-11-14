@@ -60,7 +60,9 @@
 :root[data-text-size="l"] { --text-body: 19px; --text-small: 17px; }
 :root[data-text-size="xl"] { --text-body: 22px; --text-small: 19px; }
 
-/* High contrast: black on white, visible borders, no translucent tints. */
+/* High contrast: black on white, black actions, no tints. The thicker boundaries and the
+   underline rules live with the components in global.css so this mode is visibly different,
+   not just a slightly darker grey. */
 :root[data-contrast="high"] {
   --ground: #ffffff;
   --chrome: #ffffff;
@@ -68,15 +70,26 @@
   --secondary: #000000;
   --border: #000000;
   --card: #ffffff;
+  --teal: #000000;      /* actions become solid black */
+  --teal-dark: #000000;
+  --amber: #6b4300;     /* waiting dot: dark, still different from the black "on track" dot */
+  --red: #8c1f17;       /* urgent stays red, darker for white text */
+  --on-action: #ffffff;
   --apricot: #ffffff;
   --tile-apricot: #ffffff;
   --tile-apricot-ink: #000000;
+  --icon-apricot: #000000;
   --chip-wait-bg: #ffffff;
   --chip-wait-ink: #000000;
   --chip-teal-bg: #ffffff;
+  --chip-taken-bg: #ffffff;
+  --chip-taken-ink: #000000;
+  --check-off: #000000;
+  --border-strong: #000000;
   --shadow-frame: none;
   --danger-soft-bg: #ffffff;
   --danger-soft-ink: #000000;
   --danger-soft-border: #000000;
   --input-border: #000000;
+  --focus: 4px solid #000000;
 }
