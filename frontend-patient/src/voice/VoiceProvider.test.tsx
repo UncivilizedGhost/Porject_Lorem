@@ -21,7 +21,6 @@ const spoken = () => vi.mocked(speak).mock.calls.map((c) => c[0]);
 let voice!: ReturnType<typeof useVoice>;
 const run = vi.fn();
 let inputDuringRun: string | null = null;
-let submitted = false;
 
 function TestScreen({ readable }: { readable?: Readable }) {
   const actions = useMemo(
@@ -59,7 +58,6 @@ beforeEach(() => {
   vi.mocked(speak).mockClear();
   run.mockClear();
   inputDuringRun = null;
-  submitted = false;
 });
 
 test("a matched action is read back and does not run until the person says yes", async () => {
@@ -166,6 +164,5 @@ test("actions are cleared when the screen unmounts", async () => {
   unmount();
   await say("confirm the chest CT");
   expect(spoken().at(-1)).toContain("I didn't catch that");
-  expect(submitted).toBe(false);
   expect(screen.queryByText("screen")).toBeNull();
 });
