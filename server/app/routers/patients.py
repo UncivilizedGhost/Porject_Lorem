@@ -63,6 +63,8 @@ async def _graded(call):
         raise HTTPException(status_code=422, detail=str(exc)) from None
 
 
+from app.services import messaging
+
 router = APIRouter(prefix="/patients", tags=["patients"])
 
 
@@ -120,6 +122,6 @@ async def medication_log(patient_id: str, body: MedicationLogBody):
 
 
 @router.get("/{patient_id}/kanta-medicines")
-async def kanta_medicines():
+async def kanta_medicines(patient_id: str):
     """person 4: fixture medicine list wrapped as a FHIR mock-up (labelled)."""
-    raise HTTPException(status_code=501, detail="not implemented")
+    return messaging.kanta_medicines()

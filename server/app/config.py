@@ -28,6 +28,9 @@ NEMOTRON_BASE_URL: str = os.getenv("NEMOTRON_BASE_URL", "")
 NEMOTRON_MODEL: str = os.getenv("NEMOTRON_MODEL", "")
 NEMOTRON_TIMEOUT_S: float = float(os.getenv("NEMOTRON_TIMEOUT_S", "8"))
 
+# Nurse Aino's (fictional) demo number, shown by Learn when no source fits.
+NURSE_PHONE: str = os.getenv("NURSE_PHONE", "040 000 0000")
+
 # ElevenLabs (voice proxy, ADR-0005). TTS disk cache location.
 VOICE_CACHE_DIR: Path = Path(os.getenv("VOICE_CACHE_DIR", REPO_ROOT / "server" / ".cache" / "voice"))
 

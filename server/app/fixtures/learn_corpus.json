@@ -3,9 +3,192 @@
     "id": "bronchoscopy_en",
     "language": "en",
     "title": "What is a bronchoscopy?",
-    "text": "",
+    "text": "A bronchoscopy is an examination of your airways. A doctor passes a thin, flexible tube with a small camera through your nose or mouth and down into your windpipe and lungs. The doctor can look at the airways and take small tissue samples, called biopsies, to be studied in a laboratory. You are usually given medicine to numb your throat, and sometimes medicine to help you relax. The test is not usually painful, but it can make you cough. You will be told beforehand if you need to stop eating or drinking, and the staff will explain what to do after the test.",
     "source_label": "Syöpätalo (Cancer Hub), Terveyskylä.fi",
-    "url": "",
-    "_todo": "person 4: 20–40 passages (fi/sv/en) covering bronchoscopy, CT, X-ray, warning signs, the 6-week goal, Kela travel reimbursement; licences checked"
+    "url": "https://hus.fi/en/treatments-and-examinations/support-cancer-treatment"
+  },
+  {
+    "id": "bronchoscopy_fi",
+    "language": "fi",
+    "title": "Mikä on bronkoskopia?",
+    "text": "Bronkoskopia eli keuhkoputkien tähystys on tutkimus, jossa katsotaan hengitysteitä. Lääkäri vie nenän tai suun kautta ohuen, taipuisan putken, jonka päässä on pieni kamera, henkitorveen ja keuhkoputkiin. Samalla lääkäri voi ottaa pieniä kudosnäytteitä eli biopsioita tutkittavaksi laboratoriossa. Kurkku puudutetaan, ja tarvittaessa saat myös rauhoittavaa lääkettä. Tutkimus ei yleensä satu, mutta se voi aiheuttaa yskimistä. Saat etukäteen ohjeet siitä, pitääkö sinun olla syömättä tai juomatta, ja henkilökunta kertoo, miten toimit tutkimuksen jälkeen.",
+    "source_label": "Syöpätalo (Cancer Hub), Terveyskylä.fi",
+    "url": "https://hus.fi/en/treatments-and-examinations/support-cancer-treatment"
+  },
+  {
+    "id": "bronchoscopy_sv",
+    "language": "sv",
+    "title": "Vad är en bronkoskopi?",
+    "text": "En bronkoskopi är en undersökning av luftvägarna. En läkare för in en tunn, böjlig slang med en liten kamera genom näsan eller munnen ner i luftstrupen och lungorna. Läkaren kan också ta små vävnadsprover, så kallade biopsier, som undersöks på ett laboratorium. Halsen bedövas och vid behov får du lugnande medicin. Undersökningen gör oftast inte ont, men den kan få dig att hosta. Du får besked i förväg om du måste avstå från mat och dryck, och personalen berättar hur du ska göra efter undersökningen.",
+    "source_label": "Syöpätalo (Cancer Hub), Terveyskylä.fi",
+    "url": "https://hus.fi/en/treatments-and-examinations/support-cancer-treatment"
+  },
+  {
+    "id": "ct_en",
+    "language": "en",
+    "title": "What is a CT scan?",
+    "text": "A CT scan, or computed tomography, takes many X-ray pictures of your body from different angles and puts them together into detailed images. For a chest CT you lie on a table that slides through a large ring. The scan itself takes only a few minutes and does not hurt. You may be given a contrast agent through a vein, which can feel warm for a moment. The images show the lungs and the lymph nodes, and help the doctors see what needs to be examined or treated next. Tell the staff if you are pregnant, have an allergy or have kidney problems.",
+    "source_label": "Syöpätalo (Cancer Hub), Terveyskylä.fi",
+    "url": "https://hus.fi/en/treatments-and-examinations/support-cancer-treatment"
+  },
+  {
+    "id": "ct_fi",
+    "language": "fi",
+    "title": "Mikä on tietokonetomografia (TT)?",
+    "text": "Tietokonetomografia eli TT-kuvaus ottaa monta röntgenkuvaa kehostasi eri suunnista ja yhdistää ne tarkoiksi kuviksi. Keuhkojen TT-kuvauksessa makaat pöydällä, joka liukuu suuren renkaan läpi. Itse kuvaus kestää vain muutaman minuutin eikä satu. Sinulle voidaan antaa suoneen varjoainetta, joka voi tuntua hetken lämpimältä. Kuvista nähdään keuhkot ja imusolmukkeet, ja ne auttavat lääkäreitä päättämään, mitä tutkitaan tai hoidetaan seuraavaksi. Kerro henkilökunnalle, jos olet raskaana, sinulla on allergia tai munuaisongelmia.",
+    "source_label": "Syöpätalo (Cancer Hub), Terveyskylä.fi",
+    "url": "https://hus.fi/en/treatments-and-examinations/support-cancer-treatment"
+  },
+  {
+    "id": "ct_sv",
+    "language": "sv",
+    "title": "Vad är en datortomografi (DT)?",
+    "text": "En datortomografi tar många röntgenbilder av kroppen från olika håll och sätter ihop dem till detaljerade bilder. Vid en datortomografi av lungorna ligger du på en brits som glider genom en stor ring. Själva undersökningen tar bara några minuter och gör inte ont. Du kan få kontrastmedel i en ven, som kan kännas varmt en stund. Bilderna visar lungorna och lymfkörtlarna och hjälper läkarna att se vad som behöver undersökas eller behandlas härnäst. Berätta för personalen om du är gravid, har en allergi eller njurproblem.",
+    "source_label": "Syöpätalo (Cancer Hub), Terveyskylä.fi",
+    "url": "https://hus.fi/en/treatments-and-examinations/support-cancer-treatment"
+  },
+  {
+    "id": "xray_en",
+    "language": "en",
+    "title": "What is a chest X-ray?",
+    "text": "A chest X-ray is a quick picture of your lungs and heart, usually the first imaging test. You stand in front of the machine and hold your breath for a few seconds while the picture is taken. It does not hurt. A chest X-ray can show changes in the lungs, but small changes can be missed, so the doctor may ask for a CT scan or other tests afterwards. That does not by itself mean something is wrong.",
+    "source_label": "Käypä hoito (Current Care guideline), patient version",
+    "url": "https://www.kaypahoito.fi/"
+  },
+  {
+    "id": "xray_fi",
+    "language": "fi",
+    "title": "Mikä on keuhkokuva?",
+    "text": "Keuhkojen röntgenkuva on nopea kuva keuhkoista ja sydämestä, ja se on yleensä ensimmäinen kuvantamistutkimus. Seisot laitteen edessä ja pidätät hengitystä muutaman sekunnin ajan kuvan ottamisen ajan. Kuvaus ei satu. Keuhkokuvassa voi näkyä muutoksia keuhkoissa, mutta pieniä muutoksia voi jäädä huomaamatta, joten lääkäri voi pyytää sen jälkeen TT-kuvausta tai muita tutkimuksia. Se ei yksinään tarkoita, että jokin olisi vialla.",
+    "source_label": "Käypä hoito -suositus, potilasversio",
+    "url": "https://www.kaypahoito.fi/"
+  },
+  {
+    "id": "xray_sv",
+    "language": "sv",
+    "title": "Vad är en lungröntgen?",
+    "text": "En lungröntgen är en snabb bild av lungorna och hjärtat och är oftast den första bildundersökningen. Du står framför apparaten och håller andan några sekunder medan bilden tas. Det gör inte ont. På en lungröntgen kan man se förändringar i lungorna, men små förändringar kan missas, så läkaren kan därefter be om en datortomografi eller andra undersökningar. Det betyder inte i sig att något är fel.",
+    "source_label": "Käypä hoito (nationell riktlinje), patientversion",
+    "url": "https://www.kaypahoito.fi/"
+  },
+  {
+    "id": "warning_signs_en",
+    "language": "en",
+    "title": "Warning signs of lung cancer",
+    "text": "Lung cancer can cause a cough that does not go away or gets worse, coughing up blood, shortness of breath, chest pain, a hoarse voice, repeated chest infections, tiredness and weight loss without a reason. These signs have many other causes and most people who have them do not have cancer. Still, contact a nurse or doctor if a cough lasts more than a few weeks or if any of these signs are new for you. If you cough up blood or struggle to breathe, get help at once.",
+    "source_label": "Pirkanmaa lung cancer pathway (Pirha)",
+    "url": "https://pirha.fi/documents/d/kehitysversio/keuhkosyopapotilaan-hoitopolku"
+  },
+  {
+    "id": "warning_signs_fi",
+    "language": "fi",
+    "title": "Keuhkosyövän varoitusmerkit",
+    "text": "Keuhkosyöpä voi aiheuttaa yskää, joka ei mene ohi tai pahenee, veriyskää, hengenahdistusta, rintakipua, käheää ääntä, toistuvia keuhkoinfektioita, väsymystä ja selittämätöntä painon laskua. Näille oireille on monia muitakin syitä, eikä useimmilla niistä kärsivillä ole syöpää. Ota silti yhteys hoitajaan tai lääkäriin, jos yskä kestää yli muutaman viikon tai jos oire on sinulle uusi. Jos yskit verta tai sinun on vaikea hengittää, hakeudu heti hoitoon.",
+    "source_label": "Pirkanmaan keuhkosyöpäpotilaan hoitopolku (Pirha)",
+    "url": "https://pirha.fi/documents/d/kehitysversio/keuhkosyopapotilaan-hoitopolku"
+  },
+  {
+    "id": "warning_signs_sv",
+    "language": "sv",
+    "title": "Varningstecken för lungcancer",
+    "text": "Lungcancer kan ge en hosta som inte går över eller blir värre, blodiga upphostningar, andfåddhet, bröstsmärta, hes röst, återkommande luftvägsinfektioner, trötthet och viktnedgång utan känd orsak. Dessa tecken har många andra orsaker och de flesta som har dem har inte cancer. Kontakta ändå en sjuksköterska eller läkare om en hosta varar i mer än några veckor eller om något av tecknen är nytt för dig. Hostar du blod eller har svårt att andas ska du söka hjälp genast.",
+    "source_label": "Pirkanmaas vårdkedja för lungcancer (Pirha)",
+    "url": "https://pirha.fi/documents/d/kehitysversio/keuhkosyopapotilaan-hoitopolku"
+  },
+  {
+    "id": "six_week_goal_en",
+    "language": "en",
+    "title": "What is the 6-week goal?",
+    "text": "In Finland the national aim is that cancer is diagnosed and treatment is started within about six weeks of the referral being received. The time is counted in steps: the first visit, imaging such as a CT scan, tests such as a bronchoscopy, and the treatment plan. It is a goal for the care system, not a promise about your own case, and your care team may need more time if your situation needs it. If the next step has not been booked, ask your nurse.",
+    "source_label": "Finnish Ministry of Social Affairs and Health, cancer care guidance (STM 2010:6)",
+    "url": "https://www.iccp-portal.org/system/files/plans/selv_2010_6_syovan_hoito_verkko.pdf"
+  },
+  {
+    "id": "six_week_goal_fi",
+    "language": "fi",
+    "title": "Mikä on kuuden viikon tavoite?",
+    "text": "Suomessa kansallisena tavoitteena on, että syöpä diagnosoidaan ja hoito aloitetaan noin kuuden viikon kuluessa lähetteen saapumisesta. Aika lasketaan vaiheittain: ensimmäinen käynti, kuvantaminen kuten TT-kuvaus, tutkimukset kuten bronkoskopia ja hoitosuunnitelma. Tämä on hoitojärjestelmän tavoite, ei lupaus sinun omasta tilanteestasi, ja hoitotiimi voi tarvita enemmän aikaa, jos tilanteesi sitä vaatii. Jos seuraavaa vaihetta ei ole vielä varattu, kysy hoitajalta.",
+    "source_label": "Sosiaali- ja terveysministeriö, syövän hoito (STM 2010:6)",
+    "url": "https://www.iccp-portal.org/system/files/plans/selv_2010_6_syovan_hoito_verkko.pdf"
+  },
+  {
+    "id": "six_week_goal_sv",
+    "language": "sv",
+    "title": "Vad är sexveckorsmålet?",
+    "text": "I Finland är det nationella målet att cancer diagnostiseras och behandling inleds inom ungefär sex veckor efter att remissen har kommit in. Tiden räknas i steg: första besöket, bilddiagnostik som datortomografi, undersökningar som bronkoskopi och behandlingsplanen. Det är ett mål för vårdsystemet, inte ett löfte om just ditt fall, och vårdteamet kan behöva mer tid om din situation kräver det. Om nästa steg inte är bokat, fråga din sjuksköterska.",
+    "source_label": "Social- och hälsovårdsministeriet, cancervård (STM 2010:6)",
+    "url": "https://www.iccp-portal.org/system/files/plans/selv_2010_6_syovan_hoito_verkko.pdf"
+  },
+  {
+    "id": "kela_travel_en",
+    "language": "en",
+    "title": "Kela travel reimbursement",
+    "text": "Kela can reimburse part of the cost of travel to examinations and treatment, for example by taxi, when your health makes it hard to use other transport or when public transport is not possible. You usually pay the part you are responsible for yourself and apply for the reimbursement afterwards, or order a taxi with a Kela card. Bring your Kela card to visits. Ask your nurse or Kela if you are unsure what applies to you.",
+    "source_label": "Kela, travel reimbursement",
+    "url": "https://www.kela.fi/"
+  },
+  {
+    "id": "kela_travel_fi",
+    "language": "fi",
+    "title": "Kelan matkakorvaus",
+    "text": "Kela voi korvata osan matkakuluista tutkimuksiin ja hoitoon, esimerkiksi taksimatkoista, kun terveydentilasi vuoksi muun kulkuneuvon käyttö on vaikeaa tai julkinen liikenne ei ole mahdollista. Maksat yleensä oman osuutesi itse ja haet korvausta jälkikäteen tai tilaat taksin Kela-kortilla. Ota Kela-kortti mukaasi käynneille. Kysy hoitajalta tai Kelasta, jos et ole varma, mitä sinun kohdallasi sovelletaan.",
+    "source_label": "Kela, matkakorvaus",
+    "url": "https://www.kela.fi/"
+  },
+  {
+    "id": "kela_travel_sv",
+    "language": "sv",
+    "title": "Kelas reseersättning",
+    "text": "Fpa kan ersätta en del av kostnaderna för resor till undersökningar och vård, till exempel taxiresor, när din hälsa gör det svårt att använda andra färdmedel eller när kollektivtrafik inte är möjlig. Du betalar vanligen din självrisk själv och ansöker om ersättning efteråt, eller beställer taxi med Kelakortet. Ta med Kelakortet till besöken. Fråga sjuksköterskan eller Fpa om du är osäker på vad som gäller dig.",
+    "source_label": "Fpa, reseersättning",
+    "url": "https://www.kela.fi/"
+  },
+  {
+    "id": "lung_function_en",
+    "language": "en",
+    "title": "What is a lung function test?",
+    "text": "A lung function test, or spirometry, measures how much air you can breathe in and out and how fast. You breathe into a mouthpiece while wearing a nose clip, and the staff tell you when to breathe in and when to blow out hard. It is not painful, though it can be tiring. The result helps the doctors plan which tests and treatments your lungs can manage.",
+    "source_label": "Käypä hoito (Current Care guideline), patient version",
+    "url": "https://www.kaypahoito.fi/"
+  },
+  {
+    "id": "lung_function_fi",
+    "language": "fi",
+    "title": "Mikä on keuhkojen toimintakoe?",
+    "text": "Keuhkojen toimintakoe eli spirometria mittaa, kuinka paljon ilmaa pystyt hengittämään sisään ja ulos ja kuinka nopeasti. Hengität suukappaleeseen nenäklipsi nenällä, ja henkilökunta kertoo, milloin hengität sisään ja milloin puhallat voimakkaasti ulos. Koe ei satu, mutta se voi väsyttää. Tulos auttaa lääkäreitä suunnittelemaan, mitkä tutkimukset ja hoidot keuhkosi kestävät.",
+    "source_label": "Käypä hoito -suositus, potilasversio",
+    "url": "https://www.kaypahoito.fi/"
+  },
+  {
+    "id": "lung_function_sv",
+    "language": "sv",
+    "title": "Vad är ett lungfunktionstest?",
+    "text": "Ett lungfunktionstest, spirometri, mäter hur mycket luft du kan andas in och ut och hur snabbt. Du andas i ett munstycke med näsklämma på, och personalen säger när du ska andas in och när du ska blåsa ut kraftigt. Det gör inte ont, men det kan vara tröttande. Resultatet hjälper läkarna att planera vilka undersökningar och behandlingar dina lungor klarar.",
+    "source_label": "Käypä hoito (nationell riktlinje), patientversion",
+    "url": "https://www.kaypahoito.fi/"
+  },
+  {
+    "id": "needle_biopsy_en",
+    "language": "en",
+    "title": "What is a needle biopsy?",
+    "text": "A needle biopsy takes a small tissue sample through the skin with a thin needle. It is used when the area to be checked cannot be reached with a bronchoscopy. You are given local anaesthetic, and a scan such as a CT is used to guide the needle. Afterwards you are observed for a while, because the lung can sometimes be irritated. The sample is studied in a laboratory.",
+    "source_label": "Syöpätalo (Cancer Hub), Terveyskylä.fi",
+    "url": "https://hus.fi/en/treatments-and-examinations/support-cancer-treatment"
+  },
+  {
+    "id": "needle_biopsy_fi",
+    "language": "fi",
+    "title": "Mikä on neulanäyte?",
+    "text": "Neulanäytteessä otetaan ihon läpi ohuella neulalla pieni kudosnäyte. Se tehdään, kun tutkittavaan kohtaan ei päästä bronkoskopialla. Alue puudutetaan, ja neulan ohjaamiseen käytetään kuvantamista, esimerkiksi TT-kuvausta. Toimenpiteen jälkeen sinua tarkkaillaan jonkin aikaa, koska keuhko voi joskus ärtyä. Näyte tutkitaan laboratoriossa.",
+    "source_label": "Syöpätalo (Cancer Hub), Terveyskylä.fi",
+    "url": "https://hus.fi/en/treatments-and-examinations/support-cancer-treatment"
+  },
+  {
+    "id": "needle_biopsy_sv",
+    "language": "sv",
+    "title": "Vad är ett nålprov?",
+    "text": "Vid ett nålprov tas ett litet vävnadsprov genom huden med en tunn nål. Det används när området inte kan nås med bronkoskopi. Du får lokalbedövning och en bildundersökning, till exempel datortomografi, används för att styra nålen. Efteråt observeras du en stund eftersom lungan ibland kan bli irriterad. Provet undersöks på ett laboratorium.",
+    "source_label": "Syöpätalo (Cancer Hub), Terveyskylä.fi",
+    "url": "https://hus.fi/en/treatments-and-examinations/support-cancer-treatment"
   }
 ]
