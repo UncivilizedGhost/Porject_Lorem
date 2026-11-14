@@ -17,9 +17,14 @@ def load(name: str) -> list[dict]:
     return json.loads((HERE / name).read_text(encoding="utf-8"))
 
 
+COORDINATOR_ID = "coordinator-aino"
+
+
 async def ensure_clock_and_coordinator() -> None:
     await db.upsert("clock_state", "demo", {"current_demo_day": 0}, overwrite=False)
-    # TODO(person 3): seed the demo Coordinator ("Nurse Aino", "Western Uusimaa") if missing.
+    await db.upsert(
+        "coordinators", COORDINATOR_ID, {"name": "Nurse Aino", "county": "Western Uusimaa"}, overwrite=False
+    )
 
 
 async def ensure_fixtures() -> None:

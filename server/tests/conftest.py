@@ -37,3 +37,13 @@ async def client():
 
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as c:
         yield c
+
+
+@pytest.fixture
+async def fresh_db():
+    """Runtime tables empty, clock at day 0, demo Coordinator seeded."""
+    from app.fixtures.seed import ensure_seeded
+
+    await db.init_schema()
+    await db.truncate(db.RUNTIME_TABLES + db.SEEDED_TABLES)
+    await ensure_seeded()
