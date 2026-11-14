@@ -28,6 +28,19 @@ def _load(name: str) -> list[dict[str, Any]]:
     return json.loads((FIXTURES / name).read_text(encoding="utf-8"))
 
 
+def pathway_status(
+    patient: dict[str, Any], steps: list[dict[str, Any]], escalation_steps: list[dict[str, Any]]
+) -> str:
+    clock = patient["pathway_clock"]
+    elapsed = clock["current_demo_day"] - clock["started_demo_day"]
+    current = next((s for s in steps if s["state"] == "next"), None)
+    if current is not None and current["expected_day"] < elapsed:
+        return "running_late"
+    if any(e.get("fired_at") and not e.get("confirmed_at") for e in escalation_steps):
+        return "running_late"
+    return "on_track"
+
+
 def pathway_steps(patient: dict[str, Any]) -> list[dict[str, Any]]:
     clock = patient["pathway_clock"]
     elapsed = clock["current_demo_day"] - clock["started_demo_day"]

@@ -67,5 +67,36 @@ async def test_patient_carries_copied_settings_and_the_pathway_steps(client):
     assert ct["date_is_estimate"] is True
 
 
+async def test_steps_and_status_change_as_demo_days_pass(client):
+    pid = await make_patient(day=3, started=3)
+    body = (await client.get(f"/patients/{pid}")).json()
+    assert body["status"] == "on_track"
+    assert states(body)["chest_ct"] == "next"
+
+    await set_day(pid, 3 + 7)  # chest CT day: still the current step, not yet past
+    body = (await client.get(f"/patients/{pid}")).json()
+    assert body["status"] == "on_track"
+
+    await set_day(pid, 3 + 8)  # one day past its expected day
+    body = (await client.get(f"/patients/{pid}")).json()
+    assert body["status"] == "running_late"
+    assert states(body)["chest_ct"] == "next"
+
+    await set_day(pid, 3 + 9)  # done; bronchoscopy is now the current step
+    body = (await client.get(f"/patients/{pid}")).json()
+    assert states(body)["chest_ct"] == "done"
+    assert states(body)["bronchoscopy"] == "next"
+    assert body["status"] == "on_track"
+
+
+async def test_an_unconfirmed_fired_escalation_step_means_running_late(client):
+    pid = await make_patient(day=2)
+    await db.insert("escalation_steps", {
+        "patient_id": pid, "step_index": 1, "rung": "auto_call", "due_demo_day": 2,
+        "fired_at": "2026-11-16T08:00:00+00:00", "confirmed_at": None,
+    })
+    assert (await client.get(f"/patients/{pid}")).json()["status"] == "running_late"
+
+
 async def test_unknown_patient_is_404(client):
     assert (await client.get("/patients/nope")).status_code == 404
