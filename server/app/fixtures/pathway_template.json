@@ -1,0 +1,38 @@
+[
+  {
+    "id": "health_station_xray",
+    "label": "Health station visit and chest X-ray",
+    "location": "Health station (terveysasema)",
+    "expected_day": null
+  },
+  {
+    "id": "referral_lung_clinic",
+    "label": "Referral to the HUS lung clinic",
+    "location": "HUS lung clinic",
+    "expected_day": null
+  },
+  {
+    "id": "chest_ct",
+    "label": "Chest CT",
+    "location": "Jorvi Hospital, Espoo (HUS imaging)",
+    "expected_day": null
+  },
+  {
+    "id": "bronchoscopy",
+    "label": "Bronchoscopy",
+    "location": "HUS Heart and Lung Center",
+    "expected_day": null
+  },
+  {
+    "id": "treatment_plan",
+    "label": "Treatment plan",
+    "location": "HUS Heart and Lung Center",
+    "expected_day": null
+  },
+  {
+    "id": "first_treatment",
+    "label": "First treatment",
+    "location": "HUS Cancer Center",
+    "expected_day": null
+  }
+]

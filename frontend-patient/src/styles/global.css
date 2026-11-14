@@ -1,0 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;700&display=swap");
+
+* { box-sizing: border-box; }
+html, body, #root { min-height: 100%; }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: var(--text-body);
+  line-height: 1.4;
+  padding-top: env(safe-area-inset-top, 0);
+}
+h1, h2, h3 { font-weight: var(--weight-heading); }
+button {
+  min-height: var(--target-min);
+  font: inherit;
+  border-radius: var(--radius-button);
+}
+button.primary { min-height: var(--target-primary); background: var(--teal); color: #fff; border: 0; }
+.card { background: var(--card); border-radius: var(--radius-card); padding: 16px; }

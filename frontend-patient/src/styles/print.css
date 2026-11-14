@@ -1,0 +1,5 @@
+/* Printable care-plan card (paper is an equal channel). Loaded by CarePlanCardPrint only. */
+@media print {
+  .demo-bar, .app-header, .bottom-nav, .hold-to-talk { display: none !important; }
+  body { background: #fff; color: #000; font-size: 14pt; }
+}

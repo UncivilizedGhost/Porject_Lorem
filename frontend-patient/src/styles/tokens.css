@@ -1,0 +1,32 @@
+/* Design tokens from the wireframe canvas's design-system note ("ds").
+   Text-size and high-contrast settings switch these variables (data attributes on <html>). */
+:root {
+  --ground: #f6f4f0;
+  --ink: #1d2a2e;
+  --secondary: #4b575b;
+  --teal: #0a6670;     /* actions only */
+  --apricot: #f5e6d8;  /* people */
+  --amber: #e6a23c;    /* waiting */
+  --red: #b02a20;      /* urgent only */
+  --card: #ffffff;
+
+  --font: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, sans-serif;
+  --text-body: 17px;
+  --text-small: 15px;
+  --weight-heading: 700;
+
+  --target-min: 48px;
+  --target-primary: 56px;
+  --radius-button: 14px;
+  --radius-card: 20px;
+}
+
+:root[data-text-size="l"] { --text-body: 19px; --text-small: 17px; }
+:root[data-text-size="xl"] { --text-body: 22px; --text-small: 19px; }
+
+:root[data-contrast="high"] {
+  --ground: #ffffff;
+  --ink: #000000;
+  --secondary: #1d2a2e;
+  --card: #ffffff;
+}

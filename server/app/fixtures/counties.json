@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Western Uusimaa",
+    "tile": {
+      "col": 0,
+      "row": 0
+    },
+    "pct_within_target": 0.0,
+    "median_days_referral_to_treatment": 0.0,
+    "reach_rate_over_75": 0.0,
+    "pct_outside_fast_track": 0.0,
+    "days_per_phase": {
+      "detection": 0.0,
+      "referral": 0.0,
+      "diagnosis": 0.0,
+      "treatment": 0.0
+    },
+    "causes": {
+      "referral": {
+        "unconfirmed": 0.0,
+        "transport": 0.0,
+        "waiting_for_slot": 0.0
+      }
+    },
+    "breakdown": {
+      "age": {
+        "75+": {
+          "pct_within_target": 0.0,
+          "n": 0
+        }
+      },
+      "language": {},
+      "education_group": {},
+      "municipality_type": {}
+    },
+    "_todo": "person 1: 22 docs, real names, synthetic figures, tiles from the wireframe; see spec tuning requirements"
+  }
+]

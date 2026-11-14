@@ -1,0 +1,17 @@
+[
+  {
+    "id": "med_morning",
+    "label": "Cancer medicine, tablets, morning",
+    "time_critical": true
+  },
+  {
+    "id": "med_evening",
+    "label": "Cancer medicine, tablets, evening",
+    "time_critical": true
+  },
+  {
+    "id": "med_nausea",
+    "label": "Medicine for nausea, when needed",
+    "time_critical": false
+  }
+]

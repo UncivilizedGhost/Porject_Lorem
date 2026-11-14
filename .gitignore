@@ -60,3 +60,11 @@ wandb/
 skills-lock.json
 CLAUDE.md
 docs/agents/
+
+# --- Node (frontend-patient, frontend-healthcare-provider) -------------------
+node_modules/
+dist/
+*.tsbuildinfo
+
+# --- server ------------------------------------------------------------------
+server/.cache/

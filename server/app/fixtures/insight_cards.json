@@ -1,0 +1,28 @@
+[
+  {
+    "card_id": "western-uusimaa/missed-first-visits-75",
+    "what": "",
+    "where": "Western Uusimaa",
+    "who": "",
+    "stage": "",
+    "baseline": {
+      "pct_within_target": 0.0,
+      "n": 0,
+      "missed_visit_share": 0.0,
+      "days_lost_to_missed_visits": 0.0
+    },
+    "stage_warning_days": {
+      "detection": 0,
+      "referral": 0,
+      "diagnosis": 0,
+      "treatment": 0
+    },
+    "cached_summary": [
+      {
+        "text": "",
+        "fact_ids": []
+      }
+    ],
+    "_todo": "person 1: hand-authored card definition + cached fallback summary with fact ids"
+  }
+]

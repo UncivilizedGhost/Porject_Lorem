@@ -1,0 +1,23 @@
+/* Dashboard / Worklist tokens: separate from the patient design system.
+   Map bands differ in lightness, not only hue (colour-vision safe); see the dataviz skill. */
+:root {
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --ink: #16202a;
+  --muted: #5b6672;
+  --line: #e1e5ea;
+  --accent: #0a6670;
+
+  --red: #b02a20;
+  --yellow: #c98a00;
+  --green: #2e7d4f;
+
+  /* % within target bands */
+  --band-under-60: #c7d3e3;
+  --band-60-69: #8fa9c9;
+  --band-70-79: #4f7cae;   /* meets Norway */
+  --band-80-plus: #1f4e82; /* meets Sweden */
+
+  --font: system-ui, "Segoe UI", sans-serif;
+  --radius: 10px;
+}

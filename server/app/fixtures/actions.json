@@ -1,0 +1,28 @@
+[
+  {
+    "_id": "reminders_nurse_call",
+    "title": "",
+    "gap_pattern": {
+      "phase": "",
+      "cause": null,
+      "group": null
+    },
+    "roadmap_action": null,
+    "evidence": [
+      {
+        "ref": 0,
+        "label": "",
+        "url": ""
+      }
+    ],
+    "badge": "trial_review",
+    "lever": "missed_visits",
+    "effect": {
+      "published": 0.0,
+      "low": 0.0,
+      "high": 0.0,
+      "range_rule": "ci"
+    },
+    "_todo": "person 1: the five rows of plan section 4.5; verify [43]'s study design first"
+  }
+]
