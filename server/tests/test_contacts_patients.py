@@ -7,3 +7,83 @@
 - trusted-view never contains Check-in or Symptom Report answers
 - the accessibility PATCH is partial
 """
+
+import pytest
+
+ELIGIBLE = {
+    "age": 60,
+    "smoking_status": "daily",
+    "cigarettes_per_day": 20,
+    "years_smoked": 30,
+}
+
+
+def contact_body(county="Western Uusimaa", **answers):
+    return {
+        "county": county,
+        "language": "en",
+        "consent": {"warning_sign_contact": True},
+        "risk_check": {"taken": True, "answers": {**ELIGIBLE, **answers}},
+    }
+
+
+async def test_create_contact_returns_risk_group_and_can_be_read_back(client):
+    res = await client.post("/contacts", json=contact_body())
+    assert res.status_code == 201
+    created = res.json()
+    assert created["risk_group"] == "screening_pilot_eligible"
+    assert created["risk_check"]["risk_group"] == "screening_pilot_eligible"
+
+    got = await client.get(f"/contacts/{created['_id']}")
+    assert got.status_code == 200
+    assert got.json()["county"] == "Western Uusimaa"
+    assert got.json()["promoted_patient_id"] is None
+
+
+async def test_contact_accessibility_patch_is_partial_and_can_set_language(client):
+    created = (await client.post("/contacts", json=contact_body())).json()
+    cid = created["_id"]
+
+    res = await client.patch(f"/contacts/{cid}/accessibility", json={"text_size": "xl"})
+    assert res.status_code == 200
+    got = (await client.get(f"/contacts/{cid}")).json()
+    assert got["accessibility"] == {
+        "read_aloud": False, "voice_mode": False, "text_size": "xl", "high_contrast": False
+    }
+
+    await client.patch(f"/contacts/{cid}/accessibility", json={"high_contrast": True, "language": "sv"})
+    got = (await client.get(f"/contacts/{cid}")).json()
+    assert got["accessibility"]["text_size"] == "xl"
+    assert got["accessibility"]["high_contrast"] is True
+    assert got["language"] == "sv"
+
+
+async def test_accessibility_patch_for_unknown_contact_is_404(client):
+    res = await client.patch("/contacts/nope/accessibility", json={"text_size": "l"})
+    assert res.status_code == 404
+
+
+@pytest.mark.parametrize(
+    ("answers", "county", "expected"),
+    [
+        ({"age": 49}, "Western Uusimaa", "not_eligible"),
+        ({"age": 50}, "Western Uusimaa", "screening_pilot_eligible"),
+        ({"age": 74}, "Western Uusimaa", "screening_pilot_eligible"),
+        ({"age": 75}, "Western Uusimaa", "not_eligible"),
+        ({"cigarettes_per_day": 15, "years_smoked": 26}, "Pirkanmaa", "not_eligible"),
+        ({"cigarettes_per_day": 16, "years_smoked": 26}, "Pirkanmaa", "screening_pilot_eligible"),
+        ({"cigarettes_per_day": 16, "years_smoked": 25}, "Pirkanmaa", "not_eligible"),
+        ({"cigarettes_per_day": 10, "years_smoked": 31}, "Ostrobothnia", "not_eligible"),
+        ({"cigarettes_per_day": 11, "years_smoked": 30}, "Ostrobothnia", "not_eligible"),
+        ({"cigarettes_per_day": 11, "years_smoked": 31}, "Ostrobothnia", "screening_pilot_eligible"),
+        ({"smoking_status": "former", "cigarettes_per_day": None, "years_smoked": None}, "Western Uusimaa", "not_eligible"),
+        ({"smoking_status": "never", "cigarettes_per_day": None, "years_smoked": None}, "Western Uusimaa", "never_smoked"),
+        ({}, "Kymenlaakso", "not_eligible"),
+        ({}, "North Ostrobothnia", "screening_pilot_eligible"),
+        ({}, "Southwest Finland", "screening_pilot_eligible"),
+    ],
+)
+async def test_risk_group_follows_the_pilot_criteria(client, answers, county, expected):
+    res = await client.post("/contacts", json=contact_body(county=county, **answers))
+    assert res.status_code == 201
+    assert res.json()["risk_group"] == expected

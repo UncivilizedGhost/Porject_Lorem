@@ -35,7 +35,8 @@ data/processed/*
 
 # --- Run artifacts ----------------------------------------------------------
 runs/
-models/
+/models/
+backend/models/
 *.joblib
 *.pkl
 *.onnx

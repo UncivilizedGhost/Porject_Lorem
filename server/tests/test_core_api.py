@@ -18,7 +18,7 @@ CONTACT = {
 async def make_contact(client) -> str:
     r = await client.post("/contacts", json=CONTACT)
     assert r.status_code in (200, 201), r.text
-    return r.json()["id"]
+    return r.json()["_id"]
 
 
 async def make_patient(client) -> str:

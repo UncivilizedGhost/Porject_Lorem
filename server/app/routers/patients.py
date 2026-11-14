@@ -11,7 +11,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
 from app import db
-from app.services import pathway, reporting
+from app.services import accessibility, messaging, pathway, reporting
 
 # Request bodies carry no grade / rule / advice_shown: those are computed server-side and any
 # client-sent value is dropped (pydantic ignores unknown fields).
@@ -63,30 +63,56 @@ async def _graded(call):
         raise HTTPException(status_code=422, detail=str(exc)) from None
 
 
-from app.services import messaging
-
 router = APIRouter(prefix="/patients", tags=["patients"])
+
+
+async def _patient_or_404(patient_id: str) -> dict[str, Any]:
+    patient = await db.get("patients", patient_id)
+    if patient is None:
+        raise HTTPException(status_code=404, detail="patient not found")
+    return patient
+
+
+async def _derive(patient: dict[str, Any]):
+    steps = pathway.pathway_steps(patient)
+    ladder = await db.find("escalation_steps", {"patient_id": patient["_id"]})
+    return steps, ladder
 
 
 @router.get("/{patient_id}")
 async def get_patient(patient_id: str):
     """person 2: Patient + derived pathway_steps, status, next_step (with pending_confirmation), medicines."""
-    patient = await db.get("patients", patient_id)
-    if patient is None:
-        raise HTTPException(status_code=404, detail="patient not found")
-    return {"id": patient_id, **await pathway.patient_view(patient)}
+    patient = await _patient_or_404(patient_id)
+    steps, ladder = await _derive(patient)
+    return {
+        **patient,
+        "pathway_steps": steps,
+        "status": pathway.pathway_status(patient, steps, ladder),
+        "next_step": pathway.next_step(steps, ladder, patient),
+        "medicines": pathway.medicines(),
+    }
 
 
 @router.get("/{patient_id}/trusted-view")
-async def trusted_view():
+async def trusted_view(patient_id: str):
     """person 2: appointments, pending Confirmations, trusted people. Never events, Check-in or Symptom Report answers."""
-    raise HTTPException(status_code=501, detail="not implemented")
+    patient = await _patient_or_404(patient_id)
+    steps, ladder = await _derive(patient)
+    return {
+        "_id": patient["_id"],
+        "status": pathway.pathway_status(patient, steps, ladder),
+        "next_step": pathway.next_step(steps, ladder, patient),
+        "appointments": await db.find("appointments", {"patient_id": patient_id}),
+        "trusted_people": patient["trusted_people"],
+        "language": patient.get("language"),
+        "accessibility": patient["accessibility"],
+    }
 
 
 @router.patch("/{patient_id}/accessibility")
-async def patch_accessibility():
+async def patch_accessibility(patient_id: str, body: dict[str, Any]):
     """person 2: partial accessibility update."""
-    raise HTTPException(status_code=501, detail="not implemented")
+    return await accessibility.patch_accessibility("patients", patient_id, body)
 
 
 @router.post("/{patient_id}/checkin")
