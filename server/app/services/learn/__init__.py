@@ -21,9 +21,9 @@ log = logging.getLogger(__name__)
 LANGUAGES = ("fi", "sv", "en")
 
 NO_SOURCE: dict[str, str] = {
-    "fi": "Minulla ei ole tarkistettua vastausta tähän. Kysy hoitajalta: Hoitaja Aino, arkisin 8–16, {phone}.",
-    "sv": "Jag har inget granskat svar på det. Fråga din sjuksköterska: Sjuksköterska Aino, vardagar 8–16, {phone}.",
-    "en": "I don't have a reviewed answer for that. Ask your nurse: Nurse Aino, weekdays 8–16, {phone}.",
+    "fi": "Minulla ei ole tarkistettua vastausta tähän. Kysy hoitajalta: Hoitaja Aino, arkisin 8–16.",
+    "sv": "Jag har inget granskat svar på det. Fråga din sjuksköterska: Sjuksköterska Aino, vardagar 8–16.",
+    "en": "I don't have a reviewed answer for that. Ask your nurse: Nurse Aino, weekdays 8–16.",
 }
 
 LANGUAGE_NAMES = {"fi": "plain Finnish (selkosuomi)", "sv": "plain Swedish", "en": "plain English"}

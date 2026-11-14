@@ -125,6 +125,7 @@ export function R5OwnWords({ onDone }: Props) {
         <button
           type="button"
           className="own-mic own-mic-bubble"
+          data-voice-read="false"
           onMouseDown={startRecording}
           onMouseUp={stopRecording}
           onMouseLeave={stopRecording}

@@ -78,7 +78,7 @@ test("no source shows the ask-your-nurse text and no source chip", async () => {
   renderLearn();
   await userEvent.type(screen.getByLabelText("Your question"), "capital of Mongolia");
   await userEvent.click(screen.getByRole("button", { name: "Ask" }));
-  expect(await screen.findByText("Ask your nurse: 040 000 0000.")).toBeInTheDocument();
+  expect(await screen.findByText("Ask your nurse")).toBeInTheDocument();
   expect(screen.queryByRole("link")).toBeNull();
 });
 

@@ -1,6 +1,6 @@
 // Owner: person 2 — header on every companion screen: Aa (settings, incl. language)
 // · Help ("Who to call", one tap from everywhere). Back on flow screens only.
-// Voice assistant toggle: hold anywhere on screen to have it read out loud.
+// Voice assistant toggle: click anywhere on screen to have it read out loud.
 import { Link } from "react-router-dom";
 
 import { useVoice } from "../voice/VoiceProvider";
