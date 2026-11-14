@@ -12,7 +12,9 @@ import { getSession } from "../lib/session";
 import { HoldToTalkButton } from "../voice/HoldToTalkButton";
 import { BottomNav } from "./BottomNav";
 import { DemoBar } from "./DemoBar";
+import { FlowBackProvider } from "./FlowBack";
 import { Header } from "./Header";
+import { PageToneProvider, usePageTone } from "./PageTone";
 
 /** Saved text size and contrast follow the person onto every screen. A Trusted Person only
  * ever reads the trusted view. */
@@ -27,10 +29,10 @@ function useSavedAccessibility() {
   }, []);
 }
 
-export function AppShell() {
-  useSavedAccessibility();
+function Frame() {
+  const tone = usePageTone();
   return (
-    <div className="app-frame">
+    <div className="app-frame" data-tone={tone ?? undefined}>
       <DemoBar />
       <Header />
       <main>
@@ -39,5 +41,16 @@ export function AppShell() {
       <HoldToTalkButton />
       <BottomNav />
     </div>
+  );
+}
+
+export function AppShell() {
+  useSavedAccessibility();
+  return (
+    <PageToneProvider>
+      <FlowBackProvider>
+        <Frame />
+      </FlowBackProvider>
+    </PageToneProvider>
   );
 }

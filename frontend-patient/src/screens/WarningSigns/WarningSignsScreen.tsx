@@ -1,7 +1,9 @@
-// Owner: person 2 — .scratch/patient-companion/spec.md (artboard "2 · Warning signs (phase 1)")
-// Signs from GET /rules warning_signs, one-tap "I have this" → POST /contacts/{id}/warning-sign-tap;
-// shows what happens next ("a nurse calls within 1–2 working days", or "seek care today").
+// Owner: person 2 — design port of app/warning-signs.html (artboard "2 · Warning signs").
+// Signs from GET /rules warning_signs as 116 px tiles; one tap sends POST /contacts/{id}/warning-sign-tap
+// and the tile says what happens next. A red line about 112 is always visible.
 import { useEffect, useMemo, useState } from "react";
+import type { ReactNode } from "react";
+import { Link } from "react-router-dom";
 
 import { api } from "../../api/client";
 import type { Option } from "../../api/types";
@@ -10,6 +12,40 @@ import { useReadable } from "../../voice/useReadable";
 import { useVoiceActions } from "../../voice/useVoiceActions";
 
 type Outcome = { sign: string; grade: string } | null;
+
+const ICONS: { test: RegExp; path: ReactNode }[] = [
+  { test: /cough/i, path: <path d="M8 7c-3 2-4 5-4 8s2 7 6 7h1M22 7c3 2 4 5 4 8s-2 7-6 7h-1M15 4v11M15 15l-4 4M15 15l4 4" /> },
+  { test: /voice|hoarse|throat/i, path: <path d="M15 4a4 4 0 014 4v6a4 4 0 01-8 0V8a4 4 0 014-4zM8 14a7 7 0 0014 0M15 21v5" /> },
+  { test: /blood/i, path: <path d="M15 4c5 6 7 9 7 12a7 7 0 01-14 0c0-3 2-6 7-12z" /> },
+  { test: /tired|fatigue|sleep/i, path: <path d="M20 6a9 9 0 100 18 10 10 0 01-6-9 10 10 0 016-9z" /> },
+  { test: /appetite|eat|food|weight/i, path: <path d="M8 4v8a3 3 0 006 0V4M11 4v22M22 4c-3 2-4 6-4 10h4v12" /> },
+];
+const FALLBACK = <path d="M15 5a10 10 0 100 20 10 10 0 000-20zM15 15v.01" />;
+
+function SignIcon({ label }: { label: string }) {
+  const hit = ICONS.find((i) => i.test.test(label));
+  return (
+    <svg
+      width="30" height="30" viewBox="0 0 30 30" focusable="false" aria-hidden="true"
+      fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+    >
+      {hit?.path ?? FALLBACK}
+    </svg>
+  );
+}
+
+function CheckRing({ on }: { on: boolean }) {
+  return on ? (
+    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="11" fill="currentColor" />
+      <path d="M7 12.5l3.5 3.5 6.5-7" fill="none" stroke="#ffffff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ) : (
+    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="2" />
+    </svg>
+  );
+}
 
 export function WarningSignsScreen() {
   const [signs, setSigns] = useState<Option[]>();
@@ -36,8 +72,8 @@ export function WarningSignsScreen() {
 
   const readable = useMemo(
     () => ({
-      heading: "Signs to watch for",
-      body: "If you notice one of these, tap I have this and a nurse will call you.",
+      heading: "Five signs worth telling a nurse",
+      body: "If you notice one of these, tap it once and a nurse will call you.",
       priority: outcome?.grade === "red" ? "Seek care today. Call 112 or 116 117." : undefined,
     }),
     [outcome],
@@ -50,29 +86,47 @@ export function WarningSignsScreen() {
   useVoiceActions(actions);
 
   if (!signs) return error ? <p role="alert">We could not load the list. Please try again.</p> : <p>Loading…</p>;
+
   return (
-    <section>
-      <h1>Signs to watch for</h1>
-      <p>If you notice one of these, tap “I have this”. You do not need to explain.</p>
-      <ul className="warning-signs">
-        {signs.map((s) => (
-          <li key={s.id}>
-            <span>{s.label}</span>
-            <button type="button" onClick={() => tap(s)}>I have this</button>
-          </li>
-        ))}
-      </ul>
+    <section className="signs-page">
+      <h1>Five signs worth telling a nurse</h1>
+
+      <div className="signs">
+        {signs.map((s) => {
+          const sent = outcome?.sign === s.id;
+          return (
+            <button
+              key={s.id}
+              type="button"
+              className="sign"
+              data-sent={sent}
+              onClick={() => tap(s)}
+            >
+              <span className="sign-icons">
+                <span className="q-opt-icon"><SignIcon label={s.label} /></span>
+                <span className="q-check"><CheckRing on={sent} /></span>
+              </span>
+              <span className="sign-label">{s.label}</span>
+              {sent && <span className="sign-sent">Sent. Nurse Aino will call you.</span>}
+            </button>
+          );
+        })}
+      </div>
+
       {error && <p role="alert">We could not send that. Please try again.</p>}
-      {outcome?.grade === "red" ? (
-        <div className="card urgent" role="alert">
+
+      {outcome?.grade === "red" && (
+        <div className="callout-red" role="alert">
           <h2>Seek care today</h2>
           <p>Do not wait for a call. Phone now.</p>
-          <a className="call-button emergency" href="tel:112">Call 112</a>
-          <a className="call-button" href="tel:116117">Call 116 117</a>
+          <a className="dark-button" href="tel:112">Call 112</a>
+          <a className="dark-button" href="tel:116117">Call 116 117</a>
         </div>
-      ) : (
-        outcome && <p role="status">Thank you. A nurse will call you within 1–2 working days.</p>
       )}
+
+      <p className="signs-note">Heavy bleeding or struggling to breathe: call 112.</p>
+
+      <Link className="continue-button" to="/home">Continue to your pathway</Link>
     </section>
   );
 }

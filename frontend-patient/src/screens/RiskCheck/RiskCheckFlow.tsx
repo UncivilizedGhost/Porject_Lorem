@@ -116,23 +116,37 @@ export function RiskCheckFlow() {
     );
   }
 
+  const percent = Math.round(((index + 1) / questions.length) * 100);
+
   return (
-    <section>
+    <section className="report-q">
+      <div className="q-head">
+        <span className="q-label">Screening check</span>
+        <div className="q-progress">
+          <span className="q-bar">
+            <span className="q-bar-fill" style={{ width: `${percent}%` }} />
+          </span>
+          <span className="q-count">{index + 1} of {questions.length}</span>
+        </div>
+      </div>
+
       <ProgressBar step={index + 1} total={questions.length} />
-      <h1>{question.prompt}</h1>
-      {question.kind === "choice" ? (
-        <ChoiceList
-          choices={[...(question.options ?? [])]}
-          onPick={(id) => answer(question.id, id)}
-        />
-      ) : (
-        <>
-          <NumberPad value={raw} onChange={setRaw} />
-          <button type="button" className="primary" disabled={raw === ""} onClick={() => answer(question.id, parseNumber(raw))}>
-            Next
-          </button>
-        </>
-      )}
+      <fieldset className="q-field">
+        <legend className="q-prompt">{question.prompt}</legend>
+        {question.kind === "choice" ? (
+          <ChoiceList
+            choices={[...(question.options ?? [])]}
+            onPick={(id) => answer(question.id, id)}
+          />
+        ) : (
+          <>
+            <NumberPad value={raw} onChange={setRaw} />
+            <button type="button" className="q-next" disabled={raw === ""} onClick={() => answer(question.id, parseNumber(raw))}>
+              Next
+            </button>
+          </>
+        )}
+      </fieldset>
     </section>
   );
 }

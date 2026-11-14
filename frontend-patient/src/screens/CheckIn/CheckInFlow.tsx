@@ -1,16 +1,16 @@
-// Owner: person 2 — .scratch/patient-companion/spec.md (artboard "7 · Symptom check-in (phase 3)")
-// ~10 items from GET /rules checkin_items, one per screen, ProgressBar, Previous/Next,
-// temperature on NumberPad → POST /patients/{id}/checkin → CheckInResult. The client never grades.
+// Owner: person 2 — design port of app/check-in.html (artboard "7 · Symptom check-in").
+// ~10 items from GET /rules checkin_items, one per screen: "Weekly check-in", a bar with "4 of 10",
+// the question as a legend, 96 px option tiles, then Previous / Next. POST /patients/{id}/checkin
+// on the last item. The client never grades.
 import { useEffect, useMemo, useState } from "react";
 
 import { api } from "../../api/client";
 import type { AdviceShown, Question } from "../../api/types";
-import { ChoiceList } from "../../components/ChoiceList";
 import { NumberPad, parseNumber } from "../../components/NumberPad";
-import { ProgressBar } from "../../components/ProgressBar";
 import { actorFields, getSession } from "../../lib/session";
 import { useReadable } from "../../voice/useReadable";
 import { useVoiceActions } from "../../voice/useVoiceActions";
+import { CheckRing, OptionIcon } from "../SymptomReport/R4GuidedQuestion";
 import { CheckInResult } from "./CheckInResult";
 
 export function CheckInFlow() {
@@ -26,9 +26,8 @@ export function CheckInFlow() {
   }, []);
 
   const q = items?.[index];
-  const readable = useMemo(() => ({ heading: q?.prompt ?? "Check-in" }), [q]);
-  useReadable(readable);
-  const answered = q ? (raw[q.id] ?? "") !== "" : false;
+  const answer = q ? (raw[q.id] ?? "") : "";
+  const answered = answer !== "";
   const last = items ? index === items.length - 1 : false;
 
   const send = async () => {
@@ -43,43 +42,94 @@ export function CheckInFlow() {
       setError("Your check-in could not be sent. If you feel worse, phone 116 117 or 112.");
     }
   };
-  const next = () => (last ? send() : setIndex(index + 1));
-  const navActions = useMemo(
-    () => [
-      { id: "checkin:next", label: last ? "Send check-in" : "Next", synonyms: ["next"], run: () => { if (answered) void next(); } },
-      ...(index > 0 ? [{ id: "checkin:prev", label: "Previous", run: () => setIndex(index - 1) }] : []),
-    ],
+
+  const goNext = () => {
+    if (!answered) return;
+    if (last) void send();
+    else setIndex(index + 1);
+  };
+  const previous = () => setIndex(Math.max(0, index - 1));
+
+  const readable = useMemo(() => ({ heading: q?.prompt ?? "Weekly check-in" }), [q]);
+  useReadable(readable);
+
+  const actions = useMemo(() => {
+    if (!q) return [];
+    return [
+      ...(q.kind === "choice"
+        ? (q.options ?? []).map((o) => ({
+            id: `checkin:${q.id}:${o.id}`,
+            label: o.label,
+            run: () => setRaw((r) => ({ ...r, [q.id]: o.id })),
+          }))
+        : []),
+      {
+        id: "checkin:next",
+        label: last ? "Send check-in" : "Next question",
+        synonyms: ["next"],
+        run: goNext,
+      },
+      ...(index > 0 ? [{ id: "checkin:prev", label: "Previous", run: previous }] : []),
+    ];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [index, last, answered],
-  );
-  useVoiceActions(navActions);
+  }, [q, answered, index, last]);
+  useVoiceActions(actions);
 
   if (result) return <CheckInResult advice={result} />;
   if (!items || !q) return error ? <p role="alert">{error}</p> : <p>Loading…</p>;
 
+  const step = index + 1;
+  const percent = Math.round((step / items.length) * 100);
+
   return (
-    <section>
-      <ProgressBar step={index + 1} total={items.length} />
-      <h1>{q.prompt}</h1>
-      {q.kind === "choice" ? (
-        <ChoiceList
-          choices={q.options ?? []}
-          selected={raw[q.id]}
-          onPick={(id) => setRaw({ ...raw, [q.id]: id })}
-        />
-      ) : (
-        <NumberPad
-          value={raw[q.id] ?? ""}
-          onChange={(v) => setRaw({ ...raw, [q.id]: v })}
-          allowDecimal
-          label={q.unit ?? "Your answer"}
-        />
-      )}
+    <section className="report-q checkin">
+      <div className="q-head">
+        <h1 className="ci-title">Weekly check-in</h1>
+        <div className="q-progress">
+          <span className="q-bar"><span className="q-bar-fill" style={{ width: `${percent}%` }} /></span>
+          <span className="q-count">{step} of {items.length}</span>
+        </div>
+      </div>
+
+      <fieldset className="q-field">
+        <legend className="q-prompt">{q.prompt}</legend>
+        {q.kind === "choice" ? (
+          <div className="q-options">
+            {(q.options ?? []).map((o) => (
+              <label key={o.id} className="q-opt" data-selected={answer === o.id}>
+                <input
+                  type="radio"
+                  name={q.id}
+                  value={o.id}
+                  checked={answer === o.id}
+                  onChange={() => setRaw({ ...raw, [q.id]: o.id })}
+                />
+                <span className="q-opt-icons">
+                  <span className="q-opt-icon"><OptionIcon id={o.id} /></span>
+                  <span className="q-check"><CheckRing on={answer === o.id} /></span>
+                </span>
+                <span className="q-opt-label">{o.label}</span>
+              </label>
+            ))}
+          </div>
+        ) : (
+          <NumberPad
+            value={answer}
+            onChange={(v) => setRaw({ ...raw, [q.id]: v })}
+            allowDecimal
+            label={q.unit ?? "Your answer"}
+          />
+        )}
+      </fieldset>
+
       {error && <p role="alert">{error}</p>}
-      {index > 0 && <button type="button" onClick={() => setIndex(index - 1)}>Previous</button>}
-      <button type="button" className="primary" disabled={!answered} onClick={next}>
-        {last ? "Send check-in" : "Next"}
-      </button>
+
+      <div className="ci-actions">
+        <button type="button" onClick={previous} disabled={index === 0}>Previous</button>
+        <button type="button" className="primary" disabled={!answered} onClick={goNext}>
+          {last ? "Send check-in" : "Next question"}
+        </button>
+      </div>
     </section>
   );
 }

@@ -33,8 +33,11 @@ export function R1SafetyCheck({ items, onTick, onNone }: Props) {
   useVoiceActions(actions);
 
   return (
-    <section>
-      <h1>Is any of this happening right now?</h1>
+    <section className="report-q">
+      <div className="screen-heading">
+        <span className="eyebrow">Report a symptom</span>
+        <h1>Is any of this happening right now?</h1>
+      </div>
       <p className="notice" role="note">
         This is not an emergency service. A nurse replies within 1–2 working days. For urgent help
         phone 116 117 or 112.
