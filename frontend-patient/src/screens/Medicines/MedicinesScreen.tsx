@@ -6,12 +6,12 @@
 // The logged choice lives here rather than in the card, so a poll or "Advance one day" (which
 // briefly reloads the patient) cannot wipe what the person just tapped.
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { api } from "../../api/client";
 import type { Medicine } from "../../api/types";
 import { actorFields, getSession } from "../../lib/session";
 import { usePatient } from "../../lib/usePatient";
-import { NoPathwayYet } from "../../components/NoPathwayYet";
 import { useReadable } from "../../voice/useReadable";
 import { useVoiceActions } from "../../voice/useVoiceActions";
 
@@ -35,11 +35,25 @@ function clockNow(): string {
   return `${d.getHours()}.${String(d.getMinutes()).padStart(2, "0")}`;
 }
 
+/** The capsule from app/medication.html — the artboard has no image files, its art is inline SVG. */
 function PillIcon() {
   return (
     <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true" focusable="false">
-      <rect x="4" y="11" width="22" height="9" rx="4.5" fill="none" stroke="currentColor" strokeWidth="2" transform="rotate(-35 15 15.5)" />
-      <path d="M11.5 10.5l7 9" stroke="currentColor" strokeWidth="2" />
+      <path
+        d="M5 17l9-9a5 5 0 017 7l-9 9a5 5 0 01-7-7zM10 12l7 7"
+        fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
+      <path
+        d="M3.5 9.5l3.5 3.5 7.5-8"
+        fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -62,6 +76,7 @@ function MedicineCard({
   onLog: (id: string, s: Status) => Promise<boolean>;
 }) {
   const schedule = scheduleFor(medicine);
+  const navigate = useNavigate();
 
   return (
     <li className="card medicine-card">
@@ -76,8 +91,11 @@ function MedicineCard({
 
       {logged ? (
         <p className="med-logged" data-status={logged.status} role="status">
-          {LOGGED[logged.status]} at {logged.at}
-          <span className="sr-only"> Saved</span>
+          <CheckIcon />
+          <span>
+            {LOGGED[logged.status]} at {logged.at}
+          </span>
+          <span className="sr-only">Saved</span>
         </p>
       ) : (
         <>
@@ -88,7 +106,15 @@ function MedicineCard({
             <button type="button" className="med-skip" onClick={() => { void onLog(medicine.id, "skipped"); }}>
               I skipped it
             </button>
-            <button type="button" onClick={() => { void onLog(medicine.id, "side_effect"); }}>
+            {/* A side effect is logged and then hands over to the Symptom Report, which is
+                where a nurse can act on it. */}
+            <button
+              type="button"
+              onClick={() => {
+                void onLog(medicine.id, "side_effect");
+                navigate("/report");
+              }}
+            >
               Side effect
             </button>
           </div>
@@ -159,8 +185,9 @@ export function MedicinesScreen() {
   );
   useVoiceActions(actions);
 
-  if (patient === null) return <NoPathwayYet />;
-  if (!patient) return <p className="muted">Loading…</p>;
+  // Never send a Contact (no Patient yet) to the pathway screen from here: this page keeps its
+  // own heading and simply has nothing to list.
+  const medicines = patient?.medicines ?? [];
 
   return (
     <section className="medicines">
@@ -169,11 +196,13 @@ export function MedicinesScreen() {
         <span className="screen-sub">From your prescriptions in Kanta (FHIR mock-up)</span>
       </div>
 
-      {patient.medicines.length === 0 ? (
+      {patient === undefined ? (
+        <p className="muted">Loading…</p>
+      ) : medicines.length === 0 ? (
         <p className="muted">No medicines right now.</p>
       ) : (
         <ul className="medicine-list">
-          {patient.medicines.map((m) => (
+          {medicines.map((m) => (
             <MedicineCard
               key={m.id}
               medicine={m}
