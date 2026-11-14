@@ -2,36 +2,36 @@
    canvas design-system note. Text-size and high-contrast settings switch these variables
    (data attributes on <html>), so every screen inherits them. */
 :root {
-  --ground: #f6f4f0;
-  --chrome: #e9e6df;   /* behind the phone frame on a wide screen */
+  --ground: #f4f6f9;
+  --chrome: #e3e8ef;   /* behind the phone frame on a wide screen */
   --ink: #1d2a2e;
   --secondary: #4b575b;
-  --border: #e2ddd5;
-  --teal: #0a6670;     /* actions only */
-  --teal-dark: #074d55;
+  --border: #dde3ea;
+  --teal: #0072b2;     /* actions only (Okabe-Ito blue) */
+  --teal-dark: #005a8c;
   --apricot: #f5e6d8;  /* people */
-  --amber: #e6a23c;    /* waiting */
-  --red: #b02a20;      /* urgent only */
+  --amber: #e69f00;    /* waiting (Okabe-Ito orange) */
+  --red: #a84a00;      /* urgent only (Okabe-Ito vermillion, darkened for white text) */
   --card: #ffffff;
   --on-action: #ffffff; /* text on teal or red */
 
   /* Chips: waiting is amber-tinted, confirmed is teal-tinted. */
   --chip-wait-bg: #fbefd9;
   --chip-wait-ink: #7a4d00;
-  --chip-teal-bg: #ddeeec;
+  --chip-teal-bg: #dcebf5;
 
   /* Tiles */
   --tile-apricot: #f5e6d8;
   --tile-apricot-ink: #5a3a22;
   --icon-apricot: #6b3511;
-  --check-off: #a59d91; /* unchecked radio / checkbox ring */
-  --border-strong: #cfc8bd; /* secondary buttons on a card */
+  --check-off: #96a0ab; /* unchecked radio / checkbox ring */
+  --border-strong: #c3cbd5; /* secondary buttons on a card */
   --input-border: #8f9a9d;  /* the question box in Learn */
-  --chip-taken-bg: #e3f2ea; /* a logged dose: calm green, never a success alarm */
-  --chip-taken-ink: #17613f;
-  --danger-soft-bg: #f8e3e0;   /* a skipped dose: a light red, not the urgent red */
-  --danger-soft-ink: #8f2a21;
-  --danger-soft-border: #e7c3bd;
+  --chip-taken-bg: #ddf2ea; /* a logged dose: calm green, never a success alarm */
+  --chip-taken-ink: #00694d;
+  --danger-soft-bg: #f9e4d6;   /* a skipped dose: a light red, not the urgent red */
+  --danger-soft-ink: #8a3d00;
+  --danger-soft-border: #ebc4a8;
 
   --font: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, sans-serif;
   --text-body: 17px;
@@ -53,7 +53,7 @@
   --space-5: 20px;
   --space-6: 24px;
 
-  --focus: 3px solid #0a6670;
+  --focus: 3px solid #0072b2;
   --shadow-frame: 0 18px 60px rgba(29, 42, 46, 0.18), 0 2px 6px rgba(29, 42, 46, 0.08);
 }
 
