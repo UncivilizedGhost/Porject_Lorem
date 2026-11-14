@@ -76,7 +76,8 @@ def medicines() -> list[dict[str, Any]]:
     return _load("medicines.json")
 
 
-def pathway_steps(patient: dict[str, Any]) -> list[dict[str, Any]]:
+def pathway_steps(patient: dict[str, Any], appointments: list[dict[str, Any]] = ()) -> list[dict[str, Any]]:
+    """A step with a booked appointment at its location shows that date and time, not the estimate."""
     clock = patient["pathway_clock"]
     elapsed = clock["current_demo_day"] - clock["started_demo_day"]
     start = datetime.fromisoformat(patient["referral"]["at"])
@@ -92,14 +93,16 @@ def pathway_steps(patient: dict[str, Any]) -> list[dict[str, Any]]:
             state, next_assigned = "next", True
         else:
             state = "later"
+        booked = next((a for a in appointments if a.get("location") == tpl["location"]), None)
+        when = booked["start"].split("T") if booked else None
         steps.append({
             "id": tpl["id"],
             "label": tpl["label"],
             "location": tpl["location"],
             "expected_day": tpl["expected_day"],
-            "time": tpl["time"],
+            "time": when[1] if when else tpl["time"],
             "state": state,
-            "date": (start + timedelta(days=tpl["expected_day"])).date().isoformat(),
-            "date_is_estimate": state == "later" or state == "next",
+            "date": when[0] if when else (start + timedelta(days=tpl["expected_day"])).date().isoformat(),
+            "date_is_estimate": not booked and state in ("later", "next"),
         })
     return steps

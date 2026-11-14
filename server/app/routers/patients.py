@@ -73,8 +73,23 @@ async def _patient_or_404(patient_id: str) -> dict[str, Any]:
     return patient
 
 
+async def _appointments(patient_id: str) -> list[dict[str, Any]]:
+    return await db.find("appointments", {"subject_type": "patient", "subject_id": patient_id})
+
+
+def _shown(appointment: dict[str, Any], steps: list[dict[str, Any]]) -> dict[str, Any]:
+    """An appointment as the companion renders it, named after the pathway step it books."""
+    step = next((s for s in steps if s["location"] == appointment["location"]), None)
+    return {
+        "_id": appointment["_id"],
+        "what": step["label"] if step else appointment["type"],
+        "at": appointment["start"],
+        "where": appointment["location"],
+    }
+
+
 async def _derive(patient: dict[str, Any]):
-    steps = pathway.pathway_steps(patient)
+    steps = pathway.pathway_steps(patient, await _appointments(patient["_id"]))
     ladder = await db.find("escalation_steps", {"patient_id": patient["_id"]})
     return steps, ladder
 
@@ -102,7 +117,7 @@ async def trusted_view(patient_id: str):
         "_id": patient["_id"],
         "status": pathway.pathway_status(patient, steps, ladder),
         "next_step": pathway.next_step(steps, ladder, patient),
-        "appointments": await db.find("appointments", {"patient_id": patient_id}),
+        "appointments": [_shown(a, steps) for a in await _appointments(patient_id)],
         "trusted_people": patient["trusted_people"],
         "language": patient.get("language"),
         "accessibility": patient["accessibility"],

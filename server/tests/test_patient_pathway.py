@@ -140,9 +140,9 @@ async def test_trusted_view_has_appointments_and_confirmations_but_no_clinical_c
         "patient_id": pid, "step_index": 0, "rung": "message_sms", "due_demo_day": 0,
         "fired_at": "2026-11-14T08:00:00+00:00", "confirmed_at": None,
     })
-    await db.insert("appointments", {
-        "patient_id": pid, "what": "Chest CT", "at": "2026-11-21T09:30:00+00:00",
-        "where": "Jorvi Hospital, Espoo",
+    await db.insert("appointments", {  # contract shape, as booking writes it
+        "subject_type": "patient", "subject_id": pid, "clinician_id": "clin-radiology-jorvi",
+        "type": "xray_ct", "start": "2026-11-21T09:30", "location": "Jorvi Hospital, Espoo (HUS imaging)",
     })
     for etype, payload in [
         ("checkin", {"answers": {"temperature": 38.6}, "grade": "red"}),
@@ -156,7 +156,10 @@ async def test_trusted_view_has_appointments_and_confirmations_but_no_clinical_c
     assert res.status_code == 200
     body = res.json()
     assert body["trusted_people"] == TRUSTED
-    assert [a["what"] for a in body["appointments"]] == ["Chest CT"]
+    # Shown as the pathway step it books, in the shape the companion renders.
+    assert [(a["what"], a["at"], a["where"]) for a in body["appointments"]] == [
+        ("Chest CT", "2026-11-21T09:30", "Jorvi Hospital, Espoo (HUS imaging)")
+    ]
     assert body["next_step"]["pending_confirmation"] == {"id": step, "kind": "appointment"}
     text = res.text
     for forbidden in ("events", "answers", "own_words", "38.6", "it hurts", "symptom_report"):
