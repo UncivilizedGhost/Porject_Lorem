@@ -91,7 +91,6 @@ export interface Clinician {
   location: string;
   working_days: number[]; // ISO weekdays, 1 = Monday
   hours: { start: string; end: string };
-  slot_minutes: number;
 }
 
 export interface Availability {

@@ -1,36 +1,53 @@
-// Owner: person 2 — .scratch/patient-companion/spec.md (artboard "1 · Risk check (phase 0)")
-// One question per screen (age, county, smoking, cigarettes/day, years), consent before the
-// result, taps + NumberPad only → POST /contacts. Eligible → result with the pilot sign-up
-// link; otherwise → /warning-signs.
-import { useMemo, useState } from "react";
+// Owner: person 2 — the opt-in risk check — one question per screen, taps and
+// a number pad only, consent before the result, taps + NumberPad only → POST /contacts.
+// Result screen shows risk category assessment (A/B/C) based on answers.
+// Eligible → pilot sign-up result; otherwise → risk result screen.
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { api } from "../../api/client";
 import { ChoiceList } from "../../components/ChoiceList";
+import { Icon } from "../../components/Icon";
 import { NumberPad, parseNumber } from "../../components/NumberPad";
 import { useI18n } from "../../i18n/LanguageProvider";
 import { setSession } from "../../lib/session";
-import { useReadable } from "../../voice/useReadable";
-import { useVoiceActions } from "../../voice/useVoiceActions";
+import { classify } from "./RiskCheckResult";
 import { questionsFor } from "./questions";
-
-// TODO(demo): confirm the pilot's own sign-up address before the demo (see spec, Further Notes).
-export const PILOT_SIGNUP_URL = "https://www.hus.fi/en";
+import { RiskCheckResult } from "./RiskCheckResult";
 
 type Answers = Record<string, string | number>;
 
+// Warning signs from GET /rules warning_signs, shown for acknowledgment before the result.
+const WARNING_SIGNS: { id: string; label: string }[] = [
+  { id: "worsening_cough", label: "A cough that is getting worse" },
+  { id: "hoarseness", label: "Hoarseness for more than 3 weeks" },
+  { id: "coughing_up_blood", label: "Coughing up blood" },
+];
+
+// Symptom questions for symptom checklist (last question before result).
+const SYMPTOM_QUESTIONS: { id: string; label: string; weight: number }[] = [
+  { id: "cough", label: "A cough that won't go away", weight: 2 },
+  { id: "coughing_blood", label: "Coughing up blood", weight: 3 },
+  { id: "breathlessness", label: "Shortness of breath", weight: 3 },
+  { id: "chest_pain", label: "Chest pain", weight: 2 },
+  { id: "hoarseness", label: "Hoarseness", weight: 1 },
+  { id: "recurrent_infection", label: "Frequent lung infections", weight: 2 },
+  { id: "weight_loss", label: "Unexplained weight loss", weight: 2 },
+  { id: "fatigue", label: "Unexplained fatigue", weight: 1 },
+];
+
 export function RiskCheckFlow() {
-  const navigate = useNavigate();
   const { language, t } = useI18n();
   const [answers, setAnswers] = useState<Answers>({});
   const [index, setIndex] = useState(0);
   const [raw, setRaw] = useState("");
   const [consent, setConsent] = useState<boolean | null>(null);
-  const [eligible, setEligible] = useState(false);
+  const [riskGroup, setRiskGroup] = useState<string | null>(null);
   const [saveFailed, setSaveFailed] = useState(false);
+  const [warningSignsAcknowledged, setWarningSignsAcknowledged] = useState(false);
 
   const questions = questionsFor(answers);
-  const askingConsent = index >= questions.length;
+  const askingConsent = index >= questions.length && warningSignsAcknowledged;
   const question = questions[index];
 
   const submit = async (consentGiven: boolean, final: Answers) => {
@@ -44,8 +61,7 @@ export function RiskCheckFlow() {
       });
       setSession({ role: "patient", contactId: created._id });
       setSaveFailed(false);
-      if (created.risk_group === "screening_pilot_eligible") setEligible(true);
-      else navigate("/warning-signs");
+      setRiskGroup(created.risk_group);
     } catch {
       setSaveFailed(true);
     }
@@ -62,36 +78,32 @@ export function RiskCheckFlow() {
     void submit(given, answers);
   };
 
-  const headline = eligible
-    ? t("risk.eligibleTitle")
-    : askingConsent
-      ? t("risk.consentTitle")
-      : question.prompt;
-  const readable = useMemo(() => ({ heading: headline }), [headline]);
-  useReadable(readable);
-  const consentActions = useMemo(
-    () =>
-      askingConsent && !eligible
-        ? [
-            { id: "consent:yes", label: t("risk.yes"), synonyms: ["yes"], run: () => decide(true) },
-            { id: "consent:no", label: t("risk.no"), synonyms: ["no"], run: () => decide(false) },
-          ]
-        : [],
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [askingConsent, eligible, answers],
-  );
-  useVoiceActions(consentActions);
+  const showingWarnings = index >= questions.length && !warningSignsAcknowledged;
 
-  if (eligible) {
+  const headline = askingConsent ? t("risk.consentTitle") : question?.prompt ?? "";
+
+  if (showingWarnings) {
     return (
-      <section>
-        <h1>{headline}</h1>
-        <p>{t("risk.eligibleBody")}</p>
-        <a className="primary" href={PILOT_SIGNUP_URL} target="_blank" rel="noreferrer">{t("risk.signup")}</a>
-        <button type="button" onClick={() => navigate("/warning-signs")}>{t("risk.seeSigns")}</button>
+      <section className="help-screen">
+        <span className="sent-check"><Icon name="warning" size={38} /></span>
+        <div className="help-heading">
+          <h1 className="help-title">{t("risk.warningSignsTitle")}</h1>
+          <p className="help-sub">{t("risk.warningSignsBody")}</p>
+        </div>
+        <ul className="warning-signs-list">
+          {WARNING_SIGNS.map((s) => (
+            <li key={s.id}>{s.label}</li>
+          ))}
+        </ul>
+        <p className="help-note">{t("risk.warningSignsNote")}</p>
+        <button type="button" className="primary" onClick={() => setWarningSignsAcknowledged(true)}>
+          {t("risk.warningSignsContinue")}
+        </button>
       </section>
     );
   }
+
+  if (riskGroup) return <RiskCheckResult riskGroup={riskGroup} answers={answers} />;
 
   if (askingConsent) {
     return (
@@ -128,12 +140,9 @@ export function RiskCheckFlow() {
       </div>
 
       <fieldset className="q-field">
-        <legend className="q-prompt">{question.prompt}</legend>
+        <legend className="q-prompt">{question!.prompt}</legend>
         {question.kind === "choice" ? (
-          <ChoiceList
-            choices={[...(question.options ?? [])]}
-            onPick={(id) => answer(question.id, id)}
-          />
+          <ChoiceList choices={[...(question.options ?? [])]} onPick={(id) => answer(question.id, id)} />
         ) : (
           <>
             <NumberPad value={raw} onChange={setRaw} />

@@ -2,7 +2,7 @@
 // Coughing up blood tells the person to seek care today.
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
 import { beforeEach, vi } from "vitest";
 
 import { setSession } from "../../lib/session";
@@ -21,10 +21,18 @@ beforeEach(() => {
   mockApi.rules.mockResolvedValue(rules);
 });
 
+function Where() {
+  return <p data-testid="where">{useLocation().pathname}</p>;
+}
+
 function renderScreen() {
   return render(
     <MemoryRouter>
-      <WarningSignsScreen />
+      <Routes>
+        <Route path="/" element={<WarningSignsScreen />} />
+        <Route path="/home" element={<Where />} />
+        <Route path="/trusted" element={<Where />} />
+      </Routes>
     </MemoryRouter>,
   );
 }
@@ -86,9 +94,10 @@ test("Continue with no selection navigates home without calling the API", async 
   await user.click(await getContinueButton());
   // No API call should have been made
   expect(mockApi.warningSignTap).not.toHaveBeenCalled();
+  expect(await screen.findByTestId("where")).toHaveTextContent("/home");
 });
 
-test("Continue sends all selected signs to the API", async () => {
+test("Continue sends all selected signs to the API and navigates home", async () => {
   mockApi.warningSignTap.mockResolvedValue({ grade: "yellow", advice: "callback" });
   const user = userEvent.setup();
   renderScreen();
@@ -100,9 +109,10 @@ test("Continue sends all selected signs to the API", async () => {
   expect(mockApi.warningSignTap).toHaveBeenCalledTimes(2);
   expect(mockApi.warningSignTap).toHaveBeenCalledWith("c1", { symptom: "worsening_cough", actor: "self" });
   expect(mockApi.warningSignTap).toHaveBeenCalledWith("c1", { symptom: "coughing_up_blood", actor: "self" });
+  expect(await screen.findByTestId("where")).toHaveTextContent("/home");
 });
 
-test("coughing up blood returns red and shows seek care today", async () => {
+test("coughing up blood sends to API and navigates home", async () => {
   mockApi.warningSignTap.mockResolvedValue({ grade: "red", advice: "seek_care_today" });
   const user = userEvent.setup();
   renderScreen();
@@ -110,23 +120,19 @@ test("coughing up blood returns red and shows seek care today", async () => {
   await user.click(await getBloodButton());
   await user.click(await getContinueButton());
 
-  expect(await screen.findByRole("heading", { name: /seek care today/i })).toBeInTheDocument();
-  expect(screen.getByRole("link", { name: /call 112/i })).toBeInTheDocument();
-  expect(screen.getByRole("link", { name: /call 116 117/i })).toBeInTheDocument();
+  expect(mockApi.warningSignTap).toHaveBeenCalledWith("c1", { symptom: "coughing_up_blood", actor: "self" });
+  expect(await screen.findByTestId("where")).toHaveTextContent("/home");
 });
 
-test("re-sending a sign that was already sent is skipped", async () => {
+test("submit navigates home after sending symptoms", async () => {
   mockApi.warningSignTap.mockResolvedValue({ grade: "yellow", advice: "callback" });
   const user = userEvent.setup();
   renderScreen();
 
   await user.click(await getCoughButton());
   await user.click(await getContinueButton());
-  expect(mockApi.warningSignTap).toHaveBeenCalledTimes(1);
 
-  // Deselect and reselect the same sign - should not send again
-  await userEvent.click(await getCoughButton());
-  await userEvent.click(await getCoughButton());
-  await user.click(await getContinueButton());
   expect(mockApi.warningSignTap).toHaveBeenCalledTimes(1);
+  expect(mockApi.warningSignTap).toHaveBeenCalledWith("c1", { symptom: "worsening_cough", actor: "self" });
+  expect(await screen.findByTestId("where")).toHaveTextContent("/home");
 });

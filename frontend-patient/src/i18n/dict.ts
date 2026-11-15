@@ -141,15 +141,15 @@ export const MESSAGES = {
     "Vastaukset tulevat vain tarkistetuista suomalaisista lähteistä. Omista tuloksistasi kysy hoitaja Ainolta.",
     "Svaren kommer bara från granskade finländska källor. Fråga din egen sjuksköterska om dina resultat.",
   ],
-  "voice.assistantOn": [
-    "Voice assistant on. Tap or click anywhere on the screen to have it read out loud.",
-    "Ääniavustaja päällä. Napauta tai klikkaa missä tahansa ruudulla saadaksesi sen luettavaksi ääneen.",
-    "Röstassistenten är på. Tryck eller klicka var som helst på skärmen för att få det läst högt.",
+  "voice.screenReaderOn": [
+    "Screen reader on. Tap anywhere on the screen to have it read out loud.",
+    "Lukuavustus päällä. Napauta tai klikkaa missä tahansa ruudulla saadaksesi sen luettavaksi ääneen.",
+    "Skärmläsare på. Tryck eller klicka var som helst på skärmen för att få det läst högt.",
   ],
-  "voice.assistantOff": [
-    "Voice assistant off.",
-    "Ääniavustaja pois käytöstä.",
-    "Röstassistenten är avstängd.",
+  "voice.screenReaderOff": [
+    "Screen reader off.",
+    "Lukuavustus pois käytöstä.",
+    "Skärmläsare avstängd.",
   ],
 
   "settings.title": ["Make it easier to use", "Helpota käyttöä", "Gör det lättare att använda"],
@@ -509,6 +509,116 @@ export const MESSAGES = {
     "See the signs to watch for",
     "Katso merkit, joita seurata",
     "Se tecknen att hålla koll på",
+  ],
+  "risk.resultNoneTitle": [
+    "Not in a risk category",
+    "Et ole riskiryhmässä",
+    "Ingen riskgrupp",
+  ],
+  "risk.resultNoneBody": [
+    "Based on your answers, you are not in a lung cancer risk category.",
+    "Vastauksiesi perusteella et ole keuhkosyövän riskiryhmässä.",
+    "Utifrån dina svar tillhör du inte en riskgrupp för lungcancer.",
+  ],
+  "risk.resultNoneNote": [
+    "If anything changes, contact your nurse.",
+    "Jos tilanne muuttuu, ota yhteyttä hoitajaan.",
+    "Om något ändras, kontakta din sjuksköterska.",
+  ],
+  "risk.resultRiskTitle": [
+    "You are in a risk category",
+    "Olet riskiryhmässä",
+    "Du tillhör en riskgrupp",
+  ],
+  "risk.resultRiskBody": [
+    "Based on your answers, you may be at risk of lung cancer. Contact a nurse for advice.",
+    "Vastauksiesi perusteella saatat olla riskiryhmässä keuhkosyövän suhteen. Ota yhteyttä hoitajaan.",
+    "Utifrån dina svar kan du vara i riskzonen för lungcancer. Kontakta en sjuksköterska för råd.",
+  ],
+  "risk.resultRiskSub": [
+    "Call the health helpline",
+    "Soita terveysneuvontaan",
+    "Ring hälsovägledningen",
+  ],
+  "risk.resultRiskNote": [
+    "You can also report symptoms to your nurse.",
+    "Voit ilmoittaa oireista hoitajalle.",
+    "Du kan också rapportera symtom till din sjuksköterska.",
+  ],
+  "risk.resultImmediateTitle": [
+    "Seek immediate medical attention",
+    "Hakeudu heti hoitoon",
+    "Sök omedelbar vård",
+  ],
+  "risk.resultImmediateBody": [
+    "Based on your answers, you may be in immediate danger. Call emergency services now.",
+    "Vastauksiesi perusteella saatat olla välittömässä vaarassa. Soita hätänumeroon nyt.",
+    "Utifrån dina svar kan du vara i omedelbar fara. Ring akutnumret nu.",
+  ],
+  "risk.resultImmediateNote": [
+    "Do not wait. Call 112 or 116 117.",
+    "Älä odota. Soita 112 tai 116 117.",
+    "Vänta inte. Ring 112 eller 116 117.",
+  ],
+  "risk.appointmentTitle": [
+    "Schedule an appointment?",
+    "Haluaisitko varata ajan lääkärille?",
+    "Vill du boka en tid hos läkare?",
+  ],
+  "risk.appointmentBody": [
+    "Based on your answers, you may be at risk of lung cancer. Would you like to schedule an appointment to discuss your results with a nurse?",
+    "Vastauksiesi perusteella saatat olla riskiryhmässä keuhkosyövän suhteen. Haluaisitko varata ajan lääkärille keskustellaksesi tuloksistasi?",
+    "Utifrån dina svar kan du vara i riskzonen för lungcancer. Vill du boka en tid för att diskutera dina resultat med en sjuksköterska?",
+  ],
+  "risk.appointmentNote": [
+    "You can also report symptoms directly to your nurse through the symptom report.",
+    "Voit myös ilmoittaa oireista hoitajalle oireilmoituksella.",
+    "Du kan också rapportera symtom direkt till din sjuksköterska via symtomanmälan.",
+  ],
+  "risk.appointmentYes": [
+    "Yes, schedule appointment",
+    "Kyllä, varaa aika",
+    "Ja, boka tid",
+  ],
+  "risk.appointmentNo": [
+    "No, see my results",
+    "Ei, näytä tulokseni",
+    "Nej, visa mina resultat",
+  ],
+  "risk.appointmentSubmittedTitle": [
+    "Appointment request submitted",
+    "Ajanvarauspyyntö lähetetty",
+    "Tidsbokning inskickad",
+  ],
+  "risk.appointmentSubmittedBody": [
+    "Thank you. Your request has been submitted and a nurse will contact you shortly.",
+    "Kiitos. Pyyntösi on lähetetty ja hoitaja ottaa sinuun yhteyttä pian.",
+    "Tack. Din begäran har skickats och en sjuksköterska kommer att kontakta dig snart.",
+  ],
+  "risk.viewResults": [
+    "View results",
+    "Näytä tulokseni",
+    "Visa mina resultat",
+  ],
+  "risk.warningSignsTitle": [
+    "Symptoms to watch for",
+    "Oireet, joita kannattaa seurata",
+    "Symtom att hålla koll på",
+  ],
+  "risk.warningSignsBody": [
+    "These symptoms can be signs of lung cancer. Tell a nurse if you notice any of them.",
+    "Nämä oireet voivat olla merkkejä keuhkosyövästä. Kerro hoitajalle, jos huomaat niitä.",
+    "Dessa symtom kan vara tecken på lungcancer. Berätta för en sjuksköterska om du märker något av dem.",
+  ],
+  "risk.warningSignsNote": [
+    "If any of these develop, contact your nurse.",
+    "Jos jokin näistä ilmenee, ota yhteyttä hoitajaan.",
+    "Om något av dessa utvecklas, kontakta din sjuksköterska.",
+  ],
+  "risk.warningSignsContinue": [
+    "I understand",
+    "Ymmärrän",
+    "Jag förstår",
   ],
 
   "noPathway.title": ["No pathway yet", "Ei vielä hoitopolkua", "Ingen vårdväg än"],

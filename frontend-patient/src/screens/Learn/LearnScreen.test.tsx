@@ -89,16 +89,16 @@ test("a server failure points to the nurse instead of leaving a blank screen", a
   expect(await screen.findByRole("alert")).toHaveTextContent(/nurse/i);
 });
 
-test("voice assistant toggle works via voice command", async () => {
+test("screen reader toggle works via voice command", async () => {
   renderLearn();
-  // Voice command "ask" triggers the learn_ask action which toggles voice assistant
+  // Voice command "ask" triggers the learn_ask action which toggles screen reader
   await act(async () => voice.handleTranscript("ask"));
   await act(async () => voice.handleTranscript("yes"));
-  // Voice assistant should now be on
-  expect(voice.settings.voice_assistant).toBe(true);
+  // Screen reader should now be on
+  expect(voice.settings.screen_reader).toBe(true);
   await act(async () => voice.handleTranscript("ask"));
   await act(async () => voice.handleTranscript("yes"));
-  expect(voice.settings.voice_assistant).toBe(false);
+  expect(voice.settings.screen_reader).toBe(false);
 });
 
 test("the answer and its source are read aloud", async () => {

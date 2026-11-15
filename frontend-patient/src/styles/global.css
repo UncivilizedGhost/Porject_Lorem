@@ -1013,9 +1013,10 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .dark-button:hover { color: var(--on-action); filter: brightness(1.15); }
 .sent-home {
   display: flex; align-items: center; justify-content: center;
-  min-height: 68px; margin-top: auto;
-  border-radius: 16px; background: var(--teal); color: var(--on-action);
-  font-size: 1.35em; font-weight: 700; text-decoration: none;
+  min-height: var(--target-primary); margin-top: auto;
+  border-radius: var(--radius-button); background: var(--teal); color: var(--on-action);
+  font-size: 1.06em; font-weight: 600; text-decoration: none;
+  padding: 8px 18px;
 }
 .sent-home:hover { color: var(--on-action); filter: brightness(0.94); }
 .app-frame[data-tone="dark"] .sent h1,
