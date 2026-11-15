@@ -1,6 +1,7 @@
 // Seam 2: Home always shows one status line, the next step with one primary action, Nurse
 // Aino's card and a way to report a symptom.
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, vi } from "vitest";
 
@@ -64,10 +65,15 @@ test("with nothing to confirm there is no Confirm appointment action", async () 
   expect(screen.queryByRole("link", { name: "Confirm appointment" })).not.toBeInTheDocument();
 });
 
-test("practical help: how to get there and what to bring opens the pathway", async () => {
+test("practical help: how to get there opens a pop-up with transit, Kela taxi and what to bring", async () => {
   renderHome();
-  const link = await screen.findByRole("link", { name: "How to get there and what to bring" });
-  expect(link).toHaveAttribute("href", "/pathway");
+  await userEvent.click(await screen.findByRole("button", { name: "How to get there and what to bring" }));
+  const dialog = screen.getByRole("dialog", { name: "How to get there" });
+  expect(within(dialog).getByRole("link", { name: /HSL journey planner/ })).toHaveAttribute("href", "https://reittiopas.hsl.fi/");
+  expect(within(dialog).getByRole("link", { name: /Call Kela taxi/ })).toHaveAttribute("href", expect.stringMatching(/^tel:/));
+  expect(within(dialog).getByText("Kela card")).toBeInTheDocument();
+  await userEvent.click(within(dialog).getByRole("button", { name: "Close" }));
+  expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 });
 
 test("Nurse Aino's card has a call button and Report a symptom is one tap away", async () => {

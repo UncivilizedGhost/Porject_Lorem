@@ -255,6 +255,22 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 }
 .text-link:hover { color: var(--teal-dark); text-decoration: underline; }
 .text-link svg { flex: none; }
+button.text-link { background: none; border: 0; padding: 0; cursor: pointer; }
+
+/* Pop-up sheet over the screen, e.g. "How to get there" on Home. */
+.sheet-backdrop {
+  position: fixed; inset: 0; z-index: 50;
+  display: flex; align-items: flex-end; justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+}
+.sheet {
+  width: 100%; max-width: 480px; max-height: 85vh; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 24px 20px; border-radius: 20px 20px 0 0;
+  background: var(--card); color: var(--ink);
+}
+.sheet h3 { margin-top: 8px; font-size: 1.06em; }
+.sheet a.primary { display: flex; align-items: center; justify-content: center; gap: 8px; }
 .tile > svg, .row-link > svg { flex: none; }
 
 .disclosure summary {

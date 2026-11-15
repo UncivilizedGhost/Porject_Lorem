@@ -13,6 +13,7 @@ import { useI18n } from "../../i18n/LanguageProvider";
 import { formatClock, formatDate, formatWeekday } from "../../lib/format";
 import { usePatient } from "../../lib/usePatient";
 import { useReadable } from "../../voice/useReadable";
+import { GettingThereSheet } from "./GettingThereSheet";
 import { useVoiceActions } from "../../voice/useVoiceActions";
 
 export function HomeScreen() {
@@ -21,6 +22,7 @@ export function HomeScreen() {
   const { language, t } = useI18n();
   const next = patient?.next_step ?? null;
   const pending = next?.pending_confirmation ?? null;
+  const [gettingThereOpen, setGettingThereOpen] = useState(false);
   const name = patient?.display_name?.trim() ?? null;
   // The greeting uses the first name: "Good morning, Matti", not the whole record name.
   const firstName = name ? name.split(/\s+/)[0] : null;
@@ -100,10 +102,10 @@ export function HomeScreen() {
             <p className="next-when">{when}</p>
             <p className="next-where">{next.where}</p>
           </div>
-          <Link className="text-link" to="/pathway">
+          <button type="button" className="text-link" onClick={() => setGettingThereOpen(true)}>
             {t("home.howToGetThere")}
             <Icon name="chevron-right" size={20} />
-          </Link>
+          </button>
           {pending && (
             <div className="confirm-block">
               <span className="chip chip-wait">{t("home.notConfirmed")}</span>
@@ -111,6 +113,10 @@ export function HomeScreen() {
             </div>
           )}
         </div>
+      )}
+
+      {next && gettingThereOpen && (
+        <GettingThereSheet next={next} onClose={() => setGettingThereOpen(false)} />
       )}
 
       <div className="tile-grid">

@@ -26,6 +26,7 @@ export const MESSAGES = {
   "common.previous": ["Previous", "Edellinen", "Föregående"],
   "common.saved": ["Saved", "Tallennettu", "Sparat"],
   "common.home": ["Home", "Etusivu", "Hem"],
+  "common.close": ["Close", "Sulje", "Stäng"],
 
   "login.title": [
     "Who is using the app?",
@@ -657,6 +658,20 @@ export const MESSAGES = {
     "Käytä HSL-reittiopasta. Kela voi korvata taksimatkasi.",
     "Använd HSL:s reseplanerare. Fpa kan ersätta din taxiresa.",
   ],
+  "getThere.transitTitle": ["By public transport", "Julkisilla", "Med kollektivtrafik"],
+  "getThere.transitBody": [
+    "Search for a route to {where} in the HSL journey planner.",
+    "Hae reitti kohteeseen {where} HSL-reittioppaasta.",
+    "Sök en rutt till {where} i HSL:s reseplanerare.",
+  ],
+  "getThere.transitLink": ["Open the HSL journey planner", "Avaa HSL-reittiopas", "Öppna HSL:s reseplanerare"],
+  "getThere.taxiTitle": ["By Kela taxi", "Kela-taksilla", "Med FPA-taxi"],
+  "getThere.taxiBody": [
+    "Kela may cover your taxi to the appointment. Order it by phone and tell them it is a Kela trip.",
+    "Kela voi korvata taksimatkan vastaanotolle. Tilaa taksi puhelimella ja kerro, että kyse on Kela-matkasta.",
+    "FPA kan ersätta din taxiresa till besöket. Beställ per telefon och säg att det är en FPA-resa.",
+  ],
+  "getThere.taxiCall": ["Call Kela taxi", "Soita Kela-taksi", "Ring FPA-taxi"],
   "card.noNext": [
     "There is no next step planned yet.",
     "Seuraavaa vaihetta ei ole vielä suunniteltu.",
