@@ -54,7 +54,7 @@ export function LoginScreen() {
         <div className="login-head">
           <span className="brand">
             <Icon name="brand-mark" size={32} />
-            Cancer Support
+            Cancer Pathway Companion
           </span>
           <h1 className="login-title">{t("login.title")}</h1>
         </div>
