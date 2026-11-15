@@ -3,7 +3,6 @@
 // Result screen shows risk category assessment (A/B/C) based on answers.
 // Eligible → pilot sign-up result; otherwise → risk result screen.
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { api } from "../../api/client";
 import { ChoiceList } from "../../components/ChoiceList";
@@ -11,7 +10,6 @@ import { Icon } from "../../components/Icon";
 import { NumberPad, parseNumber } from "../../components/NumberPad";
 import { useI18n } from "../../i18n/LanguageProvider";
 import { setSession } from "../../lib/session";
-import { classify } from "./RiskCheckResult";
 import { questionsFor } from "./questions";
 import { RiskCheckResult } from "./RiskCheckResult";
 
@@ -22,18 +20,6 @@ const WARNING_SIGNS: { id: string; label: string }[] = [
   { id: "worsening_cough", label: "A cough that is getting worse" },
   { id: "hoarseness", label: "Hoarseness for more than 3 weeks" },
   { id: "coughing_up_blood", label: "Coughing up blood" },
-];
-
-// Symptom questions for symptom checklist (last question before result).
-const SYMPTOM_QUESTIONS: { id: string; label: string; weight: number }[] = [
-  { id: "cough", label: "A cough that won't go away", weight: 2 },
-  { id: "coughing_blood", label: "Coughing up blood", weight: 3 },
-  { id: "breathlessness", label: "Shortness of breath", weight: 3 },
-  { id: "chest_pain", label: "Chest pain", weight: 2 },
-  { id: "hoarseness", label: "Hoarseness", weight: 1 },
-  { id: "recurrent_infection", label: "Frequent lung infections", weight: 2 },
-  { id: "weight_loss", label: "Unexplained weight loss", weight: 2 },
-  { id: "fatigue", label: "Unexplained fatigue", weight: 1 },
 ];
 
 export function RiskCheckFlow() {
