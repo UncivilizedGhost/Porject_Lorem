@@ -67,6 +67,7 @@ export function WarningSignsScreen() {
         setSent((prev) => new Set(prev).add(sign.id));
       }
       setError(false);
+      navigate(getSession()?.role === "trusted_person" ? "/trusted" : "/home");
     } catch {
       setError(true);
     }

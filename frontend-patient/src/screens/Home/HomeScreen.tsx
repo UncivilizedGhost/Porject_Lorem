@@ -139,16 +139,6 @@ export function HomeScreen() {
         </span>
         <Icon name="chevron-right" size={20} />
       </Link>
-
-      {/* Paper is an equal channel: a printable copy of the next step, opened in its own tab so
-          the app stays where it is. */}
-      <a className="row-link" href="/care-plan-card" target="_blank" rel="noreferrer">
-        <span>
-          <span className="row-link-title">{t("card.title")}</span>
-          <span className="row-link-sub">{t("card.print")}</span>
-        </span>
-        <Icon name="chevron-right" size={20} />
-      </a>
     </section>
   );
 }

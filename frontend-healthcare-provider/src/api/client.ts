@@ -50,7 +50,6 @@ export const api = {
   availability: (id: string, from: string, to: string) =>
     request<Availability>("GET", `/clinicians/${id}/availability?from=${from}&to=${to}`),
   book: (body: object) => request<unknown>("POST", "/appointments", body),
-  escalate: (patientId: string) => request<unknown>("POST", `/patients/${patientId}/escalate`),
 
   // person 1: dashboard
   counties: () => request<CountySummary[]>("GET", "/dashboard/counties"),

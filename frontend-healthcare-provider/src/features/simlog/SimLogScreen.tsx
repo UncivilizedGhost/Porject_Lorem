@@ -36,20 +36,7 @@ function when(iso: string): string {
 
 export function SimLogScreen() {
   const [tick, setTick] = useState(0);
-  const [failed, setFailed] = useState(false);
-  const fetcher = useCallback(
-    () =>
-      (api.simLog(100) as Promise<SimEvent[]>)
-        .then((rows) => {
-          setFailed(false);
-          return rows;
-        })
-        .catch((err: unknown) => {
-          setFailed(true);
-          throw err;
-        }),
-    [tick],
-  );
+  const fetcher = useCallback(() => api.simLog(100) as Promise<SimEvent[]>, [tick]); // eslint-disable-line react-hooks/exhaustive-deps
   const rows = usePolling(fetcher);
 
   const reply = async (id: string) => {
@@ -58,70 +45,57 @@ export function SimLogScreen() {
   };
 
   return (
-    <section className="sim-log">
+    <section>
       <h1>Simulated SMS / FHIR log</h1>
       <p>Nothing on this page was really sent. Messages and Kanta syncs are simulated for the demo.</p>
-
-      {failed && (
-        <p className="error" role="alert">
-          Could not reach the log. Retrying every few seconds.
-        </p>
-      )}
-      {!rows && !failed && <p className="muted">Loading…</p>}
-      {rows && rows.length === 0 && <p className="muted">No messages yet.</p>}
-
-      {rows && rows.length > 0 && (
-        <>
-          <p className="sim-count">{rows.length} simulated rows, newest first.</p>
-          <table>
-            <thead>
-              <tr>
-                <th scope="col">Time</th>
-                <th scope="col">Channel</th>
-                <th scope="col">Recipient</th>
-                <th scope="col">Text</th>
-                <th scope="col">Status</th>
-                <th scope="col">Label</th>
-                <th scope="col">Action</th>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Time</th>
+            <th scope="col">Channel</th>
+            <th scope="col">Recipient</th>
+            <th scope="col">Text</th>
+            <th scope="col">Status</th>
+            <th scope="col">Label</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {(rows ?? []).map((e) => {
+            const fhir = e.type === "fhir_sync";
+            const p = e.payload;
+            return (
+              <tr key={e.id}>
+                <td>{when(e.created_at)}</td>
+                <td>{fhir ? "Kanta / FHIR" : CHANNEL_LABEL[p.channel ?? "sms"]}</td>
+                <td>{fhir ? "Kanta" : p.to}</td>
+                <td>
+                  {fhir ? (
+                    <details>
+                      <summary>Show FHIR payload</summary>
+                      <pre>{JSON.stringify(p.bundle, null, 2)}</pre>
+                    </details>
+                  ) : (
+                    p.text
+                  )}
+                </td>
+                <td>{fhir ? "synced" : p.status}</td>
+                <td>
+                  <span className="badge">{fhir ? "FHIR mock-up" : "(simulated)"}</span>
+                </td>
+                <td>
+                  {!fhir && p.status === "sent" && (
+                    <button type="button" onClick={() => void reply(e.id)}>
+                      Simulate reply (YES)
+                    </button>
+                  )}
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {rows.map((e) => {
-                const fhir = e.type === "fhir_sync";
-                const p = e.payload ?? {};
-                return (
-                  <tr key={e.id}>
-                    <td>{when(e.created_at)}</td>
-                    <td>{fhir ? "Kanta / FHIR" : CHANNEL_LABEL[p.channel ?? "sms"]}</td>
-                    <td>{fhir ? "Kanta" : p.to}</td>
-                    <td>
-                      {fhir ? (
-                        <details>
-                          <summary>Show FHIR payload</summary>
-                          <pre>{JSON.stringify(p.bundle, null, 2)}</pre>
-                        </details>
-                      ) : (
-                        p.text
-                      )}
-                    </td>
-                    <td>{fhir ? "synced" : p.status}</td>
-                    <td>
-                      <span className="badge">{fhir ? "FHIR mock-up" : "(simulated)"}</span>
-                    </td>
-                    <td>
-                      {!fhir && p.status === "sent" && (
-                        <button type="button" onClick={() => void reply(e.id)}>
-                          Simulate reply (YES)
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </>
-      )}
+            );
+          })}
+        </tbody>
+      </table>
+      {rows && rows.length === 0 && <p>No messages yet.</p>}
     </section>
   );
 }
