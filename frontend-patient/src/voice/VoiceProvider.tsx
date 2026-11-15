@@ -25,7 +25,7 @@ export interface VoiceSettings {
   language: "fi" | "sv" | "en";
   read_aloud: boolean;
   voice_mode: boolean;
-  voice_assistant: boolean;
+  screen_reader: boolean;
   speed: "normal" | "slow";
 }
 
@@ -41,13 +41,13 @@ interface VoiceContextValue {
   handleTranscript: (transcript: string) => Promise<void>;
   /** Tell the person (aloud) that speech input failed, so they use the buttons. */
   reportVoiceUnavailable: () => Promise<void>;
-  /** Toggle voice assistant mode on/off. */
-  toggleVoiceAssistant: () => Promise<void>;
+  /** Toggle screen reader on/off. */
+  toggleScreenReader: () => Promise<void>;
   /** Read a single element's text aloud. */
   speakElementText: (text: string) => Promise<void>;
 }
 
-const DEFAULT_SETTINGS: VoiceSettings = { language: "en", read_aloud: false, voice_mode: false, voice_assistant: false, speed: "normal" };
+const DEFAULT_SETTINGS: VoiceSettings = { language: "en", read_aloud: false, voice_mode: false, screen_reader: false, speed: "normal" };
 
 const noop: VoiceContextValue = {
   registerActions: () => () => undefined,
@@ -58,7 +58,7 @@ const noop: VoiceContextValue = {
   updateSettings: () => undefined,
   handleTranscript: async () => undefined,
   reportVoiceUnavailable: async () => undefined,
-  toggleVoiceAssistant: async () => undefined,
+  toggleScreenReader: async () => undefined,
   speakElementText: async () => undefined,
 };
 
@@ -274,22 +274,22 @@ export function VoiceProvider({
     await say(t.unavailable);
   }, [say]);
 
-  const toggleVoiceAssistant = useCallback(async () => {
+  const toggleScreenReader = useCallback(async () => {
     const t = STRINGS[settingsRef.current.language] ?? STRINGS.en;
+    const next = !settingsRef.current.screen_reader;
     setSettings((s) => {
-      const next = { ...s, voice_assistant: !s.voice_assistant };
+      const updated = { ...s, screen_reader: next };
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
       } catch {
         /* ignore */
       }
-      return next;
+      return updated;
     });
-    const next = !settingsRef.current.voice_assistant;
     if (next) {
-      await say(t.voiceAssistantOn);
+      await say(t.screenReaderOn);
     } else {
-      await say(t.voiceAssistantOff);
+      await say(t.screenReaderOff);
     }
   }, [say]);
 
@@ -297,12 +297,12 @@ export function VoiceProvider({
     await say(text);
   }, [say]);
 
-  // Global click-to-read: when voice assistant is on, clicking on any element reads it aloud.
+  // Global click-to-read: when screen reader is on, clicking on any element reads it aloud.
   // Uses pointerup (fires immediately on touch, no 300 ms double-tap delay) with click as a
   // fallback. Walks up from the clicked target so icons inside buttons still read the button's
   // text. Form controls are excluded so they still work normally.
   const handlePointerUp = useCallback((e: PointerEvent) => {
-    if (!settings.voice_assistant) return;
+    if (!settings.screen_reader) return;
     const target = e.target as HTMLElement;
     if (target.closest("input, textarea, select")) return; // let form controls work normally
     if (target.closest('[data-voice-read="false"]')) return; // exclude buttons that must not be read aloud
@@ -310,10 +310,10 @@ export function VoiceProvider({
     if (readable) {
       void say(readable);
     }
-  }, [settings.voice_assistant, say]);
+  }, [settings.screen_reader, say]);
 
   const handleClick = useCallback((e: MouseEvent) => {
-    if (!settings.voice_assistant) return;
+    if (!settings.screen_reader) return;
     const target = e.target as HTMLElement;
     if (target.closest("input, textarea, select")) return;
     if (target.closest('[data-voice-read="false"]')) return;
@@ -321,7 +321,7 @@ export function VoiceProvider({
     if (readable) {
       void say(readable);
     }
-  }, [settings.voice_assistant, say]);
+  }, [settings.screen_reader, say]);
 
   /** Walk up from the clicked node to find the nearest element with readable text. */
   function findReadableElement(node: HTMLElement): string | null {
@@ -346,14 +346,14 @@ export function VoiceProvider({
   }
 
   useEffect(() => {
-    if (!settings.voice_assistant) return;
+    if (!settings.screen_reader) return;
     document.addEventListener("pointerup", handlePointerUp);
     document.addEventListener("click", handleClick);
     return () => {
       document.removeEventListener("pointerup", handlePointerUp);
       document.removeEventListener("click", handleClick);
     };
-  }, [settings.voice_assistant, handlePointerUp, handleClick]);
+  }, [settings.screen_reader, handlePointerUp, handleClick]);
 
   useEffect(
     () => () => {
@@ -372,10 +372,10 @@ export function VoiceProvider({
       updateSettings,
       handleTranscript,
       reportVoiceUnavailable,
-      toggleVoiceAssistant,
+      toggleScreenReader,
       speakElementText,
     }),
-    [registerActions, setReadable, readPage, dictate, settings, updateSettings, handleTranscript, reportVoiceUnavailable, toggleVoiceAssistant, speakElementText],
+    [registerActions, setReadable, readPage, dictate, settings, updateSettings, handleTranscript, reportVoiceUnavailable, toggleScreenReader, speakElementText],
   );
 
   return <VoiceContext.Provider value={value}>{children}</VoiceContext.Provider>;

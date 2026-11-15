@@ -61,11 +61,11 @@ const ROUTED = [
   "/trusted",
 ];
 
-test.each(ROUTED)("Help, Voice assistant and Aa are in the header of %s", async (path) => {
+test.each(ROUTED)("Help, Screen reader and Aa are in the header of %s", async (path) => {
   renderAt(path);
   const header = await screen.findByRole("banner");
   expect(within(header).getByRole("link", { name: "Help" })).toHaveAttribute("href", "/help");
-  expect(within(header).getByRole("button", { name: /voice assistant/i })).toBeInTheDocument();
+  expect(within(header).getByRole("button", { name: /screen reader/i })).toBeInTheDocument();
   expect(within(header).getByRole("link", { name: /text size and settings/i })).toHaveAttribute("href", "/settings");
 });
 

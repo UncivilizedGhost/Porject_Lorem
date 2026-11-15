@@ -107,7 +107,7 @@ const TEXT: Record<Language, Record<string, string>> = {
 };
 
 export function LearnScreen() {
-  const { settings, readPage, toggleVoiceAssistant, speakElementText } = useVoice();
+  const { settings, readPage, toggleScreenReader, speakElementText } = useVoice();
   // Settings → Language drives both the copy and the language of the answer.
   const language = settings.language;
   const [question, setQuestion] = useState("");
@@ -131,7 +131,9 @@ export function LearnScreen() {
     try {
       const result = (await api.learnAsk({ question: text, language })) as LearnResult;
       setResult(result);
-      await speakElementText(stripPhoneNumbers(result.text));
+      if (settings.screen_reader) {
+        await speakElementText(stripPhoneNumbers(result.text));
+      }
     } catch {
       setResult(null);
       setFailed(true);
@@ -208,7 +210,7 @@ export function LearnScreen() {
         synonyms: [TEXT[language].askVoice],
         confirm_text: `${TEXT[language].askVoice}?`,
         run: () => {
-          void toggleVoiceAssistant();
+          void toggleScreenReader();
         },
       },
       {
